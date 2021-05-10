@@ -89,9 +89,9 @@ class Eye {
     //mask eye
     fill(0);
     stroke(0);
-    strokeWeight(radius*0.2);
+    strokeWeight(radius*0.22);
     noFill();
-    circle(posEye.x, posEye.y, radius * 2 + radius*0.2);
+    circle(posEye.x, posEye.y, radius * 2 + radius*0.22);
   }
 
   void blinkEye() {
