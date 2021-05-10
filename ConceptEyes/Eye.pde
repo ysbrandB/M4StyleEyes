@@ -112,7 +112,7 @@ class Eye {
     EyeToPerson.setMag(radius*0.8);
     posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
 
-    if (distToScreen == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(mouseX_, mouseY_), posEye).limit(radius*0.6));
+    if (distToScreen == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(mouseX_, mouseY_), posEye).limit(radius*0.8));
   }
   
 }
