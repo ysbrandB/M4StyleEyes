@@ -5,15 +5,16 @@ float area;
 float areaEyes = 0;
 float counter = 0;
 float distToScreen = 200;
-
+PVector lookingPosition;
 PImage eyeIris;
 
 ArrayList <Eye> eyes = new ArrayList <Eye>();
 int frameCounter;
 
 void setup() {
-  c = new Client(this, "127.0.0.1", 10000); // Replace with your server's IP and port
+  c = new Client(this, "127.0.0.1", 10000);//listening port and ip
   frameCounter=0;
+  lookingPosition=new PVector(0,0);
   size(1920, 1080);
   //fullScreen();
   imageMode(CENTER);
@@ -34,6 +35,8 @@ void setup() {
 
 
 void draw() {
+  lookingPosition=new PVector(mouseX, mouseY, distToScreen);
+  
   if (frameCounter%10==0) {
     if (c.available() > 0) { // receive data
       println("client received: " +c.readString());
@@ -44,7 +47,7 @@ void draw() {
   background(0);
 
   for (Eye eye : eyes) {
-    eye.update(mouseX, mouseY);
+    eye.update(lookingPosition);
     eye.display(eyeIris);
   }
 }
@@ -52,5 +55,5 @@ void draw() {
 void mouseWheel(MouseEvent event) {
   float delta = event.getCount();
   if ((delta < 0 && distToScreen > 0) || (delta > 0 && distToScreen < 2000)) distToScreen += delta*100;
-  println(distToScreen);
+  //println(distToScreen);
 }

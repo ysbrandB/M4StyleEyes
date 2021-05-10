@@ -98,7 +98,7 @@ class Eye {
     isBlinking = true;
   }
 
-  void update(float mouseX_, float mouseY_) {
+  void update(PVector lookingPosition) {
     if (random(0, 500) < 2) isBlinking = true;
     if (isBlinking) {
       offsetY -= radius*0.4;
@@ -108,11 +108,11 @@ class Eye {
       if (offsetY > radius * 1.4) offsetY = radius*1.4;
     }
 
-    EyeToPerson = PVector.sub(new PVector(mouseX_, mouseY_, distToScreen), posEye);
+    EyeToPerson = PVector.sub(new PVector(lookingPosition.x, lookingPosition.y, lookingPosition.z), posEye);
     EyeToPerson.setMag(radius*0.8);
     posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
 
-    if (distToScreen == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(mouseX_, mouseY_), posEye).limit(radius*0.8));
+    if (lookingPosition.z == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(lookingPosition.x, lookingPosition.y), posEye).limit(radius*0.8));
   }
   
 }
