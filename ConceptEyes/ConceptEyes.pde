@@ -1,4 +1,5 @@
-
+import processing.net.*;
+Client c;
 int amount = 2000;
 float area;
 float areaEyes = 0;
@@ -8,9 +9,11 @@ float distToScreen = 200;
 PImage eyeIris;
 
 ArrayList <Eye> eyes = new ArrayList <Eye>();
-
+int frameCounter;
 
 void setup() {
+  c = new Client(this, "127.0.0.1", 10000); // Replace with your server's IP and port
+  frameCounter=0;
   size(1920, 1080);
   //fullScreen();
   imageMode(CENTER);
@@ -31,6 +34,13 @@ void setup() {
 
 
 void draw() {
+  if (frameCounter%10==0) {
+    if (c.available() > 0) { // receive data
+      println("client received: " +c.readString());
+    }
+  }
+  frameCounter++;
+
   background(0);
 
   for (Eye eye : eyes) {
@@ -43,10 +53,4 @@ void mouseWheel(MouseEvent event) {
   float delta = event.getCount();
   if ((delta < 0 && distToScreen > 0) || (delta > 0 && distToScreen < 2000)) distToScreen += delta*100;
   println(distToScreen);
-}
-
-void mousePressed() {
-  //for (Eye eye : eyes) {
-  //  eye.blinkEye();
-  //}
 }
