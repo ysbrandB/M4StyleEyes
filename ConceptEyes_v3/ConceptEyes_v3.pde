@@ -4,10 +4,12 @@ int amount = 2000;
 float area;
 float areaEyes = 0;
 float counter = 0;
+float time = 0;
 float distToScreen = 200;
 PVector lookingPosition;
 PImage centerEyeIris;
 PImage[] eyeImages=new PImage[50];
+float noiseFactor = 0.01;
 
 //zet deze boolean op false om je mouseposition te pakken
 Boolean server=false;
@@ -16,6 +18,7 @@ Boolean useImages=false;
 ArrayList <Eye> eyes = new ArrayList <Eye>();
 int frameCounter;
 String ontvangen="";
+
 void setup() {
   if (server) {
     c = new Client(this, "127.0.0.1", 10001);//listening port and ip
@@ -23,13 +26,13 @@ void setup() {
   }
   size(1920, 1080);
   //fullScreen();
-  if(useImages){
-  imageMode(CENTER);
+  if (useImages) {
+    imageMode(CENTER);
     for (int i=0; i<50; i++) {
-    String path="./onlyEyes/eye"+i+".png";
-    eyeImages[i]=loadImage(path);
-  }
-  centerEyeIris = loadImage("centerEyeIris.png");
+      String path="./onlyEyes/eye"+i+".png";
+      eyeImages[i]=loadImage(path);
+    }
+    centerEyeIris = loadImage("centerEyeIris.png");
   }
   eyes.add(new Eye(width/2, height/2, 400));
 
@@ -48,6 +51,10 @@ void setup() {
 
 void draw() {
   background(0);
+  time ++;
+
+
+
   //everything for server
   if (server) {
     if (c.available() > 0) { // receive data
@@ -64,11 +71,29 @@ void draw() {
   } else {
     lookingPosition=new PVector(mouseX, mouseY, distToScreen);
   }
-  
+
   //draw eyes
   for (Eye eye : eyes) {
     eye.update(lookingPosition);
     eye.display();
+  }
+  println(eyes.get(0).n);
+
+  //for (float x = 0; x < width; x+=10) {
+  //  for (float y = 0; y < height; y+=10) {
+  //    noStroke();
+  //    fill(noise(x * noiseFactor, y * noiseFactor, time)*255);
+  //    rect(x, y, 10, 10);
+  //  }
+  //}
+
+  if (time%20 == 1 && time%10 == 1) {
+    stroke(255, 0, 0);
+    strokeWeight(5);
+    float randomX = random(width);
+    float randomY = random(height);
+    float randomR = random(50, 200);
+    circle(randomX, randomY, randomR * 2);
   }
 }
 

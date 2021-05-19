@@ -11,7 +11,9 @@ class Eye {
   float offsetY;
   boolean isBlinking;
   int myEyeImage;
+  float n;
 
+  //constructer for center eye
   Eye(float xPos, float yPos, float radius) {
     posEye = new PVector(xPos, yPos);
     this.radius = radius;
@@ -21,16 +23,17 @@ class Eye {
     isBlinking = false;
   }
 
+  //constructor for smaller eyes
   Eye() {
     myEyeImage=int(random(0, 50));
-    while (!canPlaceDot());
+    while (!canPlaceEye());
     areaEyes += PI * radius * radius;
     isCenterEye = false;
     offsetY = radius*1.4;
     isBlinking = false;
   }
 
-  boolean canPlaceDot() {
+  boolean canPlaceEye() {
     radius = random(15, 100);
     posEye = new PVector(random(radius, width-radius), random(radius, height-radius));
     posPupil = new PVector(random(radius, width-radius), random(radius, height-radius));
@@ -66,6 +69,7 @@ class Eye {
         image(eyeImages[myEyeImage], posPupil.x, posPupil.y, radius*0.9, radius*0.9); //image instead of color
       }
     }
+
     //pupil
     fill(0);
     circle(posPupil.x, posPupil.y, radius*0.5);
@@ -77,7 +81,7 @@ class Eye {
     //eyelids
     pushMatrix();
     translate(posEye.x, posEye.y);
-    rotate(posPupil.copy().sub(posEye).heading());
+    //rotate(posPupil.copy().sub(posEye).heading());
     fill(0);
     strokeWeight(1);
     beginShape();
@@ -98,6 +102,7 @@ class Eye {
     strokeWeight(radius*0.22);
     noFill();
     circle(posEye.x, posEye.y, radius * 2 + radius*0.22);
+    strokeWeight(1);
   }
 
   void blinkEye() {
@@ -105,7 +110,11 @@ class Eye {
   }
 
   void update(PVector lookingPosition) {
-    if (random(0, 500) < 2) isBlinking = true;
+    if (time%10 == 0 && int(random(10)) == 7) {
+      n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, time* 0.1);
+      if (n > 0.6) isBlinking = true;
+    }
+
     if (isBlinking) {
       offsetY -= radius*0.4;
       if (offsetY < 0) isBlinking = false;
