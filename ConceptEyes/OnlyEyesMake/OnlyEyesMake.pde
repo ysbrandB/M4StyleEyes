@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream:ConceptEyesWithPupil/OnlyEyesMake/OnlyEyesMake.pde
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes:ConceptEyes/OnlyEyesMake/OnlyEyesMake.pde
 //FAILED IMPLEMENTATION
 //PImage eyeIris;
 //void setup() {
@@ -105,6 +108,7 @@
 //  print("done!");
 //  noLoop();
 //}
+<<<<<<< Updated upstream:ConceptEyesWithPupil/OnlyEyesMake/OnlyEyesMake.pde
 =======
 //FAILED IMPLEMENTATION
 //PImage eyeIris;
@@ -213,3 +217,5 @@
 //  noLoop();
 //}
 >>>>>>> master
+=======
+>>>>>>> Stashed changes:ConceptEyes/OnlyEyesMake/OnlyEyesMake.pde

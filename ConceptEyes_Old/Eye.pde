@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream:ConceptEyesWithPupil/Eye.pde
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes:ConceptEyes_Old/Eye.pde
 class Eye {
 
   PVector posEye;
@@ -11,7 +14,10 @@ class Eye {
   boolean isCenterEye;
   float offsetY;
   boolean isBlinking;
+<<<<<<< Updated upstream:ConceptEyesWithPupil/Eye.pde
   int myEyeImage;
+=======
+>>>>>>> Stashed changes:ConceptEyes_Old/Eye.pde
 
   Eye(float xPos, float yPos, float radius) {
     posEye = new PVector(xPos, yPos);
@@ -23,7 +29,10 @@ class Eye {
   }
 
   Eye() {
+<<<<<<< Updated upstream:ConceptEyesWithPupil/Eye.pde
     myEyeImage=int(random(0, 50));
+=======
+>>>>>>> Stashed changes:ConceptEyes_Old/Eye.pde
     while (!canPlaceDot());
     areaEyes += PI * radius * radius;
     isCenterEye = false;
@@ -52,6 +61,7 @@ class Eye {
 
   void display() {
     noStroke();
+<<<<<<< Updated upstream:ConceptEyesWithPupil/Eye.pde
 
     //eye white
     fill(255);
@@ -177,6 +187,9 @@ class Eye {
   void display() {
     noStroke();
 
+=======
+    
+>>>>>>> Stashed changes:ConceptEyes_Old/Eye.pde
     //eye white
     fill(255);
     circle(posEye.x, posEye.y, radius*2);
@@ -184,6 +197,7 @@ class Eye {
     //iris
     fill(eyeColor);
     circle(posPupil.x, posPupil.y, radius*0.8);
+<<<<<<< Updated upstream:ConceptEyesWithPupil/Eye.pde
     if (useImages) {
       if (isCenterEye) {
         image(centerEyeIris, posPupil.x, posPupil.y, radius*0.9, radius*0.9);
@@ -195,6 +209,13 @@ class Eye {
     fill(0);
     circle(posPupil.x, posPupil.y, radius*0.5);
 
+=======
+    
+    //pupil
+    fill(0);
+    circle(posPupil.x, posPupil.y, radius*0.5);
+    
+>>>>>>> Stashed changes:ConceptEyes_Old/Eye.pde
     //highlight
     fill(255);
     circle(posPupil.x + radius*0.14, posPupil.y - radius*0.14, radius*0.1);    
@@ -216,7 +237,11 @@ class Eye {
     bezierVertex(radius, radius*1.4, -radius, radius*1.4, -radius, 0);
     endShape();
     popMatrix();
+<<<<<<< Updated upstream:ConceptEyesWithPupil/Eye.pde
 
+=======
+    
+>>>>>>> Stashed changes:ConceptEyes_Old/Eye.pde
     //mask eye
     fill(0);
     stroke(0);
@@ -229,7 +254,11 @@ class Eye {
     isBlinking = true;
   }
 
+<<<<<<< Updated upstream:ConceptEyesWithPupil/Eye.pde
   void update(PVector lookingPosition) {
+=======
+  void update(float mouseX_, float mouseY_) {
+>>>>>>> Stashed changes:ConceptEyes_Old/Eye.pde
     if (random(0, 500) < 2) isBlinking = true;
     if (isBlinking) {
       offsetY -= radius*0.4;
@@ -239,6 +268,7 @@ class Eye {
       if (offsetY > radius * 1.4) offsetY = radius*1.4;
     }
 
+<<<<<<< Updated upstream:ConceptEyesWithPupil/Eye.pde
     EyeToPerson = PVector.sub(new PVector(lookingPosition.x, lookingPosition.y, lookingPosition.z), posEye);
     EyeToPerson.setMag(radius*0.8);
     posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
@@ -247,3 +277,13 @@ class Eye {
   }
 }
 >>>>>>> master
+=======
+    EyeToPerson = PVector.sub(new PVector(mouseX_, mouseY_, distToScreen), posEye);
+    EyeToPerson.setMag(radius*0.8);
+    posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
+
+    if (distToScreen == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(mouseX_, mouseY_), posEye).limit(radius*0.8));
+  }
+  
+}
+>>>>>>> Stashed changes:ConceptEyes_Old/Eye.pde
