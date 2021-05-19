@@ -47,7 +47,7 @@ class Eye {
   }
 
 
-  void display(PImage Iris) {
+  void display() {
     noStroke();
     
     //eye white
@@ -57,8 +57,6 @@ class Eye {
     //iris
     fill(eyeColor);
     circle(posPupil.x, posPupil.y, radius*0.8);
-    
-    //image(Iris, posPupil.x, posPupil.y, radius*0.8, radius*0.8); //image instead of color
 
     //pupil
     fill(0);

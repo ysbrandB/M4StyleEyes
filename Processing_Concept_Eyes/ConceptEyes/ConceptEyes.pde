@@ -9,7 +9,7 @@ PVector lookingPosition;
 PImage eyeIris;
 
 //zet deze boolean op false om je mouseposition te pakken
-Boolean server=false;
+Boolean server=true;
 
 ArrayList <Eye> eyes = new ArrayList <Eye>();
 int frameCounter;
@@ -54,12 +54,12 @@ void draw() {
   } else {
     lookingPosition=new PVector(mouseX, mouseY, distToScreen);
   }
-  
+
   background(0);
 
   for (Eye eye : eyes) {
     eye.update(lookingPosition);
-    eye.display(eyeIris);
+    eye.display();
   }
 }
 
