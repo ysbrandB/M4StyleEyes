@@ -46,7 +46,9 @@ void setup() {
 }
 
 
-void draw() {  
+void draw() {
+  background(0);
+  //everything for server
   if (server) {
     if (c.available() > 0) { // receive data
       ontvangen=c.readString();
@@ -63,8 +65,7 @@ void draw() {
     lookingPosition=new PVector(mouseX, mouseY, distToScreen);
   }
   
-  background(0);
-
+  //draw eyes
   for (Eye eye : eyes) {
     eye.update(lookingPosition);
     eye.display();
@@ -72,10 +73,12 @@ void draw() {
 }
 
 void mouseWheel(MouseEvent event) {
+  //change the distance to screen by scrolling mousewheel
   float delta = event.getCount();
   if ((delta < 0 && distToScreen > 0) || (delta > 0 && distToScreen < 200000)) distToScreen += delta*100;
   println(distToScreen);
 }
+
 void mousePressed() {
-  print(distToScreen);
+  println(distToScreen);
 }
