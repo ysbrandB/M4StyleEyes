@@ -110,11 +110,11 @@ class Eye {
   }
 
   void update(PVector lookingPosition) {
-    if (time%10 == 0 && int(random(10)) == 7) {
-      n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, time* 0.1);
+    if (frameCount%100 == 0) {
+      n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, time);
       if (n > 0.6) isBlinking = true;
     }
-
+    
     if (isBlinking) {
       offsetY -= radius*0.4;
       if (offsetY < 0) isBlinking = false;

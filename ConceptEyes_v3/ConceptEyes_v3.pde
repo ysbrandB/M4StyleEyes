@@ -51,10 +51,8 @@ void setup() {
 
 void draw() {
   background(0);
-  time ++;
-
-
-
+  time +=0.01;
+  
   //everything for server
   if (server) {
     if (c.available() > 0) { // receive data
@@ -77,23 +75,13 @@ void draw() {
     eye.update(lookingPosition);
     eye.display();
   }
-  println(eyes.get(0).n);
 
-  //for (float x = 0; x < width; x+=10) {
-  //  for (float y = 0; y < height; y+=10) {
-  //    noStroke();
-  //    fill(noise(x * noiseFactor, y * noiseFactor, time)*255);
-  //    rect(x, y, 10, 10);
-  //  }
-  //}
-
-  if (time%20 == 1 && time%10 == 1) {
-    stroke(255, 0, 0);
-    strokeWeight(5);
-    float randomX = random(width);
-    float randomY = random(height);
-    float randomR = random(50, 200);
-    circle(randomX, randomY, randomR * 2);
+  for (float x = 0; x < width; x+=10) {
+    for (float y = 0; y < height; y+=10) {
+      noStroke();
+      fill(noise(x * noiseFactor, y * noiseFactor, time)*255, 100);
+      rect(x, y, 10, 10);
+    }
   }
 }
 
