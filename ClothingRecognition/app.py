@@ -2,10 +2,6 @@ import numpy as np
 import threading
 import cv2
 
-#remove if you want to use cuda
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
 from utils import draw_bounding_box, load_model, detect_clothes
 
 model = load_model()
@@ -14,11 +10,12 @@ clothing_types = ['short_sleeve_top', 'long_sleeve_top', 'short_sleeve_outwear',
                   'vest', 'sling', 'shorts', 'trousers', 'skirt', 'short_sleeve_dress',
                   'long_sleeve_dress', 'vest_dress', 'sling_dress']
 
-capture = cv2.VideoCapture(0)
+capture = cv2.VideoCapture(1)
 readCorrectly, frame = capture.read()
 cv2.imshow('preview', frame)
 
 frameRate = 30
+detectionRate = 1
 frames = 0
 imageBox = (84, 0, 500, 480)
 
@@ -35,7 +32,7 @@ while cv2.getWindowProperty('preview', 0) >= 0:
     
     if key == 27: #escape
         break
-    if frames % frameRate == 0:
+    if frames % detectionRate == 0:
         detect(frame)
     frames += 1
 cv2.destroyAllWindows()
