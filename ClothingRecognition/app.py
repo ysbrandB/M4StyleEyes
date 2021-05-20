@@ -1,4 +1,5 @@
 import numpy as np
+import threading
 import cv2
 
 #remove if you want to use cuda
@@ -7,15 +8,34 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 from utils import draw_bounding_box, load_model, detect_clothes
 
+model = load_model()
+
 clothing_types = ['short_sleeve_top', 'long_sleeve_top', 'short_sleeve_outwear', 'long_sleeve_outwear',
                   'vest', 'sling', 'shorts', 'trousers', 'skirt', 'short_sleeve_dress',
                   'long_sleeve_dress', 'vest_dress', 'sling_dress']
 
-image = cv2.imread('sterre.png')
-model = load_model()
+capture = cv2.VideoCapture(0)
+readCorrectly, frame = capture.read()
+cv2.imshow('preview', frame)
 
-detected_objects = detect_clothes(image, model, clothing_types)
-image_bounding_box = draw_bounding_box(image, detected_objects)
+frameRate = 30
+frames = 0
+imageBox = (84, 0, 500, 480)
 
-cv2.imshow("HENKIE", image_bounding_box)
-cv2.waitKey(0)
+def detect(image):
+    crop_img = image[imageBox[1]:imageBox[1] + imageBox[3], imageBox[0]:imageBox[0] + imageBox[2]]
+    detected_objects = detect_clothes(crop_img, model, clothing_types)
+    image_bounding_box = draw_bounding_box(crop_img, detected_objects)
+    cv2.imshow('clothes', image_bounding_box)
+
+while cv2.getWindowProperty('preview', 0) >= 0:
+    readCorrectly, frame = capture.read()
+    cv2.imshow('preview', frame)
+    key = cv2.waitKey((int)(1000 / frameRate))
+    
+    if key == 27: #escape
+        break
+    if frames % frameRate == 0:
+        detect(frame)
+    frames += 1
+cv2.destroyAllWindows()
