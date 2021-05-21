@@ -2,10 +2,10 @@
 
 JSONArray eyePosData;
 Calibration CalibrationScreen;
-boolean isCalibration;
 PVector screenPos;
 PImage screenImg;
 PImage eyeImg;
+ButtonHandler buttonHandler;
 
 
 void setup() {
@@ -13,38 +13,33 @@ void setup() {
 
   screenImg = loadImage("tv.png");
   eyeImg = loadImage("eye.png");
-  screenImg.resize(width/4,0);
-  eyeImg.resize(width/8,0);
-  imageMode(CENTER);
-  
-  eyePosData = loadJSONArray("EyePos.JSON");
-  screenPos = new PVector(width/2,100);
-  CalibrationScreen = new Calibration(eyePosData);
-  isCalibration = true;
- 
-  
-  
+  screenImg.resize(width/4, 0);
+  eyeImg.resize(width/8, 0);
 
-  //println(eyePosData);
+  eyePosData = loadJSONArray("../EyePos.JSON");
+  screenPos = new PVector(width/2, 100);
+  CalibrationScreen = new Calibration(eyePosData);
+  buttonHandler = new ButtonHandler();
 }
 
 void draw() {
   background(150);
+
+  buttonHandler.update();
+  buttonHandler.display();
+
   pushMatrix();
-  translate(screenPos.x,screenPos.y);
+  translate(screenPos.x, screenPos.y);
   rectMode(CENTER);
-  image(screenImg,0,-height/20);
-  //fill(0,150);
-  //rect(0,0,width/5,height/10);// moet later nog iets leuks worden, een foto ofzo
-  
-  if (isCalibration) {
-    CalibrationScreen.update(mouseX, mouseY);
-    CalibrationScreen.display();
-  }
+  imageMode(CENTER);
+  image(screenImg, 0, -height/20);
+
+  CalibrationScreen.update(mouseX, mouseY);
+  CalibrationScreen.display();
   popMatrix();
 }
 
-void mousePressed(){
+void mousePressed() {
   CalibrationScreen.clicked(mouseX, mouseY);
 }
 
