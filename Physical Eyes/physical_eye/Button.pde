@@ -1,7 +1,6 @@
 class Button {
   /*
     The button class, this class makes buttons that you can click on.
-    Exampels are: Reset button, Revive button, Close button. 
   */
   PVector pos;
   PVector size;
@@ -10,20 +9,24 @@ class Button {
   int timer;
   boolean isClicked;
   int textsize;
-  final color colorRest = color(150);
+  final color colorRest = color(255);
   final color colorHover = color(130);
   static final int bend = 10;
+  ClickFunction clickFunction;
 
 
-  Button(float x, float y, float Width, float Height, String textIn, int textsizeIn) {
+  Button(float x, float y, float Width, float Height, String textIn, int textsizeIn, ClickFunction clickFunction) {
     pos = new PVector(x, y);
     size = new PVector(Width, Height);
     text = textIn;
     isClicked = false;
     textsize = textsizeIn;
+    this.clickFunction = clickFunction;
+    colorbg = colorRest;
   }
 
   void display() {
+    rectMode(CORNER);
     fill(colorbg);
     stroke(0);
     rect(pos.x, pos.y, size.x, size.y, bend, bend, bend, bend);
@@ -47,9 +50,10 @@ class Button {
   }
 
   void clicked(float x, float y) {
-    if (isOver(x,y)) {
+    if (isOver(x,y) && !isClicked) {
       timer = 100;
       isClicked = true;
+      clickFunction.clicked();
     }
   }
 
