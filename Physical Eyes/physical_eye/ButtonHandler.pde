@@ -4,27 +4,28 @@ interface ClickFunction {
 
 
 class ButtonHandler {
-  Button addEyeBtn;
-  AddEyeClick addEyeClick;
+  Button safeBtn;
+  SafeBtnClick safeBtnClick;
 
   ButtonHandler() {
-    addEyeClick = new AddEyeClick();
-    addEyeBtn = new Button(width*0.78, height*0.88, width*0.2, height*0.1, "Add eye", 20, addEyeClick);
+    safeBtnClick = new SafeBtnClick();
+    safeBtn = new Button(width/2-width*0.15, height*0.88, width*0.3, height*0.1, "Safe", 50, safeBtnClick);
   }
 
-  public void update(){
-    
+  public void update(float x, float y){
+    safeBtn.update(x,y);
   }
   
   public void display(){
-    addEyeBtn.display();
+    safeBtn.display();
   }
   
-  public void clicked(){
-    
+  public void clicked(float x, float y){
+    safeBtn.clicked(x,y);
   }
-  class AddEyeClick implements ClickFunction {
+  class SafeBtnClick implements ClickFunction {
     public void clicked() {
+      safe();
     }
   }
 }

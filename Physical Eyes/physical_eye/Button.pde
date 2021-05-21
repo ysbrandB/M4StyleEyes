@@ -9,8 +9,9 @@ class Button {
   int timer;
   boolean isClicked;
   int textsize;
-  final color colorRest = color(255);
-  final color colorHover = color(130);
+  final color colorRest = color(160);
+  final color colorHover = color(140);
+  final color colorClicked = color(100);
   static final int bend = 10;
   ClickFunction clickFunction;
 
@@ -21,6 +22,12 @@ class Button {
     text = textIn;
     isClicked = false;
     textsize = textsizeIn;
+    if(textsize <= 0){
+      textSize(1);
+      textsize = int(Width/textWidth(textIn));
+      if(textsize > Height-10) textsize = int(Height-10);
+    }
+
     this.clickFunction = clickFunction;
     colorbg = colorRest;
   }
@@ -32,8 +39,8 @@ class Button {
     rect(pos.x, pos.y, size.x, size.y, bend, bend, bend, bend);
     fill(0);
     textSize(textsize);
-    textAlign(CENTER);
-    text(text, pos.x+size.x/2, pos.y+size.y/3*2);
+    textAlign(CENTER,CENTER);
+    text(text, pos.x+size.x/2, pos.y+size.y/2 - textDescent()*0.4);
   }
 
   void update(float x, float y) {
@@ -43,8 +50,8 @@ class Button {
     //clicked animation.
     if (isClicked) {
       timer -=5;
-      if (timer >= 50) colorbg = color(255, map(timer, 100, 50, 0,150));
-      else if (timer>0) colorbg = color(255, map(timer, 50, 0, 150,0));
+      if (timer >= 50) colorbg = lerpColor(colorClicked, colorHover, map(timer, 50, 100, 0, 1));//color(255, map(timer, 100, 50, 0,150));
+      else if (timer>0) colorbg = lerpColor(colorHover, colorClicked, map(timer, 0, 50, 0, 1));//color(255, map(timer, 50, 0, 150,0));
       else isClicked = false;
     }
   }

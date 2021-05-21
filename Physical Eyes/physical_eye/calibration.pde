@@ -28,4 +28,16 @@ class Calibration {
       eye.select(x,z);
     }
   }
+
+  void dragged(float x, float z){
+    for (Eye eye : eyes) {
+      eye.dragged(x,z);
+    }
+  }
+
+   void mouseRelease(){
+     for (Eye eye : eyes) {
+      eye.mouseRelease();
+    }
+   }
 }
