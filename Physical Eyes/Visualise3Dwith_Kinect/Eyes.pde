@@ -1,15 +1,28 @@
 class Eye {
+  int id;
   PVector pos;
   PVector closestHead= camPos.copy();
-  float angleX, angleY;
+  float angleY, angleZ;
   float closestDist;
-  Eye(PVector pos) {
+  PVector headToEye= new PVector(0,0,0);
+  Eye(PVector pos, int id) {
+    //als het niet het scherm is:
+    if(id!=-1){
+    this.id=id;
+    }
     this.pos=pos;
     angleY=0;
-    angleX=0;
+    angleZ=0;
   }
-
+//show the eye and lookingvectorline
   void show() {
+    //cheat display of line
+    PVector displayLine= headToEye.copy().setMag(30).add(pos);
+    draw3DLine(pos, displayLine, color (0,0,255));
+    drawPoint(pos, color (255,0,0));
+  }  
+  //update the lookingvector and calculate its angles
+  void update(){
     closestDist=999999999;
     for (int i=0; i<heads.size(); i++) {
       float distance=PVector.dist(heads.get(i), pos);
@@ -18,37 +31,12 @@ class Eye {
         closestHead=heads.get(i).copy();
       }
     }
-    drawEye(pos, closestHead);
-  }
+    headToEye=PVector.sub(closestHead.copy(), pos.copy());    
+    
+    PVector lookY=new PVector(headToEye.x, headToEye.z);
+    angleY=-lookY.heading();
 
-  void drawEye(PVector pos, PVector closestPos) {
-
-    //PVector eyeToHeadY = PVector.sub(new PVector(closestPos.x, closestPos.z), new PVector(pos.x, pos.z));
-    //PVector toVectorY = PVector.add(pos, new PVector(eyeToHeadY.x, pos.y, eyeToHeadY.y).normalize().mult(40));
-    angleY = PVector.angleBetween(new PVector(pos.x, pos.z), new PVector(closestPos.x, closestPos.z));
-    angleX = PVector.angleBetween(new PVector(pos.y, pos.z), new PVector(closestPos.y, closestPos.z));
-     
-    //PVector eyeToHeadX = PVector.sub(new PVector(closestPos.z, closestPos.y),new PVector(pos.z, pos.y));
-    //PVector toVectorX = PVector.add(pos, new PVector(pos.x, eyeToHeadX.y, eyeToHeadX.z));
-    ////angleX=-eyeToHeadX.heading();
-    
-    //PVector fixedFromX = new PVector(pos.y, pos.z);
-    //PVector fixedToX = new PVector(toVectorX.y, toVectorX.z);
-    //angleX = PVector.angleBetween(fixedFromX, fixedToX);
-    stroke(0,0,255);
-    pushMatrix();
-    
-    translate(pos.x, pos.y, pos.z);
-    rotateY(angleY);
-    //rotateX(angleX);
-   
-    strokeWeight(3);
-    stroke(0, 0, 255);
-    
-    line(0, 0, 0, 0, 0, 50);
-    stroke(0);
-    strokeWeight(1);
-    popMatrix();
-    drawPoint(pos);
+    PVector lookZ=new PVector(headToEye.x, headToEye.y);
+    angleZ=lookZ.heading();
   }
 }

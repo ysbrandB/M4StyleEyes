@@ -13,7 +13,7 @@ class Eye {
   int myEyeImage;
   float n;
 
-  //constructer for center eye
+  //constructor for center eye
   Eye(float xPos, float yPos, float radius) {
     posEye = new PVector(xPos, yPos);
     this.radius = radius;
@@ -105,16 +105,14 @@ class Eye {
     strokeWeight(1);
   }
 
-  void blinkEye() {
-    isBlinking = true;
+  void checkToGoBlink() {
+    n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, time);
+    if (n > 0.6) {
+      isBlinking = true;
+    }
   }
 
   void update(PVector lookingPosition) {
-    if (frameCount%100 == 0) {
-      n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, time);
-      if (n > 0.6) isBlinking = true;
-    }
-    
     if (isBlinking) {
       offsetY -= radius*0.4;
       if (offsetY < 0) isBlinking = false;

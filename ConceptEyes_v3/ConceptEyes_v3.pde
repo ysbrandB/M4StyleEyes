@@ -10,9 +10,12 @@ PVector lookingPosition;
 PImage centerEyeIris;
 PImage[] eyeImages=new PImage[50];
 float noiseFactor = 0.01;
+int screenWidthCM=100;
+float swPixDIVswCM;
+int blinkFrameCount=0;
 
 //zet deze boolean op false om je mouseposition te pakken
-Boolean server=false;
+Boolean server=true;
 Boolean useImages=false;
 
 ArrayList <Eye> eyes = new ArrayList <Eye>();
@@ -24,8 +27,8 @@ void setup() {
     c = new Client(this, "127.0.0.1", 10001);//listening port and ip
     lookingPosition=new PVector(0, 0);
   }
-  size(1920, 1080);
-  //fullScreen();
+  fullScreen(2);
+  swPixDIVswCM=width/screenWidthCM;
   if (useImages) {
     imageMode(CENTER);
     for (int i=0; i<50; i++) {
@@ -51,8 +54,8 @@ void setup() {
 
 void draw() {
   background(0);
-  time +=0.01;
-  
+  time +=1;
+
   //everything for server
   if (server) {
     if (c.available() > 0) { // receive data
@@ -60,11 +63,14 @@ void draw() {
       String[] temp=split(ontvangen, "\n");
       ontvangen=temp[0];
       temp=split(ontvangen, ",");
-      //ontvangen= (x, y, FaceWidth, screenWidth, screenHeight) 
-      float x=map(int(temp[0]), 0, int(temp[3]), width, 0);
-      float y=map(int(temp[1]), 0, int(temp[4]), 0, height);
-      float z=map(int(temp[2]), 50, 350, 2500, 5000);
-      lookingPosition=new PVector(x, y, z);
+      //ontvangen= (x, y, z) 
+      //ontvangen=in meters;
+      //to convert to pixels do meters times pixels/meters ratio and add half the screen
+      float x=float(temp[0])*swPixDIVswCM;
+      float y=float(temp[1])*swPixDIVswCM;
+      float z=float(temp[2])*swPixDIVswCM;
+      lookingPosition=PVector.add(new PVector(x, y, z), new PVector(width/2, height/2));
+      println(lookingPosition);
     }
   } else {
     lookingPosition=new PVector(mouseX, mouseY, distToScreen);
@@ -75,12 +81,11 @@ void draw() {
     eye.update(lookingPosition);
     eye.display();
   }
-
-  for (float x = 0; x < width; x+=10) {
-    for (float y = 0; y < height; y+=10) {
-      noStroke();
-      fill(noise(x * noiseFactor, y * noiseFactor, time)*255, 100);
-      rect(x, y, 10, 10);
+  //make the eyes blink by per a random amount of frames
+  if (frameCount>blinkFrameCount) {
+    blinkFrameCount=frameCount+int(random(20, 100));
+    for (Eye eye : eyes) {
+      eye.checkToGoBlink();
     }
   }
 }
