@@ -22,13 +22,13 @@ class DistanceMeter {
 
     switch(dimension) {
     case "x": 
-      postxt =  new PVector(distance/2, - txtSize.y/2 - padding*2); 
+      postxt =  new PVector(distance/2,0); 
       break;
     case "y": 
-      postxt = new PVector(currentEye.getPos().x + 100, currentEye.getPos().z); 
+      postxt = new PVector(currentEye.getPos().x, currentEye.getPos().z); 
       break;
     case "z": 
-      postxt =  new PVector(txtSize.y/2 + currentEye.getPos().x, distance/2); 
+      postxt =  new PVector(currentEye.getPos().x, distance/2); 
       break;
     }
   }
@@ -36,29 +36,30 @@ class DistanceMeter {
   void display() {
     textAlign(CENTER, CENTER);
     rectMode(CENTER);
+    textSize(20);
     stroke(0);
     strokeWeight(5);
     switch(dimension) {
     case "x": 
-      line(0, 0, distance, 0);
+      line(0, 0, distance*zoom, 0);
       fill(255, 200);
       strokeWeight(1);
-      rect(postxt.x, postxt.y, txtSize.x, txtSize.y);
+      rect(postxt.x*zoom, postxt.y*zoom - txtSize.y/2 - padding*2, txtSize.x, txtSize.y);
       fill(0);
-      text(int(distance), postxt.x, postxt.y);
+      text(int(distance), postxt.x*zoom, postxt.y*zoom - txtSize.y/2 - padding*2);
       break;
     case "y": 
       strokeWeight(1);
       fill(255, 200);
-      rect(postxt.x, postxt.y, txtSize.x, txtSize.y);
+      rect(postxt.x*zoom + 100, postxt.y*zoom, txtSize.x, txtSize.y);
       fill(0);
-      text(int(distance), postxt.x, postxt.y);
+      text(int(distance), postxt.x*zoom + 100, postxt.y*zoom);
       break;
     case "z": 
-      line(currentEye.getPos().x, 0, currentEye.getPos().x, distance);
+      line(currentEye.getPos().x*zoom, 0, currentEye.getPos().x*zoom, distance*zoom);
       strokeWeight(1);
       pushMatrix();
-      translate(postxt.x, postxt.y);
+      translate(txtSize.y/2 + postxt.x*zoom, postxt.y*zoom);
       rotate(PI/2);
       fill(255, 200);
       rect(0,0, txtSize.x, txtSize.y);
@@ -73,18 +74,19 @@ class DistanceMeter {
 
   //}
 
-  void updateDist() {
-    //switch(dimension) {
-    //case "x": 
-    //  end = new PVector(start.x + distance, start.y); 
-    //  break;
-    //case "y": 
-    //  postxt = new PVector(currentEye.getPos().x + 20, currentEye.getPos().z); 
-    //  break;
-    //case "z": 
-    //  end = new PVector(start.x, start.y + distance); 
-    //  break;
-    //}
+  void updateDist(float dist) {
+    distance = dist;
+    switch(dimension) {
+    case "x": 
+      postxt =  new PVector(distance/2,0); 
+      break;
+    case "y": 
+      postxt = new PVector(currentEye.getPos().x, currentEye.getPos().z); 
+      break;
+    case "z": 
+      postxt =  new PVector(currentEye.getPos().x, distance/2); 
+      break;
+    }
   }
   
   //float roundN(float num, float n){
