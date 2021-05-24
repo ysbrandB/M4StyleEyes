@@ -25,6 +25,7 @@ Eye screen=new Eye(screenPos, -1);
 
 JSONArray eyePosData;
 ArrayList<Eye> eyes = new ArrayList<Eye>();
+ArrayList<String> oldData= new ArrayList<String>();
 ArrayList<PVector> heads = new ArrayList<PVector>();
 void setup() {
   //make an eye for every json eye
@@ -126,17 +127,33 @@ void draw() {
   }
   //update all the eyes, show if appropriate and send the data to the arduino
   String arduinoPayload="";
-  for (Eye eye : eyes) {
-    eye.update();
+  for (int i=0; i<eyes.size(); i++) {
+    Eye thisEye=eyes.get(i);
+    thisEye.update();
     if (draw) {
-      eye.show();
+      thisEye.show();
     }
-    arduinoPayload+=eye.id+","+eye.angleY+","+eye.angleZ+"|";
+    //vul het array als ie leeg is
+    if (oldData.size()<1) {
+      for (Eye eye : eyes) {
+        oldData.add(eye.id+","+int(eye.angleY)+","+int(eye.angleZ)+"|");
+      }
+    }
+    //stuur alleen de data als de hoeken verander zijn
+    String thisArduinoPayload=thisEye.id+","+int(thisEye.angleY)+","+int(thisEye.angleZ)+"|";
+    if (!oldData.get(i).equals(thisArduinoPayload)) {
+      arduinoPayload+=thisArduinoPayload;
+      oldData.set(i, thisArduinoPayload);
+    }
   }
-  arduinoPayload+="\n";
-  if (useArduino) {
-    port.write(arduinoPayload);
+  if (arduinoPayload.length()>=1) {
+    arduinoPayload+="\n";
+
+    if (useArduino) {
+      port.write(arduinoPayload);
+    }
   }
+
 
   //Adjust the lookingPos for the screen by the difference between kinect and screenmid
   //update the lookingvector of the screen
@@ -150,6 +167,8 @@ void draw() {
   //(x,y,z,'\n')
   //write the coords to the drawing sketch
   s.write(TCPpayload);
+
+  //arrayCopy(eyes, oldEyes);
 }
 
 //draw a point with on position pos

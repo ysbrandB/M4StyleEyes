@@ -15,7 +15,7 @@ float swPixDIVswCM;
 int blinkFrameCount=0;
 
 //zet deze boolean op false om je mouseposition te pakken
-Boolean server=true;
+Boolean server=false;
 Boolean useImages=false;
 
 ArrayList <Eye> eyes = new ArrayList <Eye>();
@@ -70,7 +70,6 @@ void draw() {
       float y=float(temp[1])*swPixDIVswCM;
       float z=float(temp[2])*swPixDIVswCM;
       lookingPosition=PVector.add(new PVector(x, y, z), new PVector(width/2, height/2));
-      println(lookingPosition);
     }
   } else {
     lookingPosition=new PVector(mouseX, mouseY, distToScreen);
@@ -83,7 +82,7 @@ void draw() {
   }
   //make the eyes blink by per a random amount of frames
   if (frameCount>blinkFrameCount) {
-    blinkFrameCount=frameCount+int(random(20, 100));
+    blinkFrameCount=frameCount+int(random(50, 100));
     for (Eye eye : eyes) {
       eye.checkToGoBlink();
     }
@@ -94,9 +93,5 @@ void mouseWheel(MouseEvent event) {
   //change the distance to screen by scrolling mousewheel
   float delta = event.getCount();
   if ((delta < 0 && distToScreen > 0) || (delta > 0 && distToScreen < 200000)) distToScreen += delta*100;
-  println(distToScreen);
-}
-
-void mousePressed() {
   println(distToScreen);
 }

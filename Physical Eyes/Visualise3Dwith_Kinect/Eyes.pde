@@ -34,9 +34,9 @@ class Eye {
     headToEye=PVector.sub(closestHead.copy(), pos.copy());    
     
     PVector lookY=new PVector(headToEye.x, headToEye.z);
-    angleY=-lookY.heading();
+    angleY=(-lookY.heading())/PI*180;
 
     PVector lookZ=new PVector(headToEye.x, headToEye.y);
-    angleZ=lookZ.heading();
+    angleZ=(lookZ.heading())/PI*180;
   }
 }
