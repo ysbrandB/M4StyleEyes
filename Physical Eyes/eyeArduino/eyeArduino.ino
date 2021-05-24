@@ -1,4 +1,4 @@
-bool stringComplete = false;  // whether the string is complete
+bool fullUpdate = false;  // whether the full update is complete
 //test string: 1,38,-41|2,125,-125|3,33,-36|4,26,-26|5,153,-131|6,28,-50|7,141,-161|\n
 int angles[60];
 int servoAmount = 30;
@@ -15,8 +15,8 @@ void setup() {
 
 void loop() {
   // print the string when a newline arrives:
-  if (stringComplete) {
-    stringComplete = false;
+  if (fullUpdate) {
+    fullUpdate = false;
   }
 }
 
@@ -36,35 +36,37 @@ void serialEvent() {
   while (Serial.available()) {
     // get the new byte:
     char inChar = (char)Serial.read();
-
-    // if the incoming character is a newline, set a flag so the main loop can
-    // do something about it:
+   //als een \n er is en we dus een volledige update hebben gehad zet 
     if (inChar == '\n') {
-      stringComplete = true;
+      fullUpdate = true;
       break;
     }
+    
+    //als het einde van een oog is bereikt reset alle variabelen
     if (inChar == '|') {
       //UPDATE HIER DE SERVOS!
-      
-      Serial.println("" + eyeId + angleX + angleY);
+      Serial.println("" + eyeId +","+ angleX+","+ angleY+'\n');
       id = false;
       //Has to be eyeid but have to stop so fix later
-      id="";
-      nextAngle = false;
+      eyeId="";
       nextAngle = false;
       angleX = "";
       angleY = "";
       break;
     }
+    //als er een comma is is er of de eerste angle of de volgende angle dus switch dan
     if (inChar == ',') {
+      //switch van de id string naar de angle string
       if (!id) {
         id = true;
       }
       else {
+        //switch van de angleX string naar de angle Y string
         nextAngle = true;
       }
+      break;
     }
-
+    
     if (!id) {
       eyeId += inChar;
     }

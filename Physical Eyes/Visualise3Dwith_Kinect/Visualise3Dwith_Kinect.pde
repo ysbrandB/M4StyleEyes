@@ -8,6 +8,7 @@ KinectPV2 kinect;
 //serial library for arduino communication
 import processing.serial.*;
 Serial port;
+String inString;
 //TCP communication with eyes
 import processing.net.*;
 Server s;
@@ -17,7 +18,7 @@ Server s;
 //als 180 graden draaien opnieuw implementeren naar midden kijkend
 
 boolean draw= true;
-boolean useArduino=false;
+boolean useArduino=true;
 PVector camPos=new PVector(0, -140, 0);
 PVector screenPos=new PVector(0, -180, 0);
 //the eye that is in the place of the middle of the screen to calc that lookingvector
@@ -67,6 +68,7 @@ void setup() {
     }
     //init the port
     port = new Serial(this, Serial.list()[2], 9600);
+    port.bufferUntil('\n'); 
   }
 }
 
@@ -147,13 +149,12 @@ void draw() {
     }
   }
   if (arduinoPayload.length()>=1) {
-    arduinoPayload+="\n";
-
-    if (useArduino) {
+    // arduinoPayload+="\n";
+    //dont update 60 frames per second!
+    if (useArduino&&frameCount%5==0) {
       port.write(arduinoPayload);
     }
   }
-
 
   //Adjust the lookingPos for the screen by the difference between kinect and screenmid
   //update the lookingvector of the screen
@@ -167,8 +168,6 @@ void draw() {
   //(x,y,z,'\n')
   //write the coords to the drawing sketch
   s.write(TCPpayload);
-
-  //arrayCopy(eyes, oldEyes);
 }
 
 //draw a point with on position pos
@@ -227,4 +226,11 @@ void drawBody(PVector[] myJoints) {
   draw3DLine(myJoints[1], myJoints[20], blue);
   draw3DLine(myJoints[20], myJoints[2], blue);
   draw3DLine(myJoints[2], myJoints[3], blue);
+}
+
+void serialEvent(Serial myPort) {
+inString = myPort.readString();
+if (inString!="") {
+    print("Received: "+inString);
+  }
 }
