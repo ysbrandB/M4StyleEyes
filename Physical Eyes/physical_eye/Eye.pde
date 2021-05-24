@@ -54,7 +54,7 @@ class Eye{
      if(isOver(x,z)){
        if(isSelected) moveSelected = true;
        isSelected = true;
-     } else {
+     } else if(!distX.clicked(x,z) && !distY.clicked(x,z) && !distZ.clicked(x,z)){
        isSelected = false;
        moveSelected = false;
       }
