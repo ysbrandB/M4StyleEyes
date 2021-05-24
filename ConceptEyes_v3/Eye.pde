@@ -105,10 +105,13 @@ class Eye {
     strokeWeight(1);
   }
 
-  void checkToGoBlink() {
-    n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, time);
-    if (n > 0.6) {
-      isBlinking = true;
+  void checkToGoBlink(PVector blink) {
+    //n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, time);
+    //if (n > 0.6) {
+    //  isBlinking = true;
+    //}
+    if (blink.dist(posEye)<100) {
+      isBlinking=true;
     }
   }
 

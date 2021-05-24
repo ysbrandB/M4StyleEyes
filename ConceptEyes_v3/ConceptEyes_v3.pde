@@ -27,7 +27,7 @@ void setup() {
     c = new Client(this, "127.0.0.1", 10001);//listening port and ip
     lookingPosition=new PVector(0, 0);
   }
-  fullScreen(2);
+  fullScreen(1);
   swPixDIVswCM=width/screenWidthCM;
   if (useImages) {
     imageMode(CENTER);
@@ -82,9 +82,10 @@ void draw() {
   }
   //make the eyes blink by per a random amount of frames
   if (frameCount>blinkFrameCount) {
-    blinkFrameCount=frameCount+int(random(50, 100));
+    PVector blink=new PVector(random(width), random(height));
+    blinkFrameCount=frameCount+int(random(10, 50));
     for (Eye eye : eyes) {
-      eye.checkToGoBlink();
+      eye.checkToGoBlink(blink);
     }
   }
 }
