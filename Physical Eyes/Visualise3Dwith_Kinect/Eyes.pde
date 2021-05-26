@@ -1,28 +1,50 @@
 class Eye {
   int id;
   PVector pos;
-  PVector closestHead= camPos.copy();
-  float angleY, angleZ;
+  PVector closestHead= kinectPos.copy();
+  int angleY, angleZ;
   float closestDist;
-  PVector headToEye= new PVector(0,0,0);
+  PVector headToEye= kinectPos.copy();
+  int neutralYAngle;
+  int neutralZAngle;
   Eye(PVector pos, int id) {
     //als het niet het scherm is:
-    if(id!=-1){
-    this.id=id;
+    if (id!=-1) {
+      this.id=id;
     }
     this.pos=pos;
     angleY=0;
     angleZ=0;
+    
+    //compute the standard angle to kinect
+    PVector neutralVector=PVector.sub(kinectPos, pos);    
+
+    PVector neutralY=new PVector(neutralVector.x, neutralVector.z);
+    neutralYAngle=int((-neutralY.heading())/PI*180);
+    if (neutralYAngle<0) {
+      neutralYAngle=360-abs(neutralYAngle);
+    }
+    
+    PVector neutralZ=new PVector(neutralVector.x, neutralVector.y);
+    neutralZAngle=int((neutralZ.heading())/PI*180);
+    if (neutralZAngle<0) {
+      neutralZAngle=360-abs(neutralZAngle);
+    }
+    
   }
-//show the eye and lookingvectorline
+
+  //show the eye and lookingvectorline
   void show() {
     //cheat display of line
     PVector displayLine= headToEye.copy().setMag(30).add(pos);
-    draw3DLine(pos, displayLine, color (0,0,255));
-    drawPoint(pos, color (255,0,0));
+    draw3DLine(pos, displayLine, color (0, 0, 255));
+    drawPoint(pos, color (255, 0, 0));
   }  
+  
+  
   //update the lookingvector and calculate its angles
-  void update(){
+  void update() {
+    
     closestDist=999999999;
     for (int i=0; i<heads.size(); i++) {
       float distance=PVector.dist(heads.get(i), pos);
@@ -31,12 +53,25 @@ class Eye {
         closestHead=heads.get(i).copy();
       }
     }
+    
+    //vector from eye to kinect
     headToEye=PVector.sub(closestHead.copy(), pos.copy());    
     
     PVector lookY=new PVector(headToEye.x, headToEye.z);
-    angleY=(-lookY.heading())/PI*180;
+
+    angleY=int((-lookY.heading())/PI*180);
+    if (angleY>0) {
+      angleY=int(360-abs(angleY));
+    }
+    angleY=angleY-neutralYAngle;
+    if (pos.x<0) {
+      //println("YANGLE: "+ angleY+"NEUTRALY "+ neutralYAngle);
+    }
 
     PVector lookZ=new PVector(headToEye.x, headToEye.y);
-    angleZ=(lookZ.heading())/PI*180;
+    angleZ=int((lookZ.heading())/PI*180);
+    if (angleZ<0) {
+      angleZ=360-abs(angleZ);
+    }
   }
 }

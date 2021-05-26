@@ -1,0 +1,15 @@
+{
+   "Screen": {
+        "id" : "screenPosition",
+        "x" : 0,
+        "y" : -180,
+        "z" : 0,
+	"screenWidth": 100
+    },
+	"Kinect":{
+        "id" : "kinectPosition",
+        "x" : 0,
+        "y" : -140,
+        "z" : 0
+    }
+}

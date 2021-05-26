@@ -18,22 +18,36 @@ Server s;
 //als 180 graden draaien opnieuw implementeren naar midden kijkend
 
 boolean draw= true;
-boolean useArduino=true;
-PVector camPos=new PVector(0, -140, 0);
-PVector screenPos=new PVector(0, -180, 0);
+boolean useArduino=false;
+JSONObject setUpData;
+PVector kinectPos;
+PVector screenPos;
 //the eye that is in the place of the middle of the screen to calc that lookingvector
-Eye screen=new Eye(screenPos, -1);
+Eye screen;
 
 JSONArray eyePosData;
 ArrayList<Eye> eyes = new ArrayList<Eye>();
 ArrayList<String> oldData= new ArrayList<String>();
-ArrayList<PVector> heads = new ArrayList<PVector>();
+ArrayList<PVector> heads= new ArrayList<PVector>();
+
 void setup() {
   //make an eye for every json eye
   eyePosData = loadJSONArray("../EyePos.JSON");
+  //Load the JSON setup file
+  setUpData = loadJSONObject("../settings.JSON");
+  JSONObject kinectData= setUpData.getJSONObject("Kinect");
+  JSONObject screenData= setUpData.getJSONObject("Screen");
+
+  kinectPos=new PVector(kinectData.getFloat("x"), kinectData.getFloat("y"), kinectData.getFloat("z")); 
+
+  screenPos=new PVector(screenData.getFloat("x"), screenData.getFloat("y"), screenData.getFloat("z"));
+
+  screen=new Eye(screenPos, -1);
+
   for (int i = 0; i < eyePosData.size(); i++) {
     JSONObject eye = eyePosData.getJSONObject(i);
     eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
+    oldData.add("");
   }
 
   size(1000, 1000, P3D);
@@ -54,7 +68,6 @@ void setup() {
   s = new Server(this, 10001);
   //if you wanna draw the 3d space setup lights etc
   if (draw) {
-    ambientLight(255, 255, 255);
     perspective(PI/3.0, width/height, 1, 10000);
     sphereDetail(1);
     rectMode(CENTER);
@@ -68,28 +81,34 @@ void setup() {
     }
     //init the port
     port = new Serial(this, Serial.list()[2], 9600);
-    port.bufferUntil('\n'); 
+    port.bufferUntil('\n');
   }
 }
 
 void draw() {
   //if you wanna display: make the ground and lights and draw the green kinect dot
   if (draw) {
-    ambientLight(255, 255, 255);
-    background(255);
-    drawPoint(camPos, color (0, 255, 0));
-
-    pushMatrix();  
-
-    rotateX(PI/2);
-    translate(0, 0, 0);
-    rect(0, 0, 10000, 10000);
-    popMatrix();
+    //draw ground and lights
+    drawAmbience();
+    //draw kinect
+    drawPoint(kinectPos, color (0, 255, 0));
+    //draw screenEye
+    screen.show();
+    //show the eyes
+    for (Eye eye : eyes) {
+      eye.show();
+    }
+    //show the framerate counter
+    fill(255, 0, 0);
+    textSize(10);
+    text(frameRate, 50, -50);
   }
+
+
   // Get the 3D data points from the 3D skeleton (access to Z point)
   ArrayList<KSkeleton> skeleton3DArray =  kinect.getSkeleton3d();
 
-  //Make an arraylist for all the heads tracked this frame
+  //Empty the arraylist for all the heads tracked this frame
   heads = new ArrayList<PVector>();
 
   for (int i = 0; i < skeleton3DArray.size(); i++) {
@@ -100,12 +119,10 @@ void draw() {
       //add every joint to the arraylist to draw and every head to the heads arraylist
       for (int j=0; j<joints3D.length; j++) {
         PVector jointPos=new PVector(joints3D[j].getX()*100, -joints3D[j].getY()*100, joints3D[j].getZ()*100);
-        myJoints[j]=camPos.copy().add(jointPos.copy());
+        myJoints[j]=kinectPos.copy().add(jointPos.copy());
         if (draw) {
-          //not the kinect itself
           if (j!=25) {
             drawPoint(myJoints[j], color(255, 0, 0));
-            fill(255, 0, 0);
           }
         }
         //if the point is the head add it to the arraylist
@@ -113,34 +130,52 @@ void draw() {
           heads.add(myJoints[j]);
         }
       }
-
-      //draw all the bones in the body
+      //draw all the bones in this particular body
       if (draw) {
         drawBody(myJoints);
       }
     }
   }
+  updatePhysicalEyesArduino();
+  updateDigitalEyesTCP();
+}
 
-  //show the framerate counter and ScreenEye
-  if (draw) {
-    fill(255, 0, 0);
-    textSize(10);
-    text(frameRate, 50, -50);
+void serialEvent(Serial myPort) {
+  inString = myPort.readString();
+  if (inString!="") {
+    print("Received: "+inString);
   }
+}
+
+void drawAmbience() {
+  ambientLight(255, 255, 255);
+  background(255);
+  pushMatrix();  
+  rotateX(PI/2);
+  translate(0, 0, 0);
+  fill(0, 255, 0);
+  rect(0, 0, 10000, 10000);
+  popMatrix();
+}
+
+void updateDigitalEyesTCP() {
+  //Adjust the lookingPos for the screen by the difference between kinect and screenmid
+  //update the lookingvector of the screen
+  screen.update();
+  //send the lookingvector over TCP to the eyeSketch
+  PVector adjustedLookingPos=PVector.sub(screen.closestHead, screen.pos);
+  String TCPpayload=""+adjustedLookingPos.x+","+adjustedLookingPos.y+","+adjustedLookingPos.z+"\n";
+  //(x,y,z,'\n')
+  //write the coords to the drawing sketch
+  s.write(TCPpayload);
+}
+
+void updatePhysicalEyesArduino() {
   //update all the eyes, show if appropriate and send the data to the arduino
   String arduinoPayload="";
   for (int i=0; i<eyes.size(); i++) {
     Eye thisEye=eyes.get(i);
     thisEye.update();
-    if (draw) {
-      thisEye.show();
-    }
-    //vul het array als ie leeg is
-    if (oldData.size()<1) {
-      for (Eye eye : eyes) {
-        oldData.add(eye.id+","+int(eye.angleY)+","+int(eye.angleZ)+"|");
-      }
-    }
     //stuur alleen de data als de hoeken verander zijn
     String thisArduinoPayload=thisEye.id+","+int(thisEye.angleY)+","+int(thisEye.angleZ)+"|";
     if (!oldData.get(i).equals(thisArduinoPayload)) {
@@ -155,38 +190,8 @@ void draw() {
       port.write(arduinoPayload);
     }
   }
-
-  //Adjust the lookingPos for the screen by the difference between kinect and screenmid
-  //update the lookingvector of the screen
-  screen.update();
-  if (draw) {
-    screen.show();
-  }
-  //send the lookingvector over TCP to the eyeSketch
-  PVector adjustedLookingPos=PVector.sub(screen.closestHead, screen.pos);
-  String TCPpayload=""+adjustedLookingPos.x+","+adjustedLookingPos.y+","+adjustedLookingPos.z+"\n";
-  //(x,y,z,'\n')
-  //write the coords to the drawing sketch
-  s.write(TCPpayload);
 }
 
-//draw a point with on position pos
-void drawPoint(PVector pos, color c) {
-  pushMatrix();
-  translate(pos.x, pos.y, pos.z);
-  fill(c);
-  sphere(2);
-  popMatrix();
-}
-
-//draw a 3d line on the given pos and color
-void draw3DLine(PVector pos1, PVector pos2, color c) {
-  strokeWeight(3);
-  stroke(c);
-  line(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
-  stroke(0);
-  strokeWeight(1);
-}
 
 //draw all the bones between the joints
 void drawBody(PVector[] myJoints) {
@@ -228,9 +233,20 @@ void drawBody(PVector[] myJoints) {
   draw3DLine(myJoints[2], myJoints[3], blue);
 }
 
-void serialEvent(Serial myPort) {
-inString = myPort.readString();
-if (inString!="") {
-    print("Received: "+inString);
-  }
+//draw a point with on position pos
+void drawPoint(PVector pos, color c) {
+  pushMatrix();
+  translate(pos.x, pos.y, pos.z);
+  fill(c);
+  sphere(2);
+  popMatrix();
+}
+
+//draw a 3d line on the given pos and color
+void draw3DLine(PVector pos1, PVector pos2, color c) {
+  strokeWeight(3);
+  stroke(c);
+  line(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
+  stroke(0);
+  strokeWeight(1);
 }
