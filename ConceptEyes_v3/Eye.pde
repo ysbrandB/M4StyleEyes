@@ -34,7 +34,7 @@ class Eye {
   }
 
   boolean canPlaceEye() {
-    radius = random(15, 100);
+    radius = random(10, 70);
     posEye = new PVector(random(radius, width-radius), random(radius, height-radius));
     posPupil = new PVector(random(radius, width-radius), random(radius, height-radius));
     colorMode(HSB, 255);
