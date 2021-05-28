@@ -1,6 +1,6 @@
 import processing.net.*;
 Client c;
-int amount = 2000;
+int amount = 5000;
 float area;
 float areaEyes = 0;
 float counter = 0;
@@ -37,13 +37,13 @@ void setup() {
     }
     centerEyeIris = loadImage("centerEyeIris.png");
   }
-  eyes.add(new Eye(width/2, height/2, 400));
+  eyes.add(new Eye(width/2, height/2, 200));
 
   area = width * height;
   for (int i = 0; i < amount; i ++) {
     eyes.add(new Eye());
     counter++;
-    if (areaEyes/area >= 0.3) {
+    if (areaEyes/area >= 0.4) {
       println("henkie");
       break;
     }
