@@ -22,10 +22,10 @@ class DistanceMeter {
 
     switch(dimension) {
     case "x": 
-      postxt =  new PVector(distance/2,0); 
+      postxt =  new PVector(distance/2, -txtSize.y/2 - padding*2); 
       break;
     case "y": 
-      postxt = new PVector(currentEye.getPos().x, currentEye.getPos().z); 
+      postxt = new PVector(currentEye.getPos().x + 100, currentEye.getPos().z); 
       break;
     case "z": 
       postxt =  new PVector(currentEye.getPos().x, distance/2); 
@@ -44,16 +44,16 @@ class DistanceMeter {
       line(0, 0, distance*zoom, 0);
       fill(255, 200);
       strokeWeight(1);
-      rect(postxt.x*zoom, postxt.y*zoom - txtSize.y/2 - padding*2, txtSize.x, txtSize.y);
+      rect(postxt.x*zoom, postxt.y*zoom, txtSize.x, txtSize.y);
       fill(0);
-      text(int(distance), postxt.x*zoom, postxt.y*zoom - txtSize.y/2 - padding*2);
+      text(int(distance), postxt.x*zoom, postxt.y*zoom);
       break;
     case "y": 
       strokeWeight(1);
       fill(255, 200);
-      rect(postxt.x*zoom + 100, postxt.y*zoom, txtSize.x, txtSize.y);
+      rect(postxt.x*zoom, postxt.y*zoom, txtSize.x, txtSize.y);
       fill(0);
-      text(int(distance), postxt.x*zoom + 100, postxt.y*zoom);
+      text(int(distance), postxt.x*zoom, postxt.y*zoom);
       break;
     case "z": 
       line(currentEye.getPos().x*zoom, 0, currentEye.getPos().x*zoom, distance*zoom);
@@ -98,7 +98,12 @@ class DistanceMeter {
   }
 
   public boolean isOver(float x, float y) {
-    return x >= postxt.x - txtSize.x/2 + screenPos.x && x <= postxt.x + txtSize.x/2 + screenPos.x && y >= postxt.y - txtSize.y/2 + screenPos.y && y <= postxt.y + txtSize.y/2 + screenPos.y;
+    //println("----- " + dimension + " -----");
+    //print("x: " + x+ ">=" + (postxt.x*zoom - txtSize.x/2 + screenPos.x));
+    //println(", " + x + "<=" + (postxt.x*zoom + txtSize.x/2 + screenPos.x));
+    //print("y: " + y + ">=" + (postxt.y*zoom - txtSize.y/2 + screenPos.y));
+    //println( ", " + y + "<=" + (postxt.y*zoom + txtSize.y/2 + screenPos.y));
+    return x >= postxt.x*zoom - txtSize.x/2 + screenPos.x && x <= postxt.x*zoom + txtSize.x/2 + screenPos.x && y >= postxt.y*zoom - txtSize.y/2 + screenPos.y && y <= postxt.y*zoom + txtSize.y/2 + screenPos.y;
   }
   
   // roundN(float num, float n){
