@@ -44,11 +44,16 @@ void setup() {
 
   screen=new Eye(screenPos, -1);
 
-  for (int i = 0; i < eyePosData.size(); i++) {
-    JSONObject eye = eyePosData.getJSONObject(i);
-    eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
-    oldData.add("");
-  }
+  //for (int i = 0; i < eyePosData.size(); i++) {
+  //  JSONObject eye = eyePosData.getJSONObject(i);
+  //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
+  //  oldData.add("");
+  //}
+  eyes.add(new Eye(new PVector(-50,-100,50), 0));
+  oldData.add("");
+  
+  eyes.add(new Eye(new PVector(50,-100,50), 0));
+  oldData.add("");
 
   size(1000, 1000, P3D);
   //fullScreen(P3D, 1);
