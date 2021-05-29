@@ -12,6 +12,7 @@ String inString;
 //TCP communication with eyes
 import processing.net.*;
 Server s;
+Server sInterface;
 
 //sketch in CM, -y is up
 //als we 360 graden kunnen draaien 0 graden = recht vanuit kinect
@@ -22,6 +23,8 @@ boolean useArduino=false;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
+PVector crossPos;
+float minimumDistToCross;
 //the eye that is in the place of the middle of the screen to calc that lookingvector
 Eye screen;
 
@@ -37,11 +40,12 @@ void setup() {
   setUpData = loadJSONObject("../settings.JSON");
   JSONObject kinectData= setUpData.getJSONObject("Kinect");
   JSONObject screenData= setUpData.getJSONObject("Screen");
-
+  JSONObject crossData= setUpData.getJSONObject("Cross");
+  minimumDistToCross=crossData.getFloat("minimumDistance");
   kinectPos=new PVector(kinectData.getFloat("x"), kinectData.getFloat("y"), kinectData.getFloat("z")); 
-
+  crossPos= new PVector (crossData.getFloat("x"), crossData.getFloat("y"), crossData.getFloat("z")); 
   screenPos=new PVector(screenData.getFloat("x"), screenData.getFloat("y"), screenData.getFloat("z"));
-
+  
   screen=new Eye(screenPos, -1);
 
   //for (int i = 0; i < eyePosData.size(); i++) {
@@ -49,10 +53,10 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(-50,-100,50), 0));
+  eyes.add(new Eye(new PVector(-25, -100, 130), 0));
   oldData.add("");
-  
-  eyes.add(new Eye(new PVector(50,-100,50), 0));
+
+  eyes.add(new Eye(new PVector(50, -100, 50), 1));
   oldData.add("");
 
   size(1000, 1000, P3D);
@@ -71,6 +75,7 @@ void setup() {
 
   //setup the TCP server
   s = new Server(this, 10001);
+  sInterface=new Server(this, 10000);
   //if you wanna draw the 3d space setup lights etc
   if (draw) {
     perspective(PI/3.0, width/height, 1, 10000);
@@ -97,6 +102,8 @@ void draw() {
     drawAmbience();
     //draw kinect
     drawPoint(kinectPos, color (0, 255, 0));
+    //draw CrossPosition
+    drawPoint(crossPos, color (255, 0, 255));
     //draw screenEye
     screen.show();
     //show the eyes
@@ -143,6 +150,7 @@ void draw() {
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
+  checkToStartInterface();
 }
 
 void serialEvent(Serial myPort) {
@@ -163,6 +171,20 @@ void drawAmbience() {
   popMatrix();
 }
 
+void checkToStartInterface() {
+  float closestDist=999999999;
+  for (int i=0; i<heads.size(); i++) {
+    PVector head=heads.get(i);
+    float distance=dist(crossPos.x, crossPos.z, head.x, head.z);
+    if (distance<closestDist) {
+      closestDist=distance;
+    }
+  }
+  if (closestDist<=minimumDistToCross) {
+    sInterface.write("Start ");
+    println("Started interface!");
+  }
+}
 void updateDigitalEyesTCP() {
   //Adjust the lookingPos for the screen by the difference between kinect and screenmid
   //update the lookingvector of the screen
@@ -191,7 +213,7 @@ void updatePhysicalEyesArduino() {
   if (arduinoPayload.length()>=1) {
     // arduinoPayload+="\n";
     //dont update 60 frames per second!
-    if (useArduino&&frameCount%5==0) {
+    if (useArduino&&frameCount%3==0) {
       port.write(arduinoPayload);
     }
   }

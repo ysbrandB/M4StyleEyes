@@ -14,6 +14,10 @@ void setup() {
     angles[i] = 0;
   }
   testServo.attach(3);
+  testServo.write(0);
+  delay(4000);
+  testServo.write(180);
+  delay(4000);
 }
 
 void loop() {
@@ -50,7 +54,7 @@ void serialEvent() {
       //UPDATE HIER DE SERVOS!
       Serial.println("" + eyeId +","+ angleX+","+ angleY+'\n');
       if(eyeId.toInt()==0){
-      testServo.write(angleY.toInt());
+      testServo.write(180-angleX.toInt());
       }
       id = false;
       //Has to be eyeid but have to stop so fix later
