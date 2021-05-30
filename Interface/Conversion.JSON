@@ -1,5 +1,15 @@
 {
-    "LongSLeeved ding " : "alkjdlkadsj",
-    "ander ing" : "zelfde"
-
+    "short_sleeve_top" : "T-Shirt",
+    "long_sleeve_top" : "Long Shirt",
+    "short_sleeve_outwear" : "Coat",
+    "long_sleeve_outwear" : "Coat",
+    "vest" : "Vest",
+    "sling" : "Vest",
+    "shorts" : "Shorts",
+    "trousers" : "Jeans",
+    "skirt" : "Skirt",
+    "short_sleeve_dress" : "Dress",
+    "long_sleeve_dress" : "Dress",
+    "vest_dress" : "Dress",
+    "sling_dress" : "Dress"
 }

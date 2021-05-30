@@ -1,6 +1,6 @@
 {
     "Types": {
-        "short_sleeve_top": {
+        "T-Shirt": {
             "Red": "",
             "Orange": "",
             "Yellow": "",
@@ -13,7 +13,7 @@
             "Pink": "",
             "Brown": ""
         },
-        "long_sleeve_top": {
+        "Long shirt": {
             "Red": "",
             "Orange": "",
             "Yellow": "",
@@ -26,7 +26,7 @@
             "Pink": "",
             "Brown": ""
         },
-        "short_sleeve_outwear": {
+        "Coat": {
             "Red": "",
             "Orange": "",
             "Yellow": "",
@@ -39,7 +39,7 @@
             "Pink": "",
             "Brown": ""
         },
-        "long_sleeve_outwear": {
+        "Vest": {
             "Red": "",
             "Orange": "",
             "Yellow": "",
@@ -52,7 +52,7 @@
             "Pink": "",
             "Brown": ""
         },
-        "vest": {
+        "Shorts": {
             "Red": "",
             "Orange": "",
             "Yellow": "",
@@ -65,7 +65,7 @@
             "Pink": "",
             "Brown": ""
         },
-        "sling": {
+        "Jeans": {
             "Red": "",
             "Orange": "",
             "Yellow": "",
@@ -78,7 +78,7 @@
             "Pink": "",
             "Brown": ""
         },
-        "shorts": {
+        "Skirt": {
             "Red": "",
             "Orange": "",
             "Yellow": "",
@@ -91,72 +91,7 @@
             "Pink": "",
             "Brown": ""
         },
-        "trousers": {
-            "Red": "",
-            "Orange": "",
-            "Yellow": "",
-            "Green": "",
-            "Blue": "",
-            "Purple": "",
-            "Grey": "",
-            "White": "",
-            "Black": "",
-            "Pink": "",
-            "Brown": ""
-        },
-        "skirt": {
-            "Red": "",
-            "Orange": "",
-            "Yellow": "",
-            "Green": "",
-            "Blue": "",
-            "Purple": "",
-            "Grey": "",
-            "White": "",
-            "Black": "",
-            "Pink": "",
-            "Brown": ""
-        },
-        "short_sleeve_dress": {
-            "Red": "",
-            "Orange": "",
-            "Yellow": "",
-            "Green": "",
-            "Blue": "",
-            "Purple": "",
-            "Grey": "",
-            "White": "",
-            "Black": "",
-            "Pink": "",
-            "Brown": ""
-        },
-        "long_sleeve_dress": {
-            "Red": "",
-            "Orange": "",
-            "Yellow": "",
-            "Green": "",
-            "Blue": "",
-            "Purple": "",
-            "Grey": "",
-            "White": "",
-            "Black": "",
-            "Pink": "",
-            "Brown": ""
-        },
-        "vest_dress": {
-            "Red": "",
-            "Orange": "",
-            "Yellow": "",
-            "Green": "",
-            "Blue": "",
-            "Purple": "",
-            "Grey": "",
-            "White": "",
-            "Black": "",
-            "Pink": "",
-            "Brown": ""
-        },
-        "sling_dress": {
+        "Dress": {
             "Red": "",
             "Orange": "",
             "Yellow": "",
