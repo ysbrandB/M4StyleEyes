@@ -61,7 +61,7 @@ class Eye {
 
     if (pos.x<0) {
       angleY=int((lookY.heading()+PI)/PI*180);
-      angleY=angleY-neutralYAngle;
+      angleY=180-(angleY-neutralYAngle);
       //println("LEFT:"+ angleY);
     }
     if (pos.x>0) {
@@ -74,6 +74,20 @@ class Eye {
     }
 
     PVector lookZ=new PVector(headToEye.x, headToEye.y);
-    angleZ=int((lookZ.heading()+PI)/PI*180);
+    if (pos.x>0) {
+      angleZ=int((lookZ.heading())/PI*180);
+      if (angleZ<0) {
+        angleZ=360+angleZ;
+      }
+      angleZ-=90;
+    }
+    else if (pos.x<0) {
+      angleZ=int((lookZ.heading()+PI)/PI*180);
+      if (angleZ<0) {
+        angleZ=360+angleZ;
+      }
+      angleZ=(angleZ-90);
+    }
+    
   }
 }

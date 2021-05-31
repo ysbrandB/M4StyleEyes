@@ -19,7 +19,7 @@ Server sInterface;
 //als 180 graden draaien opnieuw implementeren naar midden kijkend
 
 boolean draw= true;
-boolean useArduino=false;
+boolean useArduino=true;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
@@ -27,6 +27,7 @@ PVector crossPos;
 float minimumDistToCross;
 //the eye that is in the place of the middle of the screen to calc that lookingvector
 Eye screen;
+float time;
 
 JSONArray eyePosData;
 ArrayList<Eye> eyes = new ArrayList<Eye>();
@@ -47,13 +48,14 @@ void setup() {
   screenPos=new PVector(screenData.getFloat("x"), screenData.getFloat("y"), screenData.getFloat("z"));
   
   screen=new Eye(screenPos, -1);
+  time=0;
 
   //for (int i = 0; i < eyePosData.size(); i++) {
   //  JSONObject eye = eyePosData.getJSONObject(i);
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(-25, -100, 130), 0));
+  eyes.add(new Eye(new PVector(-70, -100, 180), 0));
   oldData.add("");
 
   eyes.add(new Eye(new PVector(50, -100, 50), 1));
@@ -148,6 +150,10 @@ void draw() {
       }
     }
   }
+  //als er niemand getrackt word laat alle ogen een arbitrary punt (paars in het overview) volgen
+  if(heads.size()<1){
+    //displayNoise();
+  }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
   checkToStartInterface();
@@ -156,7 +162,7 @@ void draw() {
 void serialEvent(Serial myPort) {
   inString = myPort.readString();
   if (inString!="") {
-    print("Received: "+inString);
+    //print("Received: "+inString);
   }
 }
 
@@ -171,6 +177,12 @@ void drawAmbience() {
   popMatrix();
 }
 
+void displayNoise(){
+PVector noise=new PVector(map(noise(time/2),0,1,-50,50), map(noise(time),0,1,-200,0), map(noise(time*2),0,1,0,200));
+  heads.add(noise);
+  drawPoint(noise, color(255,0,255));
+  time+=0.001;
+}
 void checkToStartInterface() {
   float closestDist=999999999;
   for (int i=0; i<heads.size(); i++) {
@@ -182,7 +194,6 @@ void checkToStartInterface() {
   }
   if (closestDist<=minimumDistToCross) {
     sInterface.write("Start ");
-    println("Started interface!");
   }
 }
 void updateDigitalEyesTCP() {
@@ -211,9 +222,8 @@ void updatePhysicalEyesArduino() {
     }
   }
   if (arduinoPayload.length()>=1) {
-    // arduinoPayload+="\n";
     //dont update 60 frames per second!
-    if (useArduino&&frameCount%3==0) {
+    if (useArduino&&frameCount%5==0) {
       port.write(arduinoPayload);
     }
   }

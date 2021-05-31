@@ -6,6 +6,7 @@ int angles[60];
 int servoAmount = 30;
 int angleAmount = servoAmount * 2;
 Servo testServo;
+Servo testServo2;
 void setup() {
   // initialize serial:
   Serial.begin(9600);
@@ -14,9 +15,12 @@ void setup() {
     angles[i] = 0;
   }
   testServo.attach(3);
+  testServo2.attach(5);
   testServo.write(0);
+  testServo2.write(0);
   delay(4000);
   testServo.write(180);
+  testServo2.write(180);
   delay(4000);
 }
 
@@ -54,7 +58,10 @@ void serialEvent() {
       //UPDATE HIER DE SERVOS!
       Serial.println("" + eyeId +","+ angleX+","+ angleY+'\n');
       if(eyeId.toInt()==0){
-      testServo.write(180-angleX.toInt());
+        int tempXAngle=angleX.toInt();
+        int tempYAngle=angleY.toInt();
+      testServo.write(constrain(tempXAngle,0,180));
+      testServo2.write(constrain(tempYAngle,0,180));
       }
       id = false;
       //Has to be eyeid but have to stop so fix later
