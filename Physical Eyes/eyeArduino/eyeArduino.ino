@@ -1,9 +1,12 @@
+#include <Servo.h>
+
 bool fullUpdate = false;  // whether the full update is complete
 //test string: 1,38,-41|2,125,-125|3,33,-36|4,26,-26|5,153,-131|6,28,-50|7,141,-161|\n
 int angles[60];
 int servoAmount = 30;
 int angleAmount = servoAmount * 2;
-
+Servo testServo;
+Servo testServo2;
 void setup() {
   // initialize serial:
   Serial.begin(9600);
@@ -11,6 +14,14 @@ void setup() {
   for (int i = 0; i < sizeof(angleAmount); i++) {
     angles[i] = 0;
   }
+  testServo.attach(3);
+  testServo2.attach(5);
+  testServo.write(0);
+  testServo2.write(0);
+  delay(4000);
+  testServo.write(180);
+  testServo2.write(180);
+  delay(4000);
 }
 
 void loop() {
@@ -46,6 +57,12 @@ void serialEvent() {
     if (inChar == '|') {
       //UPDATE HIER DE SERVOS!
       Serial.println("" + eyeId +","+ angleX+","+ angleY+'\n');
+      if(eyeId.toInt()==0){
+        int tempXAngle=angleX.toInt();
+        int tempYAngle=angleY.toInt();
+      testServo.write(constrain(tempXAngle,0,180));
+      testServo2.write(constrain(tempYAngle,0,180));
+      }
       id = false;
       //Has to be eyeid but have to stop so fix later
       eyeId="";
