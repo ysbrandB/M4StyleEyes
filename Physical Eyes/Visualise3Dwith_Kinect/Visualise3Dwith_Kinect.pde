@@ -19,7 +19,7 @@ Server sInterface;
 //als 180 graden draaien opnieuw implementeren naar midden kijkend
 
 boolean draw= true;
-boolean useArduino=true;
+boolean useArduino=false;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
@@ -152,7 +152,7 @@ void draw() {
   }
   //als er niemand getrackt word laat alle ogen een arbitrary punt (paars in het overview) volgen
   if(heads.size()<1){
-    //displayNoise();
+    displayNoise();
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();

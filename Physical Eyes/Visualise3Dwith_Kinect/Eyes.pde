@@ -86,7 +86,7 @@ class Eye {
       if (angleZ<0) {
         angleZ=360+angleZ;
       }
-      angleZ=(angleZ-90);
+      angleZ=angleZ-90;
     }
     
   }
