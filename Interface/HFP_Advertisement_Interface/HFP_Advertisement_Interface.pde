@@ -2,15 +2,9 @@
 //By Sterre Kuijper <Team Leader>, Frank Bosman, Jesse Boomkamp, Ysbrand Brugstede, Jelle Gerritsen,  Max Liebe, Marnix Lueb & Kimberley Siemons
 //The Style Eyes Project
 //Advertisement Interface of Style Eyes
+//Press R to Start
 
-//libraries:
-import processing.net.*;
-
-//TCP clients
-Client personOnCrossClient;
-
-//communicationHandler
-ComHandler communicationHandler;
+import processing.sound.*;
 
 int phaseCount;
 float phaseTimer;
@@ -18,38 +12,46 @@ int t1 = 0;
 
 Boolean distanceTrigger;
 
+Boolean hasPlayed;
+
 String colorGet;
 String colorRecommend;
+
+PFont pOneMainText; //Font for the main text in phase one
+PFont pTwoMainText; //Font for the main text in phase two
+PFont pThreeMainText; //Font for the main text in phase three
 
 PhaseZero pZero;
 PhaseOne pOne;
 PhaseTwo pTwo;
 PhaseThree pThree;
 
-PFont pOneMainText; //Font for the main text in phase one
-PFont pTwoMainText; //Font for the main text in phase two
-PFont pThreeMainText; //Font for the main text in phase three
+SpeechSynth speechSynth;
 
 void setup() {
-  //Setup TCP
-  personOnCrossClient = new Client(this, "127.0.0.1", 10000);//listening port and ip
-  communicationHandler=new ComHandler();
+
   fullScreen(); 
-  //size(800, 800);
+  //size(800, 800); //for testing only
   imageMode(CENTER);
 
   pOneMainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
   pTwoMainText = createFont("Font/ARLRDBD_0.TTF", 40); //lettertype Arial rounded MT Bold
   pThreeMainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
 
+  //initialize all phases
   pZero = new PhaseZero();
   pOne = new PhaseOne(pOneMainText);
   pTwo = new PhaseTwo(pTwoMainText);
   pThree = new PhaseThree(pThreeMainText);
+  
+  //initialize the speech synthesizer
+  speechSynth = new SpeechSynth();
 
+  //initialize the phaseTimer & phaseCounter
   phaseCount = 0;
   phaseTimer = 1;
 
+  //
   distanceTrigger = false;
 }
 
@@ -63,6 +65,7 @@ void draw() {
 
   case 1:
     pOne.display();
+    speechSynth.aiRecommend(); 
     //phaseCount++;
     println("One");  // Prints "One"
     break;
@@ -80,29 +83,27 @@ void draw() {
     break;
   }
 
-  //update current phase
+  //update current phase, phaseTimer is in seconds
   if (phaseTimer > 0) {
-    phaseTimer -= 1/frameRate;
+    phaseTimer -= 1/frameRate; 
   } else if (phaseCount != 0 || (distanceTrigger && phaseCount == 0)) {
     phaseCount++;
     if (phaseCount > 3) phaseCount = 0;
 
     switch(phaseCount) { //determines the length of the next phase 
     case 1:
-      phaseTimer = 5;
+      phaseTimer = 8;
       break;
     case 2: 
       phaseTimer = 8; 
       break;
     case 3: 
-      phaseTimer = 8; 
+      phaseTimer = 5; 
       break;
      case 0:
-      phaseTimer = 3;
+      phaseTimer = 2;
     }
   }
-  
-  communicationHandler.getInfo();
 }
 
 void keyPressed() {
