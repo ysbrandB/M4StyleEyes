@@ -9,9 +9,7 @@ class Eye {
   int neutralZAngle;
   Eye(PVector pos, int id) {
     //als het niet het scherm is:
-    if (id!=-1) {
-      this.id=id;
-    }
+    this.id=id;
     this.pos=pos;
     angleY=0;
     angleZ=0;

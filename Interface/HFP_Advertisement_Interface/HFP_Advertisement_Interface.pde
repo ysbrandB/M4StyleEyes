@@ -3,6 +3,14 @@
 //The Style Eyes Project
 //Advertisement Interface of Style Eyes
 
+//libraries:
+import processing.net.*;
+
+//TCP clients
+Client personOnCrossClient;
+
+//communicationHandler
+ComHandler communicationHandler;
 
 int phaseCount;
 float phaseTimer;
@@ -23,7 +31,9 @@ PFont pTwoMainText; //Font for the main text in phase two
 PFont pThreeMainText; //Font for the main text in phase three
 
 void setup() {
-
+  //Setup TCP
+  personOnCrossClient = new Client(this, "127.0.0.1", 10000);//listening port and ip
+  communicationHandler=new ComHandler();
   fullScreen(); 
   //size(800, 800);
   imageMode(CENTER);
@@ -91,6 +101,8 @@ void draw() {
       phaseTimer = 3;
     }
   }
+  
+  communicationHandler.getInfo();
 }
 
 void keyPressed() {

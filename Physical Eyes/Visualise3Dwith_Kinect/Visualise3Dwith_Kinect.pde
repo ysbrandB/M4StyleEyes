@@ -19,7 +19,7 @@ Server sInterface;
 //als 180 graden draaien opnieuw implementeren naar midden kijkend
 
 boolean draw= true;
-boolean useArduino=true;
+boolean useArduino=false;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
@@ -28,6 +28,11 @@ float minimumDistToCross;
 //the eye that is in the place of the middle of the screen to calc that lookingvector
 Eye screen;
 float time;
+
+//to only send an update to interface when a new person is over the cross
+int buffer=0;
+int desiredBufferTime=0;
+boolean triggeredInterface=false;
 
 JSONArray eyePosData;
 ArrayList<Eye> eyes = new ArrayList<Eye>();
@@ -43,10 +48,11 @@ void setup() {
   JSONObject screenData= setUpData.getJSONObject("Screen");
   JSONObject crossData= setUpData.getJSONObject("Cross");
   minimumDistToCross=crossData.getFloat("minimumDistance");
+  desiredBufferTime=crossData.getInt("bufferFrames");
   kinectPos=new PVector(kinectData.getFloat("x"), kinectData.getFloat("y"), kinectData.getFloat("z")); 
   crossPos= new PVector (crossData.getFloat("x"), crossData.getFloat("y"), crossData.getFloat("z")); 
   screenPos=new PVector(screenData.getFloat("x"), screenData.getFloat("y"), screenData.getFloat("z"));
-  
+
   screen=new Eye(screenPos, -1);
   time=0;
 
@@ -150,13 +156,13 @@ void draw() {
       }
     }
   }
+  checkToStartInterface();
   //als er niemand getrackt word laat alle ogen een arbitrary punt (paars in het overview) volgen
-  if(heads.size()<1){
-    //displayNoise();
+  if (heads.size()<1) {
+    displayNoise();
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
-  checkToStartInterface();
 }
 
 void serialEvent(Serial myPort) {
@@ -177,13 +183,16 @@ void drawAmbience() {
   popMatrix();
 }
 
-void displayNoise(){
-PVector noise=new PVector(map(noise(time/2),0,1,-50,50), map(noise(time),0,1,-200,0), map(noise(time*2),0,1,0,200));
+void displayNoise() {
+  PVector noise=new PVector(map(noise(time/2), 0, 1, -50, 50), map(noise(time), 0, 1, -200, 0), map(noise(time*2), 0, 1, 0, 200));
   heads.add(noise);
-  drawPoint(noise, color(255,0,255));
+  drawPoint(noise, color(255, 0, 255));
   time+=0.001;
 }
 void checkToStartInterface() {
+  //  int buffer=0;
+  //int desiredBufferTime=0;
+  //boolean triggeredInterface=false;
   float closestDist=999999999;
   for (int i=0; i<heads.size(); i++) {
     PVector head=heads.get(i);
@@ -193,7 +202,17 @@ void checkToStartInterface() {
     }
   }
   if (closestDist<=minimumDistToCross) {
-    sInterface.write("Start ");
+    if (!triggeredInterface) {
+      sInterface.write("Start ");
+      println("Start", desiredBufferTime);
+      triggeredInterface=true;
+    }
+  } else {
+    buffer++;
+    if (buffer>desiredBufferTime) {
+      triggeredInterface=false;
+      buffer=0;
+    }
   }
 }
 void updateDigitalEyesTCP() {
