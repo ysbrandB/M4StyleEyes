@@ -16,9 +16,12 @@ class PhaseTwo extends Slide {
   String recomClothing;
   String recogClothing;
 
+  Strings string;
+
   PhaseTwo(PFont pTwoMainText) {
     //bgColor = color(0, 255, 0);
 
+    string = new Strings();
     mainText = pTwoMainText;
     
     tweet = loadImage("image/fullelontweet.png");
@@ -50,6 +53,9 @@ class PhaseTwo extends Slide {
     textFont(mainText);
 
     fill(0);
+    string.NewsQuote();
+    string.ScientificQuote();
+    
     text(favourNumber + "%", width/8 + 10, height/4*3+42);
     text(opposeNumber + "%", width/8 + width/4 + 70, height/4*3+42);
     text(pollDescription, width/8-110, height/8*6-50);

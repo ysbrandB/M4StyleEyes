@@ -7,7 +7,7 @@
         "What a fun Color_ Type_ are you wearing but a Color_ Type_ is most worn by young children"
     ],
 
-    "Feitjes" : [ 
+    "NewsHeads" : [
         "Color_ often means beautiful and colorful.",
         "Color_ is america's favorite color.",
         "Color_ is a relaxing color.",
@@ -17,32 +17,16 @@
         "Color_ stimulates hunger"
     ],
 
-    "Tweets" : [
-        {
-            "Name" : "Elon Musk",
-            "images" : "",
-            "text" : [
-                "",
-                ""
-            ]
-        },
-        {
-            "Name" : "",
-            "images" : "",
-            "text" : [
-                "",
-                ""
-            ]
-        }
+    "ScientificFacts" : [
+        "Blah, Blah, Better by 30%, Blah"
     ],
 
-    "Brands" :{ 
-        "Cheap": 
-        [
-        "Jones & Jack", "Shipperman", "Kalvin Clein"
-    ],
-        "Expensive" :[
-        "Luois Vitoon", "Armini", "Blurberry"
-    ]
-}
+    "Brands" : [
+        "Jones & Jack", 
+        "Shipperman", 
+        "Kalvin Clein",
+        "Luois VitØn",
+        "Armini", 
+        "Blurberry"
+]
 }
