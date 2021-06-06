@@ -12,29 +12,30 @@ class PhaseOne extends Slide {
   String recomEndText;
 
   PImage recomClothing; 
-
+  ColorPicker colorPicker;
 
   PhaseOne(PFont pONeMainText) {
     //bgColor = color(255,0,0);
-
     mainText = pONeMainText;
+  }
+
+  void display() {
+    background(bgColor);
+    fill(0);
+    colorPicker = new ColorPicker(222,5,0);
+    colorPicker.update();
 
     recogText = "You are wearing a" + '\n';
-    clothRecog = "Blue Sweater";
+    clothRecog = colorPicker.getDeterminedColorName() + " Sweater";
 
     recomStartText = "However, these days" + '\n'; 
-    clothRecom = "White Polos";
+    clothRecom = colorPicker.getOpositeDeterminedColorName() + " Polos";
     recomEndText = " are far" + '\n' +  "more fashionable";
 
     upperText = recogText + clothRecog;
     lowerText = recomStartText + clothRecom + recomEndText;
 
     recomClothing = loadImage("image/whitepolo.png");
-  }
-
-  void display() {
-    background(bgColor);
-    fill(0);
 
     textFont(mainText);
 

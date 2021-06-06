@@ -27,11 +27,12 @@ PhaseTwo pTwo;
 PhaseThree pThree;
 
 SpeechSynth speechSynth;
+ColorPicker colorPicker;
 
 void setup() {
 
   fullScreen(); 
-  //size(800, 800); //for testing only
+  //size(1600, 800); //for testing only
   imageMode(CENTER);
 
   pOneMainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
