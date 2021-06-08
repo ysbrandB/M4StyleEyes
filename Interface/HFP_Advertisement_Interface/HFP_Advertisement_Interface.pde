@@ -5,6 +5,9 @@
 //Press R to Start
 
 import processing.sound.*;
+import processing.net.*;
+import processing.serial.*;
+
 
 int phaseCount;
 float phaseTimer;
