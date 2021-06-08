@@ -5,11 +5,10 @@ class Calibration {
   Calibration(JSONArray eyePosData) {
     this.eyePosData = eyePosData;
 
-  int i = 0;
-    //for (int i = 0; i < eyePosData.size(); i++) {
+    for (int i = 0; i < eyePosData.size(); i++) {
       JSONObject eye = eyePosData.getJSONObject(i);
       eyes.add(new Eye(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z"), eyeImg));
-    //}
+    }
   }
 
   void update(float x, float z) {

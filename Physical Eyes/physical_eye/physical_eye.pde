@@ -1,6 +1,6 @@
 //images by https://www.freepik.com, from https://www.flaticon.com
 //TODO:
-//distanceMeter aanpassen door erop te klikken en dat je het oog dan ook niet unselect
+//input field
 
 JSONArray eyePosData;
 Calibration CalibrationScreen;
