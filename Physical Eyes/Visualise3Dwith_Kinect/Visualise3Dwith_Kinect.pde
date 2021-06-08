@@ -40,6 +40,7 @@ ArrayList<String> oldData= new ArrayList<String>();
 ArrayList<PVector> heads= new ArrayList<PVector>();
 
 void setup() {
+  frameRate(30);
   //make an eye for every json eye
   eyePosData = loadJSONArray("../EyePos.JSON");
   //Load the JSON setup file
@@ -61,7 +62,7 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(100, -120, 50), 0));
+  eyes.add(new Eye(new PVector(20, -100, 100), 0));
   oldData.add("");
 
   eyes.add(new Eye(new PVector(50, -100, 50), 1));

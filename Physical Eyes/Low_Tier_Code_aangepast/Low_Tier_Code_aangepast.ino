@@ -1,121 +1,71 @@
-//  Nilheim Mechatronics Simplified Eye Mechanism Code
-//  Make sure you have the Adafruit servo driver library installed >>>>> https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library
-//  X-axis joystick pin: A1
-//  Y-axis joystick pin: A0
-//  Trim potentiometer pin: A2
-//  Button pin: 2
+//Ysbrand Burgstede Physical Eye Project M4 for blinking physical eyes
 
-int amountEyes=6;
+int amountEyes = 6;
 int xAngles[6];
 int yAngles[6];
-bool fullUpdate;
- 
+bool blinking[6];
+
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-#define SERVOMIN  140 // this is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  520 // this is the 'maximum' pulse length count (out of 4096)
+#define SERVOMIN  130 // this is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX  610 // this is the 'maximum' pulse length count (out of 4096)
 
-// our servo # counter
-uint8_t servonum = 0;
+#define ANGLEMINLEFT 45
+#define ANGLEMAXRIGHT 135
+
+#define ANGLEMINDOWN 80
+#define ANGLEMAXUP 100
+
+
 
 int xval;
 int yval;
 
-int lexpulse;
-int rexpulse;
-
-int leypulse;
-int reypulse;
-
-int uplidpulse;
-int lolidpulse;
-int altuplidpulse;
-int altlolidpulse;
-
-int trimval;
-
-const int analogInPin = A0;
-int sensorValue = 0;
-int outputValue = 0;
-int switchval = 0;
+int xPulse;
+int yPulse;
 
 void setup() {
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
   Serial.begin(9600);
-  Serial.println("8 channel Servo test!");
-  pinMode(analogInPin, INPUT);
-  pinMode(2, INPUT);
- 
+  Serial.println("Ysbrand dit gaat niet werken lmao");
   pwm.begin();
-  
+
   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
-
-  delay(10);
-}
-
-// you can use this function if you'd like to set the pulse length in seconds
-// e.g. setServoPulse(0, 0.001) is a ~1 millisecond pulse width. its not precise!
-void setServoPulse(uint8_t n, double pulse) {
-  double pulselength;
-  
-  pulselength = 1000000;   // 1,000,000 us per second
-  pulselength /= 60;   // 60 Hz
-  Serial.print(pulselength); Serial.println(" us per period"); 
-  pulselength /= 4096;  // 12 bits of resolution
-  Serial.print(pulselength); Serial.println(" us per bit"); 
-  pulse *= 1000000;  // convert to us
-  pulse /= pulselength;
-  Serial.println(pulse);
+  for (int i = 0; i < 6; i++) {
+    blinking[i] = false;
+  }
+  delay(100);
 }
 
 void loop() {
+  for (int i = 0; i < 6; i++) {
+    xval = xAngles[0];
+    yval = yAngles[0];
 
-  xval = xAngles[0];
-  yval=yAngles[0];
-  Serial.println(yAngles[0]);
-    lexpulse = map(xval, 0,180, 220, 440);
-    rexpulse = lexpulse;
-
-    switchval = 0;
+    //LEFT RIGHT
+    xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
+    //xPulse = map(analogRead(0),0, 1023, 220, 450);
+    pwm.setPWM(0,0,xPulse);
     
-    leypulse = map(yval, 0,180, 250, 500);
-    reypulse = map(yval, 0,180, 400, 280);
+    //UP DOWN
+   yPulse= map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
+   //yPulse = map(analogRead(1),0, 1023, 280, 520);
+   pwm.setPWM(1,0,yPulse);
 
-  trimval = analogRead(A2);
-    trimval=map(trimval, 320, 580, -40, 40);
-     uplidpulse = map(yval, 0, 1023, 400, 280);
-        uplidpulse -= (trimval-40);
-          uplidpulse = constrain(uplidpulse, 280, 400);
-     altuplidpulse = 680-uplidpulse;
-
-     lolidpulse = map(yval, 0, 180, 410, 280);
-       lolidpulse += (trimval/2);
-         lolidpulse = constrain(lolidpulse, 280, 400);      
-     altlolidpulse = 680-lolidpulse;
- 
+    if(blinking[i]){
+      }
     
-      pwm.setPWM(0, 0, lexpulse);
-      pwm.setPWM(1, 0, leypulse);
+  pwm.setPWM(4, 0, map(analogRead(0),0,1023,230,560));
+  //Serial.println(map(analogRead(0),0,1023,230,560));
+  //160
 
-
-      if (switchval == HIGH) {
-      pwm.setPWM(2, 0, 400);
-      pwm.setPWM(3, 0, 240);
-      pwm.setPWM(4, 0, 240);
-      pwm.setPWM(5, 0, 400);
-      }
-      else if (switchval == LOW) {
-      pwm.setPWM(2, 0, uplidpulse);
-      pwm.setPWM(3, 0, lolidpulse);
-      pwm.setPWM(4, 0, altuplidpulse);
-      pwm.setPWM(5, 0, altlolidpulse);
-      }
-     // Serial.println(trimval);
-      
+  pwm.setPWM(2, 0, map(analogRead(0),0,1023,500,160));
   delay(5);
-
+  }
 }
 
 boolean id = false;
@@ -128,25 +78,20 @@ void serialEvent() {
   while (Serial.available()) {
     // get the new byte:
     char inChar = (char)Serial.read();
-   //als een \n er is en we dus een volledige update hebben gehad zet 
-    if (inChar == '\n') {
-      fullUpdate = true;
-      break;
-    }
-    
+
     //als het einde van een oog is bereikt reset alle variabelen
     if (inChar == '|') {
       //UPDATE HIER DE SERVOS!
-      Serial.println("" + eyeId +","+ angleX+","+ angleY+'\n');
-      int tempId=eyeId.toInt();
-        int tempXAngle=angleX.toInt();
-        int tempYAngle=angleY.toInt();
-      xAngles[tempId]=constrain(tempXAngle,0,180);
-      yAngles[tempId]=constrain(tempYAngle,0,180);
-     
+      Serial.println("" + eyeId + "," + angleX + "," + angleY + '\n');
+      int tempId = eyeId.toInt();
+      int tempXAngle = angleX.toInt();
+      int tempYAngle = angleY.toInt();
+      xAngles[tempId] = constrain(tempXAngle, ANGLEMINLEFT, ANGLEMAXRIGHT);
+      yAngles[tempId] = constrain(tempYAngle, ANGLEMINDOWN, ANGLEMAXUP);
+
       id = false;
       //Has to be eyeid but have to stop so fix later
-      eyeId="";
+      eyeId = "";
       nextAngle = false;
       angleX = "";
       angleY = "";
@@ -164,7 +109,7 @@ void serialEvent() {
       }
       break;
     }
-    
+
     if (!id) {
       eyeId += inChar;
     }
