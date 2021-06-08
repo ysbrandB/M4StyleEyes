@@ -86,6 +86,5 @@ class Eye {
       }
       angleZ=(angleZ-90);
     }
-    
   }
 }

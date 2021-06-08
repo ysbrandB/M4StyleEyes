@@ -19,7 +19,7 @@ Server sInterface;
 //als 180 graden draaien opnieuw implementeren naar midden kijkend
 
 boolean draw= true;
-boolean useArduino=false;
+boolean useArduino=true;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
@@ -61,7 +61,7 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(-70, -100, 180), 0));
+  eyes.add(new Eye(new PVector(100, -120, 50), 0));
   oldData.add("");
 
   eyes.add(new Eye(new PVector(50, -100, 50), 1));
@@ -168,7 +168,7 @@ void draw() {
 void serialEvent(Serial myPort) {
   inString = myPort.readString();
   if (inString!="") {
-    //print("Received: "+inString);
+    print("Received: "+inString);
   }
 }
 
@@ -189,6 +189,7 @@ void displayNoise() {
   drawPoint(noise, color(255, 0, 255));
   time+=0.001;
 }
+
 void checkToStartInterface() {
   //  int buffer=0;
   //int desiredBufferTime=0;
@@ -201,6 +202,7 @@ void checkToStartInterface() {
       closestDist=distance;
     }
   }
+  
   if (closestDist<=minimumDistToCross) {
     if (!triggeredInterface) {
       sInterface.write("Start ");
