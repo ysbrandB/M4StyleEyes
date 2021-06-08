@@ -30,7 +30,7 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  fullScreen(); 
+  fullScreen(2); 
   //size(800, 800); //for testing only
   imageMode(CENTER);
 
@@ -93,6 +93,7 @@ void draw() {
     switch(phaseCount) { //determines the length of the next phase 
     case 1:
       phaseTimer = 8;
+
       break;
     case 2: 
       phaseTimer = 8; 

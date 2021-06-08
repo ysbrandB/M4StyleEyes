@@ -49,22 +49,22 @@ void loop() {
     //LEFT RIGHT
     xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
     //xPulse = map(analogRead(0),0, 1023, 220, 450);
-    pwm.setPWM(0,0,xPulse);
-    
+    pwm.setPWM(0, 0, xPulse);
+
     //UP DOWN
-   yPulse= map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
-   //yPulse = map(analogRead(1),0, 1023, 280, 520);
-   pwm.setPWM(1,0,yPulse);
+    yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
+    //yPulse = map(analogRead(1),0, 1023, 280, 520);
+    pwm.setPWM(1, 0, yPulse);
 
-    if(blinking[i]){
-      }
-    
-  pwm.setPWM(4, 0, map(analogRead(0),0,1023,230,560));
-  //Serial.println(map(analogRead(0),0,1023,230,560));
-  //160
+    if (blinking[i]) {
+    }
 
-  pwm.setPWM(2, 0, map(analogRead(0),0,1023,500,160));
-  delay(5);
+    pwm.setPWM(4, 0, map(analogRead(0), 0, 1023, 230, 560));
+    //Serial.println(map(analogRead(0),0,1023,230,560));
+    //160
+
+    pwm.setPWM(2, 0, map(analogRead(0), 0, 1023, 500, 160));
+    delay(5);
   }
 }
 
