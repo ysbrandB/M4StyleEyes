@@ -67,19 +67,19 @@ void draw() {
     pOne.display();
     speechSynth.aiRecommend(); 
     //phaseCount++;
-    println("One");  // Prints "One"
+    //println("One");  // Prints "One"
     break;
 
   case 2: 
     pTwo.display();
     //phaseCount++;
-    println("Two");  // Prints "Two"
+    //println("Two");  // Prints "Two"
     break;
 
   case 3:
     pThree.display();
     //phaseCount++;
-    println("Three");  // Prints "Three"
+    //println("Three");  // Prints "Three"
     break;
   }
 

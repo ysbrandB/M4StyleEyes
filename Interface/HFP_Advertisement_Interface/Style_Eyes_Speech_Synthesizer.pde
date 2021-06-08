@@ -2,25 +2,24 @@
 //// Style Eyes Speech Synthesizer
 //// By Jelle Gerritsen
 
-
-
 class SpeechSynth {
 
   static final int colour_amount = 9;
   static final int clothingtype_amount = 5;
   static final int maxpause_amount = 6;
   static final float soundamp = 0.1;
-  
+
   Boolean recomHasPlayed = false;
 
   int detClColour = 0;
   int detClType = 0;
   int recClColour = int(random(0, colour_amount));
   int recClType = int(random(0, clothingtype_amount));
-  
+
   int speakTimer;
-  
-  float [] speakPause;
+  int pauseCounter;
+
+  int [] speakPause = {1200, 600, 1400, 600, 500, 800, 0};
 
   String colorRecog; 
   String clothTypeRecog;
@@ -48,11 +47,9 @@ class SpeechSynth {
 
     clothRecog = colorRecog + "" + clothTypeRecog;
     clothRecom = colorRecom + "" + clothTypeRecom;
-    
-    speakTimer = 1;
-    
-    speakPause = new float [maxpause_amount];
-    //speakPause[] = [1.2, 0.6, 1.4, 0.6, 0.5, 0.8];
+
+    speakTimer = speakPause[0];
+    pauseCounter = 0;
 
     roboDelay = new Delay(HFP_Advertisement_Interface.this);
 
@@ -78,37 +75,78 @@ class SpeechSynth {
   }
 
   void aiRecommend() {
-   
-    if(speakTimer > 0){
-      speakTimer -= 1/frameRate;
-    }
-    
-    if(!recomHasPlayed){
-    //analyse sentence
-    youRWearingA.amp(soundamp);
-    youRWearingA.play();
-    delay(1200);
-    colour[detClColour].amp(soundamp);
-    colour[detClColour].play();
-    delay(600);
-    clothingtype[detClType].amp(soundamp);
-    clothingtype[detClType].play();
-    delay(1400);
 
-    //recommendation sentence
-    a.amp(soundamp);
-    a.play();
-    delay(500);
-    colour[recClColour].amp(soundamp);
-    colour[recClColour].play();
-    delay(600);
-    clothingtype[recClType].amp(soundamp);
-    clothingtype[recClType].play();
-    delay(800);
-    wouldFitYouWayBetter.amp(soundamp);
-    wouldFitYouWayBetter.play();
-  }
-  
-  recomHasPlayed = true;
+    if (speakTimer > 0) {
+      speakTimer -= 1000/frameRate;
+    } else if (pauseCounter < 6 && speakTimer <= 0) {
+      pauseCounter++;
+      speakTimer = speakPause[pauseCounter];
+    }
+
+    if (!recomHasPlayed) {
+      switch(pauseCounter) { //determines the length of the next phase 
+      case 0:
+        youRWearingA.amp(soundamp);
+        youRWearingA.play();
+        break;
+      case 1: 
+        colour[detClColour].amp(soundamp);
+        colour[detClColour].play();
+        break;
+      case 2: 
+        clothingtype[detClType].amp(soundamp);
+        clothingtype[detClType].play(); 
+        break;
+      case 3:
+        a.amp(soundamp);
+        a.play();
+        break;
+      case 4:
+        colour[recClColour].amp(soundamp);
+        colour[recClColour].play();
+        break;
+      case 5:
+        clothingtype[recClType].amp(soundamp);
+        clothingtype[recClType].play();
+        break;
+      case 6:
+        wouldFitYouWayBetter.amp(soundamp);
+        wouldFitYouWayBetter.play();
+        break;
+      case 7:
+        recomHasPlayed = true;
+        break;
+      }
+      //println(speakTimer);
+      println(pauseCounter);
+    }
+
+    //  if (!recomHasPlayed) {
+    //    //analyse sentence
+    //    youRWearingA.amp(soundamp);
+    //    youRWearingA.play();
+    //    delay(speakPause[pauseCounter]);
+    //    colour[detClColour].amp(soundamp);
+    //    colour[detClColour].play();
+    //    delay(speakPause[pauseCounter]);
+    //    clothingtype[detClType].amp(soundamp);
+    //    clothingtype[detClType].play();
+    //    delay(1400);
+
+    //    //recommendation sentence
+    //    a.amp(soundamp);
+    //    a.play();
+    //    delay(500);
+    //    colour[recClColour].amp(soundamp);
+    //    colour[recClColour].play();
+    //    delay(600);
+    //    clothingtype[recClType].amp(soundamp);
+    //    clothingtype[recClType].play();
+    //    delay(800);
+    //    wouldFitYouWayBetter.amp(soundamp);
+    //    wouldFitYouWayBetter.play();
+    //  }
+
+    //  recomHasPlayed = true;
   }
 }
