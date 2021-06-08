@@ -60,8 +60,8 @@ void serialEvent() {
       if(eyeId.toInt()==0){
         int tempXAngle=angleX.toInt();
         int tempYAngle=angleY.toInt();
-      testServo.write(constrain(tempXAngle,0,180));
-      testServo2.write(constrain(tempYAngle,0,180));
+      testServo.write(constrain(tempXAngle,60,120));
+      testServo2.write(constrain(tempYAngle,60,120));
       }
       id = false;
       //Has to be eyeid but have to stop so fix later

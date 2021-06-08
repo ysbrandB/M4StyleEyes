@@ -7,14 +7,14 @@
     },
 	"Kinect":{
         "x" : 0,
-        "y" : -150,
+        "y" : -82,
         "z" : 0
     },
 	"Cross":{
         "x" : 0,
         "y" : 0,
         "z" : 200,
-	"minimumDistance":100,
+	"minimumDistance":50,
 	"bufferFrames":60
     }
 }
