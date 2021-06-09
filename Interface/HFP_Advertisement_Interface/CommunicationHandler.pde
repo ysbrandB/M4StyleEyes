@@ -2,7 +2,7 @@
 //
 //Marnix's code should **NOT** be placed here MAKE A DIFFERENT CLASS FOR THAT.
 
-  class ComHandler{
+  class CommunicationHandler{
 
   //----- DE GROOTSTE ANTI HENK (BULLSHIT) ------
   // String colorRecog; 
@@ -41,12 +41,12 @@
   //-----------------------------------------
 
   //AI clothing recognition.
-  String clothColor; 
-  String clothType;
-  int hits; //the amount of times this type of cloths has been recognised.
-  Client clothsClient;
-  String clothsIp = "127.0.0.1";
-  int clothsPort = 6969;
+  PVector clothingColor;
+  String clothingType = "";
+  int hits = 0; //the amount of times this type of clothing has been recognised.
+  Client clothesClient;
+  String clothesIp = "127.0.0.1";
+  int clothesPort = 6969;
 
   //Kinect pos detection.
   boolean overCross; //the user is over the red cross
@@ -55,21 +55,26 @@
   int kinectPort = 1000;
 
 
-  ComHandler(PApplet parrent){
-    connectCloths(parrent);
-    connectKinect(parrent);
+  CommunicationHandler(PApplet parent){
+    clothingColor = new PVector();
+    connectClothes(parent);
+    connectKinect(parent);
   }
 
-  void update(PApplet parrent){
+  void update(PApplet parent){
     //reconnect clients if needed.
-    if((clothsClient == null || (clothsClient != null && !clothsClient.active()) && frameCount%30 == 0)  connectCloths;
-    if((kinectClient == null || (kinectClient != null && !kinectClient.active()) && frameCount%30 == 0)  kinectClient;
+    if(!isConnected(clothesClient) && frameCount % 30 == 0) {
+      connectClothes(parent);
+    }
+    if(!isConnected(kinectClient) && frameCount % 30 == 0) {
+      connectKinect(parent);
+    }
 
-    //if a client isn't connected then stop this methoud.
-    if((clothsClient == null || (clothsClient != null && !clothsClient.active()) || (kinectClient == null || (kinectClient != null && !kinectClient.active())) return;
+    //if a client isn't connected then stop this method.
+    if(!isConnected(clothesClient) || !isConnected(kinectClient)) return;
 
-    if(clothsClient.available() > 0){
-      decodeCloths(clothsClient.readStringUntil('\n'));
+    if(clothesClient.available() > 0){
+      decodeClothes(clothesClient.readStringUntil('\n'));
     }
 
     if(kinectClient.available() > 0){
@@ -77,33 +82,41 @@
     }
   }
 
-  void connectCloths(PApplet parrent){
+  void connectClothes(PApplet parent){
     try {
-      clothsClient = new Client(parrent, clothsIp, clothsPort);
+      clothesClient = new Client(parent, clothesIp, clothesPort);
     } catch (Exception e) {
       println("can't connect to server");
     }
   }
 
-  void connectKinect(PApplet parrent){
+  void connectKinect(PApplet parent){
     try {
-      kinectclient = new Client(parrent, kinectIp, kinectPort);
+      kinectClient = new Client(parent, kinectIp, kinectPort);
     } catch (Exception e) {
       println("can't connect to the kinect server");
     }
   }
 
-  void decodeCloths(String input){
-    string[] values = split(input, ',');
+  void decodeClothes(String input){
+    String[] values = split(input, ',');
     
-    clothType = values[0];
-    clothColor = new PVector(int(values[1]), int(values[2]), int(values[3]));
-    hits = int(values[4]);
+    clothingType = values[0];
+    try {
+      clothingColor = new PVector(Integer.parseInt(values[3]), Integer.parseInt(values[2]), Integer.parseInt(values[1]));
+      hits = Integer.parseInt(values[4]);
+    }catch(Exception e) {
+      println("Couldn't parse int, defaulting to 0...");
+      clothingColor = new PVector();
+      hits = 0;
+    }
   }
 
   void decodeKinect(String input){
 
   }
 
-  
+  boolean isConnected(Client c) {
+    return c != null && c.active();
+  }
 }

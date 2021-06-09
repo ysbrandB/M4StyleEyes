@@ -1,7 +1,5 @@
 class PhaseThree extends Slide {
 
-  PFont mainText; //font for main the main text
-
   int chpRandomPrice;  //random number generated to calculate all cheap prices
   int expRandomPrice; //random number generated to calculate all expensive prices
   
@@ -19,9 +17,7 @@ class PhaseThree extends Slide {
   String expOrignialPrice; //randomly generated original expensive brand price
   String encourageMessage; //encourages the person the buy the product
 
-  PhaseThree(PFont pThreeMainText) {
-    mainText = pThreeMainText;
-    
+  PhaseThree() {
     clothRecom = "White Polo";
     
     encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + clothRecom + " too!"; 
@@ -49,10 +45,10 @@ class PhaseThree extends Slide {
   void display() {
     background(bgColor);
 
-    textFont(mainText);
+    textFont(fontHeading);
     
-    text(encourageMessage, width/8, height/4);
+    text(encourageMessage, width / 8, height / 4);
     
-    text(totalRecom, width/8, height/3*2);
+    text(totalRecom, width / 8, height / 1.5);
   }
 }

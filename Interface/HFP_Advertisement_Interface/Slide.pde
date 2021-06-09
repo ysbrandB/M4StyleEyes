@@ -1,13 +1,15 @@
 //the super class of all slides: PhaseZero, PhaseOne, PhaseTwo & PhaseThree
 class Slide {
 
-  color bgColor; //gives the background color
-  boolean isFinished;
+  color bgColor = color(192, 200, 206); //gives the background color
+  boolean isFinished = false;
+  
+  PFont fontHeading;
+  PFont fontSub;
 
   Slide() {
-
-    bgColor = color(192, 200, 206);
-    isFinished = false;
+    fontHeading = createFont("Font/ARLRDBD_0.TTF", 80); //Arial rounded MT Bold
+    fontSub = createFont("Font/ARLRDBD_0.TTF", 40); //Arial rounded MT Bold
   }
 
   void display() {

@@ -1,23 +1,32 @@
 class PhaseOne extends Slide {
 
-  PFont mainText;
-
   String upperText;
   String lowerText;
 
   String recogText;
+  String clothColorRecog;
   String clothRecog;
   String recomStartText;
+  String clothColorRecom;
   String clothRecom;
   String recomEndText;
 
   PImage recomClothing; 
   ColorPicker colorPicker;
 
-  PhaseOne(PFont pONeMainText) {
-    //bgColor = color(255,0,0);
-    mainText = pONeMainText;
+  ColorPicker colorPicker;
+  TypePicker typePicker;
+
+  PhaseOne(ColorPicker colorPicker, TypePicker typePicker) {
+    this.colorPicker = colorPicker;
+    this.typePicker= typePicker;
   }
+
+  void display() {
+    background(bgColor);
+    fill(0);
+    //colorPicker = new ColorPicker(222,5,0);
+    //colorPicker.update();
 
   void display() {
     background(bgColor);
@@ -26,21 +35,31 @@ class PhaseOne extends Slide {
     colorPicker.update();
 
     recogText = "You are wearing a" + '\n';
-    clothRecog = colorPicker.getDeterminedColorName() + " Sweater";
+    clothColorRecog = colorPicker.getLastColorName();
+    clothRecog = typePicker.getLastTypeName();
 
     recomStartText = "However, these days" + '\n'; 
-    clothRecom = colorPicker.getOpositeDeterminedColorName() + " Polos";
-    recomEndText = " are far" + '\n' +  "more fashionable";
+    clothColorRecom = colorPicker.getLastOppositeColorName();
+    clothRecom = typePicker.getLastOppositeTypeName();
+    recomEndText = " are far more" + '\n' + "fashionable";
 
-    upperText = recogText + clothRecog;
-    lowerText = recomStartText + clothRecom + recomEndText;
+    lowerText = clothRecom + recomEndText; 
 
     recomClothing = loadImage("image/whitepolo.png");
 
-    textFont(mainText);
+    textFont(fontHeading);
 
-    text(upperText, width/8, height/4);
-    text(lowerText, width/8, height/8*5);
+    text(recogText, width/8, height/4);
+    fill(colorPicker.getLastColor());
+    text(clothColorRecog, width/8, height/4 +80);
+    fill(0);
+    text(clothRecog, width/8, height/4 +160);
+
+    text(recomStartText, width/8, height/8*5);
+    fill(colorPicker.getLastOppositeColor());
+    text(clothColorRecom, width/8, height/8*5 + 80);
+    fill(0);
+    text(lowerText, width/8, height/8*5 + 160);
 
     image(recomClothing, width/4*3, height/2);
   }
