@@ -7,7 +7,9 @@
 import processing.sound.*;
 import processing.net.*;
 import processing.serial.*;
+CommunicationHandler handler;
 
+static final int HITS_THRESHOLD = 5;
 
 int phaseCount;
 float phaseTimer;
@@ -17,12 +19,8 @@ Boolean distanceTrigger;
 
 Boolean hasPlayed;
 
-String colorGet;
-String colorRecommend;
-
-PFont pOneMainText; //Font for the main text in phase one
-PFont pTwoMainText; //Font for the main text in phase two
-PFont pThreeMainText; //Font for the main text in phase three
+ColorPicker colorPicker;
+TypePicker typePicker;
 
 PhaseZero pZero;
 PhaseOne pOne;
@@ -33,22 +31,22 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  fullScreen(2); 
-  //size(800, 800); //for testing only
+  //fullScreen(2); 
+  size(1920, 1080); //for testing only
   imageMode(CENTER);
 
-  pOneMainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
-  pTwoMainText = createFont("Font/ARLRDBD_0.TTF", 40); //lettertype Arial rounded MT Bold
-  pThreeMainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
+  handler = new CommunicationHandler(this);
+  colorPicker = new ColorPicker();
+  typePicker = new TypePicker();
 
   //initialize all phases
   pZero = new PhaseZero();
-  pOne = new PhaseOne(pOneMainText);
-  pTwo = new PhaseTwo(pTwoMainText);
-  pThree = new PhaseThree(pThreeMainText);
+  pOne = new PhaseOne(colorPicker, typePicker);
+  pTwo = new PhaseTwo(colorPicker, typePicker);
+  pThree = new PhaseThree();
   
   //initialize the speech synthesizer
-  speechSynth = new SpeechSynth();
+  speechSynth = new SpeechSynth(colorPicker, typePicker);
 
   //initialize the phaseTimer & phaseCounter
   phaseCount = 0;
@@ -63,12 +61,17 @@ void draw() {
   switch(phaseCount) {
   case 0:
     pZero.display();
+    if(handler.hits >= HITS_THRESHOLD) {
+      colorPicker.colorDetermination(handler.clothingColor);
+      typePicker.typeDetermination(handler.clothingType);
+      distanceTrigger = true;
+    }
     //println("Zero" + t1);  // Prints "Zero"
     break;
 
   case 1:
     pOne.display();
-    speechSynth.aiRecommend(); 
+    speechSynth.recommendColor(); 
     //phaseCount++;
     //println("One");  // Prints "One"
     break;
@@ -96,7 +99,6 @@ void draw() {
     switch(phaseCount) { //determines the length of the next phase 
     case 1:
       phaseTimer = 8;
-
       break;
     case 2: 
       phaseTimer = 8; 
@@ -112,14 +114,12 @@ void draw() {
 
 void keyPressed() {
   if (key == 'r' || key == 'R') {
-    colorGet = "RED";
+    colorPicker.colorDetermination(handler.clothingColor);
     distanceTrigger = true;
-    println(colorGet);
   }
 
   if (key == BACKSPACE) {
     phaseCount = 0;
-    println(colorGet);
   }
 }
 
