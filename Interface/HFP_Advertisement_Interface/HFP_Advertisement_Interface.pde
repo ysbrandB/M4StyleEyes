@@ -40,7 +40,7 @@ void setup() {
   typePicker = new TypePicker();
 
   //initialize all phases
-  pZero = new PhaseZero();
+  pZero = new PhaseZero(handler);
   pOne = new PhaseOne(colorPicker, typePicker);
   pTwo = new PhaseTwo(colorPicker, typePicker);
   pThree = new PhaseThree();
@@ -61,7 +61,7 @@ void draw() {
   switch(phaseCount) {
   case 0:
     pZero.display();
-    if(handler.hits >= HITS_THRESHOLD) {
+    if(handler.hits >= HITS_THRESHOLD && distanceTrigger) {
       colorPicker.colorDetermination(handler.clothingColor);
       typePicker.typeDetermination(handler.clothingType);
       distanceTrigger = true;
@@ -110,6 +110,8 @@ void draw() {
       phaseTimer = 2;
     }
   }
+
+  handler.update();
 }
 
 void keyPressed() {
