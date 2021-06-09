@@ -7,7 +7,7 @@
 import processing.sound.*;
 import processing.net.*;
 import processing.serial.*;
-CommunicationHandler handler;
+CommunicationHandler com;
 
 static final int HITS_THRESHOLD = 5;
 
@@ -35,12 +35,12 @@ void setup() {
   size(1920, 1080); //for testing only
   imageMode(CENTER);
 
-  handler = new CommunicationHandler(this);
+  com = new CommunicationHandler(this);
   colorPicker = new ColorPicker();
   typePicker = new TypePicker();
 
   //initialize all phases
-  pZero = new PhaseZero(handler);
+  pZero = new PhaseZero(com);
   pOne = new PhaseOne(colorPicker, typePicker);
   pTwo = new PhaseTwo(colorPicker, typePicker);
   pThree = new PhaseThree();
@@ -61,9 +61,9 @@ void draw() {
   switch(phaseCount) {
   case 0:
     pZero.display();
-    if(handler.hits >= HITS_THRESHOLD && distanceTrigger) {
-      colorPicker.colorDetermination(handler.clothingColor);
-      typePicker.typeDetermination(handler.clothingType);
+    if(com.hits >= HITS_THRESHOLD && distanceTrigger) {
+      colorPicker.colorDetermination(com.clothingColor);
+      typePicker.typeDetermination(com.clothingType);
       distanceTrigger = true;
     }
     //println("Zero" + t1);  // Prints "Zero"
@@ -111,12 +111,12 @@ void draw() {
     }
   }
 
-  handler.update();
+  com.update();
 }
 
 void keyPressed() {
   if (key == 'r' || key == 'R') {
-    colorPicker.colorDetermination(handler.clothingColor);
+    colorPicker.colorDetermination(com.clothingColor);
     distanceTrigger = true;
   }
 
