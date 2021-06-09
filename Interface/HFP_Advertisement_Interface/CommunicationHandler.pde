@@ -52,7 +52,7 @@
   boolean overCross; //the user is over the red cross
   Client kinectClient;
   String kinectIp = "127.0.0.1";
-  int kinectPort = 10000;
+  int kinectPort = 1000;
 
 
   CommunicationHandler(PApplet parent){
@@ -113,9 +113,7 @@
   }
 
   void decodeKinect(String input){
-    if(input.contains("Start")){
-      distanceTrigger=true;
-    }    
+
   }
 
   boolean isConnected(Client c) {
