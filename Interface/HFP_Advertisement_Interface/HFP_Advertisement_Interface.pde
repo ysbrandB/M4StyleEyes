@@ -61,10 +61,9 @@ void draw() {
   switch(phaseCount) {
   case 0:
     pZero.display();
-    if(handler.hits >= HITS_THRESHOLD) {
+    if(handler.hits >= HITS_THRESHOLD && distanceTrigger) {
       colorPicker.colorDetermination(handler.clothingColor);
       typePicker.typeDetermination(handler.clothingType);
-      distanceTrigger = true;
     }
     //println("Zero" + t1);  // Prints "Zero"
     break;
