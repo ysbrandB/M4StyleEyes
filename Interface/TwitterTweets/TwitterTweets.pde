@@ -3,7 +3,7 @@ Tweet tweet;
 PImage backgroundTweet;
 
 void setup() {
-  size(600, 500);
+  size(600, 471);
   imageMode(CENTER);
   backgroundTweet = loadImage("tweet.png");
   tweet = new Tweet(backgroundTweet);
