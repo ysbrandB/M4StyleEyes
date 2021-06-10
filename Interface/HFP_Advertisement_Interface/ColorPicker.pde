@@ -1,90 +1,114 @@
 class ColorPicker {
-  String lastName;
-  color lastColor;
-  String lastOppositeName;
-  color lastOppositeColor;
+  String detectedColorName;
+  color detectedColor;
+  String oppisiteColorName;
+  color oppisiteColor;
 
-  PVector[] knownColors;
-  String[] knownColorNames = {
-    "Light Red", 
-    "Dark Red", 
-    "Light Orange", 
-    "Dark Orange", 
-    "Light Yellow", 
-    "Dark Yellow", 
-    "Light Green", 
-    "Dark Green", 
-    "Light Blue", 
-    "Dark Blue", 
-    "Light Purple", 
-    "Dark Purple", 
-    "Light Pink", 
-    "Dark Pink", 
-    "Light Brown", 
-    "Dark Brown", 
-    "White", 
-    "Light Grey", 
-    "Dark Grey", 
-    "Black"
-  }; 
+  JSONObject colorData;
+  JSONObject inputColors;
+  JSONObject oppisiteColors;
+  
 
   ColorPicker() {
-    knownColors = new PVector[] {
-        new PVector(255, 0, 0),  
-        new PVector(165, 0, 0),
-        new PVector(255, 155, 5),
-        new PVector(190, 115, 0),
-        new PVector(255, 255, 0),
-        new PVector(190, 185, 0),
-        new PVector(0, 255, 0),
-        new PVector(0, 115, 0),
-        new PVector(0, 160, 255),
-        new PVector(0, 0, 255),
-        new PVector(160, 110, 255),
-        new PVector(70, 0, 220),
-        new PVector(255, 140, 245),
-        new PVector(210, 5, 195),
-        new PVector(145, 95, 5),
-        new PVector(100, 65, 0),
-        new PVector(255, 255, 255),
-        new PVector(190, 190, 190),
-        new PVector(110, 110, 110),
-        new PVector(0, 0, 0)
-    };
+    colorData = loadJSONObject("../JsonFiles/Colors.JSON");
+    inputColors = colorData.getJSONObject("inputColors");
+    oppisiteColors = colorData.getJSONObject("oppisiteColor");
+
+    detectedColorName = "None";
+    detectedColor = color(0,255,0);
   }
 
-  void colorDetermination(PVector givenColor) {
-    float minDistance = 10000;
-    for (int i = 0; i <= knownColors.length - 1; i++) {
-      if(PVector.dist(knownColors[i], givenColor) < minDistance) {
-        minDistance = PVector.dist(knownColors[i], givenColor);
-        lastColor = color(knownColors[i].x, knownColors[i].y, knownColors[i].z);
-        lastName = knownColorNames[i];
-      }
+  void colorDetermination(color inputColor) {
+    float hue = map(hue(inputColor), 0, 255, 0, 360);
+    float saturation = map(saturation(inputColor), 0, 255, 0, 100);
+    float brightness = map(brightness(inputColor), 0, 255, 0, 100);
+    
+    detectedColorName = "None";
+
+    //determin the color
+    if(saturation <= 20){ //for white, grays and black.
+      if(brightness >= 90) detectedColorName = "White";
+      else if(brightness >= 60) detectedColorName = "Light Grey";
+      else if(brightness >= 25) detectedColorName = "Dark Grey";
+      else detectedColorName = "Black";
     }
-    float maxDistance = 0;
-    for (int i = 0; i <= knownColors.length - 1; i++) {
-      if(PVector.dist(knownColors[i], givenColor) > maxDistance) {
-        maxDistance = PVector.dist(knownColors[i], givenColor);
-        lastOppositeColor = color(knownColors[i].x, knownColors[i].y, knownColors[i].z);
-        lastOppositeName = knownColorNames[i];
-      }
+    else if(hue <= 13 || hue >= 337){ //red shit
+      if(saturation <= 60 && brightness >= 80) detectedColorName = "Light Red";
+      else if(brightness <= 80 && brightness >= 25) detectedColorName = "Dark Red";
+      else if(brightness < 25) detectedColorName = "Black";
+      else detectedColorName = "Red";
+    } 
+    else if(hue > 13 && hue <= 42){ //orange shit also brown
+      if(brightness > 70 && saturation > 70) detectedColorName = "Orange";
+      else if(brightness >= 20) detectedColorName = "Brown";
+      else if (brightness < 20) detectedColorName = "Black";
+    }
+    else if(hue > 42 && hue <= 64){ //yellow shit
+      if(hue <= 50 && brightness >= 20) detectedColorName = "Dark Yellow";
+      else if(brightness > 55) detectedColorName = "Yellow";
+      else if(brightness > 20) detectedColorName = "Dark Yellow";
+      else detectedColorName = "Black";
+    }
+    else if(hue > 64 && hue <= 162){ //green shit
+      //lime, green, and dark green
+      if(brightness >= 85) detectedColorName = "Lime";
+      else if(brightness >= 66) detectedColorName = "Green";
+      else if (brightness >= 15) detectedColorName = "Dark Green";
+      else detectedColorName = "Black";
+    }
+    else if(hue > 162 && hue <= 250){ //blue shit
+      // light blue, blue, dark blue, turquoise
+      if(brightness <= 15) detectedColorName = "Black";
+      else if(hue < 180) detectedColorName = "Turquoise";
+      else if(((saturation >= 58 && brightness >= 59) || hue < 200 && brightness < 75) && hue < 220) detectedColorName = "Light Blue";
+      else if(brightness > 90) detectedColorName = "Blue";
+      else detectedColorName = "Dark Blue";
+    }
+    else if(hue > 250 && hue <= 295){ //purple shit
+      //purple, dark purple
+      if(brightness <= 20) detectedColorName = "Black";
+      else if((hue<260 && saturation < 81) || brightness < 65) detectedColorName = "Dark Purple";
+      else detectedColorName = "Purple";
+    }
+    else if(hue > 295 && hue < 337){ //pink shit
+      if(brightness <= 25) detectedColorName = "Black";
+      else if(brightness <= 60) detectedColorName = "Dark Purple";
+      else detectedColorName = "Pink";
+    }
+
+    //gets the corresponding color form the json file
+    {
+      int[] rgbColor = inputColors.getJSONArray(detectedColorName).getIntArray();
+      detectedColor = color(rgbColor[0], rgbColor[1], rgbColor[2]);
+    }
+
+    //oppisite color -------------------------------------------
+    String[] oppisiteColorArray = split(detectedColorName, ' ');
+    if(oppisiteColorArray.length == 1) oppisiteColorName = oppisiteColorArray[0]; //when there is no light or dark
+    else oppisiteColorName = oppisiteColorArray[1]; //remove the light or dark
+
+    oppisiteColorName = oppisiteColors.getString(oppisiteColorName);
+
+    //gets the corresponding color form the json file
+    {
+      int[] rgbColor = inputColors.getJSONArray(oppisiteColorName).getIntArray();
+      oppisiteColor = color(rgbColor[0], rgbColor[1], rgbColor[2]);
     }
   }
   
   String getLastColorName() {
-    return lastName;
+    return detectedColorName;
   }
   
   color getLastColor(){
-    return lastColor;
+    return detectedColor;
   }
   
   String getLastOppositeColorName() {
-    return lastOppositeName;
+    return oppisiteColorName;
   }
   
   color getLastOppositeColor(){
-    return lastOppositeColor;
+    return oppisiteColor;
   }
 }

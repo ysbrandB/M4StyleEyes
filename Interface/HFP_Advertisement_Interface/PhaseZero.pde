@@ -10,6 +10,8 @@ class PhaseZero extends Slide {
   void display() {
     background(bgColor);
     fill(255);
-    text(com.clothingType + " " + com.clothingColor + " " + com.hits, 50, 50);
+    textSize(45);
+    textAlign(TOP, LEFT);
+    text(com.clothingType + " [" + red(com.clothingColor) + "," + green(com.clothingColor) + "," + blue(com.clothingColor) + "] " + com.hits, 50, 50);
   }
 }
