@@ -19,7 +19,7 @@ Server sInterface;
 //als 180 graden draaien opnieuw implementeren naar midden kijkend
 
 boolean draw= true;
-boolean useArduino=false;
+boolean useArduino=true;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
@@ -40,6 +40,7 @@ ArrayList<String> oldData= new ArrayList<String>();
 ArrayList<PVector> heads= new ArrayList<PVector>();
 
 void setup() {
+  frameRate(30);
   //make an eye for every json eye
   eyePosData = loadJSONArray("../EyePos.JSON");
   //Load the JSON setup file
@@ -61,7 +62,7 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(-70, -100, 180), 0));
+  eyes.add(new Eye(new PVector(-50, -100, 200), 0));
   oldData.add("");
 
   eyes.add(new Eye(new PVector(50, -100, 50), 1));
@@ -165,12 +166,12 @@ void draw() {
   updateDigitalEyesTCP();
 }
 
-void serialEvent(Serial myPort) {
-  inString = myPort.readString();
-  if (inString!="") {
-    //print("Received: "+inString);
-  }
-}
+//void serialEvent(Serial myPort) {
+//  inString = myPort.readString();
+//  if (inString!="") {
+//    print("Received: "+inString);
+//  }
+//}
 
 void drawAmbience() {
   ambientLight(255, 255, 255);
@@ -189,6 +190,7 @@ void displayNoise() {
   drawPoint(noise, color(255, 0, 255));
   time+=0.001;
 }
+
 void checkToStartInterface() {
   //  int buffer=0;
   //int desiredBufferTime=0;
@@ -201,10 +203,11 @@ void checkToStartInterface() {
       closestDist=distance;
     }
   }
+  
   if (closestDist<=minimumDistToCross) {
     if (!triggeredInterface) {
-      sInterface.write("Start ");
-      println("Start", desiredBufferTime);
+      sInterface.write("Start"+'\n');
+      print("Start"+'\n');
       triggeredInterface=true;
     }
   } else {

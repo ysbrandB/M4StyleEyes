@@ -13,7 +13,7 @@ clothing_types = ['short_sleeve_top', 'long_sleeve_top', 'short_sleeve_outwear',
                   'vest', 'sling', 'shorts', 'trousers', 'skirt', 'short_sleeve_dress',
                   'long_sleeve_dress', 'vest_dress', 'sling_dress']
 
-capture = cv2.VideoCapture(0)
+capture = cv2.VideoCapture(1)
 readCorrectly, frame = capture.read()
 cv2.imshow('preview', frame)
 
@@ -42,7 +42,7 @@ def server_handling():
                 # Construct the payload and send it. Wait a tick length before sending the next packet
                 payload = "Oopsie whoopsie whoops whoops whoops herres in de tent alles ging fout\n"
                 if detected_color is not None:
-                    payload = f"{detected_type},{detected_color[0]},{detected_color[1]},{detected_color[2]},{hits}\n"
+                    payload = f"{detected_type},{detected_color[2]},{detected_color[1]},{detected_color[0]},{hits}\n"
                 else:
                     payload = f"{detected_type},bruh,bruh,bruh,{hits}\n"
                 client.send(payload.encode())

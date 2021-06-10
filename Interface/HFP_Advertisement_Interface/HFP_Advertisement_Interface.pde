@@ -5,6 +5,11 @@
 //Press R to Start
 
 import processing.sound.*;
+import processing.net.*;
+import processing.serial.*;
+CommunicationHandler com;
+
+static final int HITS_THRESHOLD = 5;
 
 int phaseCount;
 float phaseTimer;
@@ -14,12 +19,8 @@ Boolean distanceTrigger;
 
 Boolean hasPlayed;
 
-String colorGet;
-String colorRecommend;
-
-PFont pOneMainText; //Font for the main text in phase one
-PFont pTwoMainText; //Font for the main text in phase two
-PFont pThreeMainText; //Font for the main text in phase three
+ColorPicker colorPicker;
+TypePicker typePicker;
 
 PhaseZero pZero;
 PhaseOne pOne;
@@ -30,22 +31,22 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  fullScreen(); 
-  //size(800, 800); //for testing only
+  //fullScreen(2); 
+  size(1920, 1080); //for testing only
   imageMode(CENTER);
 
-  pOneMainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
-  pTwoMainText = createFont("Font/ARLRDBD_0.TTF", 40); //lettertype Arial rounded MT Bold
-  pThreeMainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
+  com = new CommunicationHandler(this);
+  colorPicker = new ColorPicker();
+  typePicker = new TypePicker();
 
   //initialize all phases
-  pZero = new PhaseZero();
-  pOne = new PhaseOne(pOneMainText);
-  pTwo = new PhaseTwo(pTwoMainText);
-  pThree = new PhaseThree(pThreeMainText);
+  pZero = new PhaseZero(com);
+  pOne = new PhaseOne(colorPicker, typePicker);
+  pTwo = new PhaseTwo(colorPicker, typePicker);
+  pThree = new PhaseThree();
   
   //initialize the speech synthesizer
-  speechSynth = new SpeechSynth();
+  speechSynth = new SpeechSynth(colorPicker, typePicker);
 
   //initialize the phaseTimer & phaseCounter
   phaseCount = 0;
@@ -60,26 +61,31 @@ void draw() {
   switch(phaseCount) {
   case 0:
     pZero.display();
+    if(com.hits >= HITS_THRESHOLD && distanceTrigger) {
+      colorPicker.colorDetermination(com.clothingColor);
+      typePicker.typeDetermination(com.clothingType);
+      distanceTrigger = true;
+    }
     //println("Zero" + t1);  // Prints "Zero"
     break;
 
   case 1:
     pOne.display();
-    speechSynth.aiRecommend(); 
+    speechSynth.recommendColor(); 
     //phaseCount++;
-    println("One");  // Prints "One"
+    //println("One");  // Prints "One"
     break;
 
   case 2: 
     pTwo.display();
     //phaseCount++;
-    println("Two");  // Prints "Two"
+    //println("Two");  // Prints "Two"
     break;
 
   case 3:
     pThree.display();
     //phaseCount++;
-    println("Three");  // Prints "Three"
+    //println("Three");  // Prints "Three"
     break;
   }
 
@@ -104,18 +110,18 @@ void draw() {
       phaseTimer = 2;
     }
   }
+
+  com.update();
 }
 
 void keyPressed() {
   if (key == 'r' || key == 'R') {
-    colorGet = "RED";
+    colorPicker.colorDetermination(com.clothingColor);
     distanceTrigger = true;
-    println(colorGet);
   }
 
   if (key == BACKSPACE) {
     phaseCount = 0;
-    println(colorGet);
   }
 }
 

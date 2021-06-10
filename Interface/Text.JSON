@@ -1,0 +1,52 @@
+{
+    "startMsg" : [
+        "Nice Color_ Type_ but did you know that Color_ Type_ are becoming less popular?",
+        "How nice, a Color_ Type_ but did you know that Color_ Type_ are not very attractive, especially for your body type",
+        "Did you know that your Color_ Type_ are considered as pretty.. low-class?",
+        "What a fun Color_ Type_ are you wearing but a Color_ Type_ is mostly worn by young children",
+        "Oh well, a Color_ Type_, you really couldn't come up with something else?",
+        "The nineties are calling, they want their Color_ Type_ back",
+        "Imagine still wearing a Color_ Type_",
+        "LMAO Color_ Type_, im actually dying",
+        "Somebody REALLy wanted to impress their mother with this Color_ Type_"
+    ],
+
+    "Feitjes" : [ 
+        "in some cultures Color_ means beautiful and colorful.",
+        "Color_ is america's favorite color.",
+        "Color_ is a relaxing color.",
+        "Color_ is the color of winners.",
+        "Women dressed in Color_ are more attractive to men.",
+        "Color_ was once seen as a high-class color.",
+        "Color_ stimulates hunger"
+    ],
+
+    "Tweets" : [
+        {
+            "Name" : "Elon Musk",
+            "images" : "",
+            "text" : [
+                "",
+                ""
+            ]
+        },
+        {
+            "Name" : "Barack Obama",
+            "images" : "",
+            "text" : [
+                "",
+                ""
+            ]
+        }
+    ],
+
+    "Brands" :{ 
+        "Cheap": 
+        [
+        "Jones & Jack", "Shipperman", "Kalvin Clein"
+    ],
+        "Expensive" :[
+        "Luois Vitoon", "Armini", "Blurberry", "Guccy", "Channel", "Pradda"
+    ]
+}
+}
