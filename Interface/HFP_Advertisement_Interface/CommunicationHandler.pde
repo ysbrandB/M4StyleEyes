@@ -19,12 +19,17 @@
   PApplet context;
   int pollingRate = 2; //polls per second
 
+  //Arduino serial com
+  Serial port;
+
 
   CommunicationHandler(PApplet parent){
     clothingColor = color(0);
     context = parent;
     connectClothes();
     connectKinect();
+
+    // port = new Serial(parent, Serial.list()[0], 9600);  // open the port!
   }
 
   void update(){
@@ -91,5 +96,18 @@
 
   boolean isConnected(Client c) {
     return c != null && c.active();
+  }
+
+  void sendColor(color inputColor) {
+    int redValue = int(red(inputColor));
+    int greenValue = int(green(inputColor));
+    int blueValue = int(blue(inputColor));
+
+    String payload = redValue + "," + greenValue + "," + blueValue + ",";
+    try {
+      port.write(payload);
+    } catch (Exception e) {
+      println("Can't write to port, try to reconnect!");      
+    }    
   }
 }
