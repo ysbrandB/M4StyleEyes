@@ -43,28 +43,27 @@ void setup() {
     yAngles[i] = 90;
     blinkingValues[i] = 0;
   }
-  delay(100);
 }
 
 void loop() {
-  for (int i = 0; i < 6; i++) {
-    if (random(0, 500) < 2) {
+  for (int i = 0; i < 4; i++) {
+    if (random(0, 1000) < 2) {
       blinking[i] = true;
     }
 
-    xval = xAngles[0];
-    yval = yAngles[0];
+    xval = xAngles[i];
+    yval = yAngles[i];
 
     //LEFT RIGHT
     xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
     //xPulse = map(analogRead(A0),0, 1023, 220, 450);
-    pwm.setPWM(0, 0, xPulse);
+    pwm.setPWM((0+i*4), 0, xPulse);
 
     //UP DOWN
     yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
     // yPulse = map(analogRead(A1),0, 1023, 520, 280);
     //Serial.println(yPulse);
-    pwm.setPWM(1, 0, yPulse);
+    pwm.setPWM((1+i*4), 0, yPulse);
 
     if (blinking[i]) {
       if (blinkingValues[i] < 100) {
@@ -78,8 +77,8 @@ void loop() {
       }
     }
 
-    pwm.setPWM(2, 0, map(blinkingValues[0], 0, 100, 500, 160));
-    pwm.setPWM(3, 0, map(blinkingValues[0], 0, 100, 230, 560));
+    pwm.setPWM((2+i*4), 0, map(blinkingValues[i], 0, 100, 500, 160));
+    pwm.setPWM((3+i*4), 0, map(blinkingValues[i], 0, 100, 230, 560));
     
     delay(1);
   }
@@ -126,7 +125,6 @@ void serialEvent() {
       }
       break;
     }
-
     if (!id) {
       eyeId += inChar;
     }
