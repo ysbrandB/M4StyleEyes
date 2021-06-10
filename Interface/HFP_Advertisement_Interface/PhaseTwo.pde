@@ -5,9 +5,12 @@ class PhaseTwo extends Slide {
   PFont SegoeBold21;
   PFont Segoe31;
   PFont SegoeSemiBold19;
+  PFont Oxford;
+  PImage NewsHeads;
 
   int favorNumber;
   int opposeNumber;
+  int randomNewsLogo;
 
   float favorFactor;
 
@@ -21,7 +24,14 @@ class PhaseTwo extends Slide {
   ColorPicker colorPicker;
   TypePicker typePicker;
 
+  Strings string;
+
   PhaseTwo(ColorPicker colorPicker, TypePicker typePicker) {
+    string = new Strings();
+    randomNewsLogo = int(random(1,5));
+    Oxford = createFont("Font/Oxford.ttf", 80);
+    NewsHeads = loadImage("NewsLogos/"+ randomNewsLogo +".png");
+
     backgroundTweet = loadImage("Image/emptyTweet.png");
     SegoeBold21 = createFont("Segoe UI Bold", 21);
     Segoe31 = createFont("Segoe UI", 31);
@@ -65,6 +75,12 @@ class PhaseTwo extends Slide {
     textFont(fontSub);
     text(pollDescription, width/8-110, height/8*6-50);
 
-    tweet.display(new PVector(width*2/3, height/3));    
+    tweet.display(new PVector(width*2/3-50, height/12-20));    
+
+    image(NewsHeads,90, 50); //Displays the news logo's
+    fill(0);
+    textFont(Oxford);
+    string.NewsQuote();
+    string.ScientificQuote();
   }
 }
