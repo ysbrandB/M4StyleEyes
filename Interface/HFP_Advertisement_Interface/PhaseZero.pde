@@ -1,15 +1,15 @@
 class PhaseZero extends Slide {
   
-  CommunicationHandler handler;
+  CommunicationHandler com;
 
-  PhaseZero(CommunicationHandler handler) {
+  PhaseZero(CommunicationHandler com) {
     bgColor = color(0, 0, 0);
-    this.handler = handler;
+    this.com = com;
   }
 
   void display() {
     background(bgColor);
     fill(255);
-    text(handler.clothingType + " " + handler.clothingColor + " " + handler.hits, 50, 50);
+    text(com.clothingType + " " + com.clothingColor + " " + com.hits, 50, 50);
   }
 }

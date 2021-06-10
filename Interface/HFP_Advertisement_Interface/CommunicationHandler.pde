@@ -67,10 +67,10 @@
 
   void update(){
     //reconnect clients if needed.
-    if(!isConnected(clothesClient) && frameCount % 30 == 0) {
+    if(!isConnected(clothesClient) && frameCount % 240 == 0) {
       connectClothes();
     }
-    if(!isConnected(kinectClient) && frameCount % 30 == 0) {
+    if(!isConnected(kinectClient) && frameCount % 240 == 0) {
       connectKinect();
     }
 
@@ -112,8 +112,8 @@
     
     clothingType = values[0];
     try {
-      clothingColor = new PVector(int(values[3]), Integer.parseInt(values[2]), Integer.parseInt(values[1]));
-      values[4] = values[4].substring(0, values[4].length() - 1);
+      clothingColor = new PVector(Integer.parseInt(values[1]), Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+      values[4] = values[4].substring(0, values[4].length() - 1); //removes the \n
       hits = Integer.parseInt(values[4]);
     }catch(Exception e) {
       clothingColor = new PVector();
