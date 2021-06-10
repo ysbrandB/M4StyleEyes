@@ -66,6 +66,5 @@ class PhaseTwo extends Slide {
     text(pollDescription, width/8-110, height/8*6-50);
 
     tweet.display(new PVector(width*2/3, height/3));    
-    //image(tweet, width/4*3, height/3);
   }
 }

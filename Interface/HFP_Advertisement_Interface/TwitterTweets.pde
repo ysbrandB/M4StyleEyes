@@ -25,7 +25,7 @@ class Tweet {
     setLikes();
     setTextTweet();
 
-    imagePath = "Image/account.png";
+    imagePath = "Image/twitterAcounts/volkswagen.png";
     account = loadImage(imagePath);
 
     this.SegoeBold21 = SegoeBold21;
@@ -71,8 +71,13 @@ class Tweet {
   void display(PVector position) {
     pushMatrix();
     translate(position.x, position.y);
+    
     imageMode(CENTER);
     image(backgroundTweet, backgroundTweet.width/2, backgroundTweet.height/2);
+    
+    imageMode(CORNER);
+    image(account, 0, 0);
+    
     noStroke();    
     fill(0);
     textAlign(RIGHT, TOP);
@@ -98,8 +103,6 @@ class Tweet {
     textFont(SegoeSemiBold19);
     text(date, 33, 294);
 
-    imageMode(CORNER);
-    image(account, 0, 0);
     popMatrix();
   }
 }
