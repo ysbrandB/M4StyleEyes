@@ -70,8 +70,10 @@ class Tweet {
   }
 
   void display() {
+    pushMatrix();
+    translate(0, 0);
     imageMode(CENTER);
-    image(backgroundTweet, width/2, height/2);
+    image(backgroundTweet, backgroundTweet.width/2, backgroundTweet.height/2);
     noStroke();    
     fill(0);
     textAlign(RIGHT, TOP);
@@ -99,5 +101,6 @@ class Tweet {
 
     imageMode(CORNER);
     image(account, 0, 0);
+    popMatrix();
   }
 }
