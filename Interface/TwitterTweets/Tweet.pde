@@ -5,38 +5,47 @@ class Tweet {
 
   //all variables for date
   String date;
-  int randomHour;
-  int randomMinute;
-  String minutes;
-  String randomMaridian;
   String[] maridian = {"AM", "PM"};
-  String randomMonth;
   String[] month = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-  int randomDay;
-  int randomYear;
 
   String likes;
   String retweets;
   String textTweet;
 
-  Tweet(PImage backgroundTweet) {
+  PImage account;
+
+  String imagePath;
+
+  PFont SegoeBold21;
+  PFont Segoe31;
+  PFont SegoeSemiBold19;
+
+  Tweet(PImage backgroundTweet, PFont SegoeBold21, PFont Segoe31, PFont SegoeSemiBold19) {
     this.backgroundTweet = backgroundTweet;
     setDate();
     setLikes();
     setTextTweet();
+
+    imagePath = "account.png";
+    account = loadImage(imagePath);
+
+    this.SegoeBold21 = SegoeBold21;
+    this.Segoe31 = Segoe31;
+    this.SegoeSemiBold19 = SegoeSemiBold19;
   }
 
   void setDate() {
-    date = "8:19 PM • Feb 2, 2021";
-    randomHour = int(random(1, 13));
-    randomMinute = int(random(60));
+    int randomHour = int(random(1, 13));
+    int randomMinute = int(random(60));
 
+    String minutes;
     if (randomMinute < 10) minutes = "0" + randomMinute;
     else minutes = "" + randomMinute;
 
-    randomMaridian = maridian[int(random(2))];
-    randomMonth = month[int(random(12))];
+    String randomMaridian = maridian[int(random(2))];
+    String randomMonth = month[int(random(12))];
 
+    int randomDay;
     if (randomMonth == "Apr" || randomMonth == "Jun" || randomMonth == "Sep" || randomMonth == "Nov") {
       randomDay = int(random(1, 31));
     } else if (randomMonth == "Feb") {
@@ -45,7 +54,8 @@ class Tweet {
       randomDay = int(random(1, 32));
     }
 
-    randomYear = int(random(2010, 2021));
+    int randomYear = int(random(2015, 2021));
+
     date = randomHour + ":" + minutes + " " + randomMaridian + " • " + randomMonth + " " + randomDay + ", " + randomYear;
   }
 
@@ -56,48 +66,38 @@ class Tweet {
   }
 
   void setTextTweet() {
-    textTweet = "Tesla research has shown that people that wear red polos are more likely to buy electric cars. All tesla staff will start wearing red polos to encourage those people. Wear red polos peaople!";
+    textTweet = "Tesla research has shown that people that wear red polos are more likely to buy electric cars. All tesla staff will start wearing red polos to encourage those people. Wear red polos people!";
   }
 
   void display() {
+    imageMode(CENTER);
     image(backgroundTweet, width/2, height/2);
-    noStroke();
-
-    //date
-    fill(255);
-    rect(30, 295, 205, 25);
-
-    fill(121, 137, 150);
-    textAlign(LEFT, TOP);
-    textFont(createFont("Segoe UI Semibold", 19));
-    text(date, 33, 294);
-
-    //likes
-    fill(255);
-    rect(210, 365, 65, 20);
-
+    noStroke();    
     fill(0);
     textAlign(RIGHT, TOP);
-    textFont(createFont("Segoe UI Bold", 21));
+
+    //likes
+    textFont(SegoeBold21);
     text(likes, 271, 360);
 
     //retweets
-    fill(255);
-    rect(33, 365, 65, 20);
-
-    fill(0);
-    textAlign(RIGHT, TOP);
-    textFont(createFont("Segoe UI Bold", 21));
+    textFont(SegoeBold21);
     text(retweets, 93, 360);
 
-    //textTweet
-    fill(255);
-    rect(32, 93, 562, 180);
-    
-    fill(1);
     textAlign(LEFT, TOP);
-    textFont(createFont("Segoe UI", 31));
+
+    //textTweet  
+    textFont(Segoe31);
     textLeading(38);
     text(textTweet, 32, 83, 565, 200);
+
+    //date
+    fill(121, 137, 150);
+    textAlign(LEFT, TOP);
+    textFont(SegoeSemiBold19);
+    text(date, 33, 294);
+
+    imageMode(CORNER);
+    image(account, 0, 0);
   }
 }
