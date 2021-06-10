@@ -1,10 +1,14 @@
 class PhaseTwo extends Slide {
-  
-  PImage tweet;
-  
+
+  Tweet tweet;
+  PImage backgroundTweet;
+  PFont SegoeBold21;
+  PFont Segoe31;
+  PFont SegoeSemiBold19;
+
   int favorNumber;
   int opposeNumber;
-  
+
   float favorFactor;
 
   color recogColor; //the recognized color from openCV
@@ -18,15 +22,19 @@ class PhaseTwo extends Slide {
   TypePicker typePicker;
 
   PhaseTwo(ColorPicker colorPicker, TypePicker typePicker) {
-    tweet = loadImage("image/fullelontweet.png");
+    backgroundTweet = loadImage("Image/emptyTweet.png");
+    SegoeBold21 = createFont("Segoe UI Bold", 21);
+    Segoe31 = createFont("Segoe UI", 31);
+    SegoeSemiBold19 = createFont("Segoe UI Semibold", 19);
+    tweet = new Tweet(backgroundTweet, SegoeBold21, Segoe31, SegoeSemiBold19);
 
     favorNumber = 55 + int(random(0, 35));
     opposeNumber = 100 - favorNumber;
     favorFactor = float(favorNumber)/100;
-    
+
     recogColor = colorPicker.getLastColor();
     recomColor = colorPicker.getLastOppositeColor();
-    
+
     pollDescription = "Official International Institute of Science Poll";
     recomClothing = "Blue Sweater";
     recogClothing = "White Polo";
@@ -37,10 +45,10 @@ class PhaseTwo extends Slide {
 
   void display() {
     background(bgColor);
-    
+
     //println(favourNumber);
     //println(favourFactor);
-    
+
     noStroke();
     fill(colorPicker.getLastColor());
     rect(width/8, height/4*3, width/3, height/20);
@@ -56,7 +64,8 @@ class PhaseTwo extends Slide {
     fill(0);
     textFont(fontSub);
     text(pollDescription, width/8-110, height/8*6-50);
-    
-    image(tweet, width/4*3, height/3);
+
+    tweet.display(new PVector(width*2/3, height/3));    
+    //image(tweet, width/4*3, height/3);
   }
 }
