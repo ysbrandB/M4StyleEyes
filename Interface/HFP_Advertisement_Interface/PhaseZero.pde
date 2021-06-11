@@ -15,7 +15,6 @@ class PhaseZero extends Slide {
     scanning = false;
     irisPos = new PVector(width/2, height/2);
     colorFade = 200;
-    rectMode(CENTER);
     rotation = 0;
     trail.append(rotation);
     textAlign(CENTER, CENTER);
@@ -29,6 +28,7 @@ class PhaseZero extends Slide {
     text(com.clothingType + " [" + red(com.clothingColor) + "," + green(com.clothingColor) + "," + blue(com.clothingColor) + "] " + com.hits, 50, 50);
 
     textAlign(CENTER, CENTER);
+    imageMode(CENTER);
     image(img, width/2, height/2, height, height);
     fill(0);
     circle(irisPos.x, irisPos.y, height/4);

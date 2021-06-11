@@ -1,18 +1,18 @@
 class ColorPicker {
   String detectedColorName;
   color detectedColor;
-  String oppisiteColorName;
-  color oppisiteColor;
+  String oppositeColorName;
+  color oppositeColor;
 
   JSONObject colorData;
   JSONObject inputColors;
-  JSONObject oppisiteColors;
+  JSONObject oppositeColors;
   
 
   ColorPicker() {
     colorData = loadJSONObject("../JsonFiles/Colors.JSON");
     inputColors = colorData.getJSONObject("inputColors");
-    oppisiteColors = colorData.getJSONObject("oppisiteColor");
+    oppositeColors = colorData.getJSONObject("oppisiteColor");
 
     detectedColorName = "None";
     detectedColor = color(0,255,0);
@@ -25,7 +25,7 @@ class ColorPicker {
     
     detectedColorName = "None";
 
-    //determin the color
+    //determine the color
     if(saturation <= 20){ //for white, grays and black.
       if(brightness >= 90) detectedColorName = "White";
       else if(brightness >= 60) detectedColorName = "Light Grey";
@@ -83,17 +83,15 @@ class ColorPicker {
     }
 
     //oppisite color -------------------------------------------
-    String[] oppisiteColorArray = split(detectedColorName, ' ');
-    if(oppisiteColorArray.length == 1) oppisiteColorName = oppisiteColorArray[0]; //when there is no light or dark
-    else oppisiteColorName = oppisiteColorArray[1]; //remove the light or dark
+    String[] oppositeColorArray = split(detectedColorName, ' ');
+    if(oppositeColorArray.length == 1) oppositeColorName = oppositeColorArray[0]; //when there is no light or dark
+    else oppositeColorName = oppositeColorArray[1]; //remove the light or dark
 
-    oppisiteColorName = oppisiteColors.getString(oppisiteColorName);
+    oppositeColorName = oppositeColors.getString(oppositeColorName);
 
     //gets the corresponding color form the json file
-    {
-      int[] rgbColor = inputColors.getJSONArray(oppisiteColorName).getIntArray();
-      oppisiteColor = color(rgbColor[0], rgbColor[1], rgbColor[2]);
-    }
+    int[] rgbColor = inputColors.getJSONArray(oppositeColorName).getIntArray();
+    oppositeColor = color(rgbColor[0], rgbColor[1], rgbColor[2]);
   }
   
   String getLastColorName() {
@@ -105,10 +103,10 @@ class ColorPicker {
   }
   
   String getLastOppositeColorName() {
-    return oppisiteColorName;
+    return oppositeColorName;
   }
   
   color getLastOppositeColor(){
-    return oppisiteColor;
+    return oppositeColor;
   }
 }
