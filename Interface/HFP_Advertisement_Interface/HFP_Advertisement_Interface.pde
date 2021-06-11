@@ -72,7 +72,6 @@ void draw() {
   case 1:
     pOne.display();
     speechSynth.recommendColor(); 
-        com.sendColor(colorPicker.getLastColor());
     //phaseCount++;
     //println("One");  // Prints "One"
     break;
@@ -100,12 +99,15 @@ void draw() {
     switch(phaseCount) { //determines the length of the next phase 
     case 1:
       phaseTimer = 8;
+      pOne.init(com);
       break;
     case 2: 
       phaseTimer = 8; 
+      pTwo.init(com);
       break;
     case 3: 
-      phaseTimer = 5; 
+      phaseTimer = 5;
+      pThree.init(); 
       break;
      case 0:
       phaseTimer = 2;

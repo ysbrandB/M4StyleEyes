@@ -37,12 +37,18 @@ class Strings {
   ColorPicker colorPicker;
   TypePicker typePicker;
 
-  Strings() {
+  Strings(ColorPicker colorPicker) {
+    this.colorPicker = colorPicker;
     s = int(random(0, 9)); //Chooses any random number for the string
     n = int(random(0, 7)); //Chooses any random number for the string
     f = int(random(0, 3)); //Chooses any random number for the string
     bC = int(random(0, 3)); //Chooses any random number for the string
     bE = int(random(3, 9)); //Chooses any random number for the string
+
+    BeginColor = colorPicker.getLastColorName(); //"Red"; //colorPicker.detectedColorName; //Placeholder recognized color
+    NewColor = colorPicker.getLastOppositeColorName(); //colorPicker.oppositeColorName; //Placeholder recommanded color
+    BeginType = "T-Shirt"; //Placeholder recognized type
+    NewType = "Sweater"; //Placeholder recommended type
 
     json = loadJSONObject("JsonFiles/Text.JSON"); //Gets the json file
     startMsg = json.getJSONArray("startMsg"); //Gets the text for the begin message
@@ -91,11 +97,6 @@ class Strings {
     totalRecom = "NOW in SALE at" +"\n" + 
       BrandCheap + ": " + chpBrandPrice + "€"+ "  <-  Originally: " + (chpOriginalPrice) + "€" +"\n" + 
       BrandExpensive + ": " + expBrandPrice + "€"+ "  <-  Originally: " + (expOrignialPrice) + "€";
-
-    BeginColor = "Red"; //colorPicker.detectedColorName; //Placeholder recognized color
-    NewColor = "Blue"; //colorPicker.oppositeColorName; //Placeholder recommanded color
-    BeginType = "T-Shirt"; //Placeholder recognized type
-    NewType = "Sweater"; //Placeholder recommended type
   }
 
   void BeginMessage() {

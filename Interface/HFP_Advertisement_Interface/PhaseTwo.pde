@@ -28,7 +28,7 @@ class PhaseTwo extends Slide {
   Strings string;
 
   PhaseTwo(ColorPicker colorPicker, TypePicker typePicker) {
-    string = new Strings();
+    // string = new Strings(colorPicker);
 
     randomNewsLogo = int(random(1,5));
     Oxford = createFont("Font/Oxford.ttf", 80);
@@ -55,6 +55,11 @@ class PhaseTwo extends Slide {
 
     this.colorPicker = colorPicker;
     this.typePicker = typePicker;
+  }
+
+  void init(CommunicationHandler com){
+    string = new Strings(colorPicker);
+    com.sendColor(colorPicker.getLastOppositeColor());
   }
 
   void display() {

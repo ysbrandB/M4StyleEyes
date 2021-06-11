@@ -17,7 +17,7 @@ class PhaseThree extends Slide {
   // String encourageMessage; //encourages the person the buy the product
 
   PhaseThree() {
-    string = new Strings();
+    // string = new Strings(colorPicker);
     // clothRecom = "White Polo";
     
     // encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + clothRecom + " too!"; 
@@ -40,6 +40,11 @@ class PhaseThree extends Slide {
     // totalRecom = "NOW in SALE at" +"\n" + 
     //   cheapBrand + ": " + chpBrandPrice + "€"+ "  <-  Originally: " + (chpOriginalPrice) + "€" +"\n" + 
     //   expensiveBrand + ": " + expBrandPrice + "€"+ "  <-  Originally: " + (expOrignialPrice) + "€";
+  }
+
+
+  void init(){
+    string = new Strings(colorPicker);
   }
 
   void display() {

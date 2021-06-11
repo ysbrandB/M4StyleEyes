@@ -19,13 +19,17 @@ class PhaseOne extends Slide {
    TypePicker typePicker;
 
   PhaseOne(ColorPicker colorPicker, TypePicker typePicker) {
-    string = new Strings();
 
      MainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
      this.colorPicker = colorPicker;
      this.typePicker= typePicker;
      recomClothing = loadImage("image/whitepolo.png");
      textFont(MainText);
+  }
+
+  void init(CommunicationHandler com){
+    string = new Strings(colorPicker);
+    com.sendColor(colorPicker.getLastColor());
   }
 
   void display() {

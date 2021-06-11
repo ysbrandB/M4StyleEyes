@@ -19,8 +19,9 @@ int green = 0;
 int blue = 0;
 boolean shouldUpdate = false;
 
-boolean scanning = true;
-int scanTimer = 0;
+boolean scanning = false;
+boolean Lightstrafe_left;
+float scanTimer = 0;
 
 void setup() {
   delay( 3000 ); // power-up safety delay
@@ -39,7 +40,6 @@ void setup() {
     }
     FastLED.show();
   }
-
   Serial.begin(9600);
 }
 
@@ -80,14 +80,14 @@ void loop() {
   }
   else if(scanning){
     for (int i = 0; i < NUM_LEDS; i++) {
-      int fade = abs(i - scanTimer);
+      int fade = abs(i - int(scanTimer));
       if (fade < 5){
         fade = 1/((float(fade)+1)/2) * 255;
       } else fade = 0;
       leds[i] = CHSV(170, 187, fade);
     }
     FastLED.show();
-    scanTimer++;
+    scanTimer+= 0.5;
     if(scanTimer > NUM_LEDS) scanTimer = 0;
   }
 
