@@ -29,7 +29,7 @@
     connectClothes();
     connectKinect();
 
-    // port = new Serial(parent, Serial.list()[0], 9600);  // open the port!
+    port = new Serial(parent, Serial.list()[0], 9600);  // open the port!
   }
 
   void update(){
