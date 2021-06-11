@@ -90,18 +90,22 @@ class Strings {
   }
 
   void BeginMessage() {
+    textAlign(LEFT);
     text(Message,width/9, height/5, width/2-100, height);
   }
 
   void NewsQuote() {
+    textAlign(TOP, LEFT);
     text(Quote, width/9, height/4, width/2-100, height/2); 
   }
 
   void ScientificQuote() {
+        textAlign(TOP, LEFT);
     text(Fact,width/2+150, height/2+150, width/2-200, height);
   }
 
   void Brands() {
+        textAlign(TOP, LEFT);
     text(encourageMessage, width/8, height/4-100);
     text(totalRecom, width/8, height/2);
   }

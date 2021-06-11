@@ -26,12 +26,12 @@ class PhaseOne extends Slide {
      this.typePicker= typePicker;
      recomClothing = loadImage("image/whitepolo.png");
      textFont(MainText);
-     textAlign(CENTER);
   }
 
   void display() {
     background(bgColor);
     fill(0);
+    textAlign(CENTER);
     string.BeginMessage();
 
     image(recomClothing, width/4*3, height/2);

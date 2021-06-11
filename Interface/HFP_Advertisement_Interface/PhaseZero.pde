@@ -29,6 +29,7 @@ class PhaseZero extends Slide {
     text(com.clothingType + " [" + red(com.clothingColor) + "," + green(com.clothingColor) + "," + blue(com.clothingColor) + "] " + com.hits, 50, 50);
 
     textAlign(CENTER, CENTER);
+    imageMode(CENTER);
     image(img, width/2, height/2, height, height);
     fill(0);
     circle(irisPos.x, irisPos.y, height/4);
