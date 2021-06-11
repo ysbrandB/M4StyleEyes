@@ -19,8 +19,8 @@ int green = 0;
 int blue = 0;
 boolean shouldUpdate = false;
 
-boolean scanning = false;
-boolean Lightstrafe_left;
+boolean scanning = true;
+boolean straveForward = true;
 float scanTimer = 0;
 
 void setup() {
@@ -30,11 +30,11 @@ void setup() {
   timer = 0;
 
   //startup color:
-  for(int timer = 0; timer<=NUM_LEDS+5; timer++){
+  for (int timer = 0; timer <= NUM_LEDS + 5; timer++) {
     for (int i = 0; i < NUM_LEDS; i++) {
       int fade = abs(i - timer);
-      if (fade < 5){
-        fade = 1/((float(fade)+1)/2) * 255;
+      if (fade < 5) {
+        fade = 1 / ((float(fade) + 1) / 2) * 255;
       } else fade = 0;
       leds[i] = CHSV(170, 187, fade);
     }
@@ -78,20 +78,25 @@ void loop() {
     shouldUpdate = false;
     scanTimer = 0;
   }
-  else if(scanning){
+  else if (scanning) {
     for (int i = 0; i < NUM_LEDS; i++) {
       int fade = abs(i - int(scanTimer));
-      if (fade < 5){
-        fade = 1/((float(fade)+1)/2) * 255;
+      if (fade < 5) {
+        fade = 255 - 255/5 * float(fade);
       } else fade = 0;
       leds[i] = CHSV(170, 187, fade);
     }
     FastLED.show();
-    scanTimer+= 0.5;
-    if(scanTimer > NUM_LEDS) scanTimer = 0;
+    if (straveForward) {
+      scanTimer += 0.2;
+      if (scanTimer > NUM_LEDS) straveForward = false;
+    } else {
+      scanTimer -= 0.2;
+      if (scanTimer < 0) straveForward = true;
+    }
   }
 
-  
+
 
 
 
