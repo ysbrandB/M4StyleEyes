@@ -5,22 +5,21 @@ int xAngles[6];
 int yAngles[6];
 bool blinking[6];
 int blinkingValues[6];
+
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-#define SERVOMIN  130 // this is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  610 // this is the 'maximum' pulse length count (out of 4096)
+#define SERVOMIN  130 //minimum pulselength for servo
+#define SERVOMAX  610 // maximum pulselength for servo
 
-#define ANGLEMINLEFT 45
+#define ANGLEMINLEFT 45 
 #define ANGLEMAXRIGHT 135
 
 #define ANGLEMINDOWN 80
 #define ANGLEMAXUP 100
 
-int xval;
-int yval;
 
 int xPulse;
 int yPulse;
@@ -30,58 +29,61 @@ void setup() {
   pinMode(A1, INPUT);
   Serial.begin(9600);
   Serial.println("Ysbrand dit gaat niet werken lmao");
-  pwm.begin();
-   pwm.setPWM(1, 0, 520);
-  pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
-  
-  for (int i = 0; i < 6; i++) {
+
+   for (int i = 0; i < amountEyes; i++) {
     blinking[i] = false;
   }
 
-  for (int i = 0; i < sizeof(xAngles); i++) {
+  for (int i = 0; i < amountEyes; i++) {
     xAngles[i] = 90;
     yAngles[i] = 90;
     blinkingValues[i] = 0;
   }
+  pwm.begin();
+  pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
 }
 
 void loop() {
-  for (int i = 0; i < 4; i++) {
-    if (random(0, 1000) < 2) {
+  for (int i = 0; i < 4; i++) {//for each set of eyes (now four for one servo board)
+    //decide to randomly blink
+    if (random(0, 2000) < 2) {
       blinking[i] = true;
     }
 
-    xval = xAngles[i];
-    yval = yAngles[i];
-
+    int xval = xAngles[i];
+    int yval = yAngles[i];
+    
     //LEFT RIGHT
     xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
     //xPulse = map(analogRead(A0),0, 1023, 220, 450);
     pwm.setPWM((0+i*4), 0, xPulse);
 
     //UP DOWN
-    yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
-    // yPulse = map(analogRead(A1),0, 1023, 520, 280);
-    //Serial.println(yPulse);
-    pwm.setPWM((1+i*4), 0, yPulse);
+    
+   yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
+    //yPulse = map(analogRead(A1),0, 1023, 520, 280);
+   Serial.println(yval);
+   // pwm.setPWM((1+i*4), 0, yPulse);
+   pwm.setPWM((1+i*4), 0, yPulse);
 
+    //ramp the blinking value up and down to 100
     if (blinking[i]) {
       if (blinkingValues[i] < 100) {
-        blinkingValues[i]+=10;
+        blinkingValues[i]+=5;
       } else {
         blinking[i] = false;
       }
     } else {
       if (blinkingValues[i] > 0) {
-        blinkingValues[i]-=5;
+        blinkingValues[i]-=3;
       }
     }
 
+    //set the blinking servos to the right values
     pwm.setPWM((2+i*4), 0, map(blinkingValues[i], 0, 100, 500, 160));
     pwm.setPWM((3+i*4), 0, map(blinkingValues[i], 0, 100, 230, 560));
-    
-    delay(1);
   }
+  delay(10);
 }
 
 boolean id = false;
@@ -106,7 +108,6 @@ void serialEvent() {
       yAngles[tempId] = constrain(tempYAngle, ANGLEMINDOWN, ANGLEMAXUP);
 
       id = false;
-      //Has to be eyeid but have to stop so fix later
       eyeId = "";
       nextAngle = false;
       angleX = "";

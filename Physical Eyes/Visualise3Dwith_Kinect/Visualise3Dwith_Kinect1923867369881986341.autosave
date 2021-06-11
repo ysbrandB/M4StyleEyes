@@ -63,11 +63,11 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(-35, -80, 15), 0));
+  eyes.add(new Eye(new PVector(-50, -100, 200), 0));
   oldData.add("");
 
- // eyes.add(new Eye(new PVector(50, -80, 50), 1));
-  //oldData.add("");
+  eyes.add(new Eye(new PVector(50, -100, 50), 1));
+  oldData.add("");
 
   size(1000, 1000, P3D);
   //fullScreen(P3D, 1);
@@ -92,6 +92,7 @@ void setup() {
     sphereDetail(1);
     rectMode(CENTER);
   }
+
   //print the available serial (arduino ports)
   if (useArduino) {
     println("Available serial ports:");
@@ -193,9 +194,6 @@ void displayNoise() {
 }
 
 void checkToStartInterface() {
-  //  int buffer=0;
-  //int desiredBufferTime=0;
-  //boolean triggeredInterface=false;
   float closestDist=999999999;
   for (int i=0; i<heads.size(); i++) {
     PVector head=heads.get(i);
@@ -204,7 +202,7 @@ void checkToStartInterface() {
       closestDist=distance;
     }
   }
-  
+
   if (closestDist<=minimumDistToCross) {
     if (!triggeredInterface) {
       sInterface.write("Start"+'\n');
@@ -219,6 +217,7 @@ void checkToStartInterface() {
     }
   }
 }
+
 void updateDigitalEyesTCP() {
   //Adjust the lookingPos for the screen by the difference between kinect and screenmid
   //update the lookingvector of the screen
@@ -244,14 +243,14 @@ void updatePhysicalEyesArduino() {
       oldData.set(i, thisArduinoPayload);
     }
   }
+
   if (arduinoPayload.length()>=1) {
     //dont update 60 frames per second!
-    if (useArduino&&frameCount%2==0) {
+    if (useArduino&&frameCount%5==0) {
       port.write(arduinoPayload);
     }
   }
 }
-
 
 //draw all the bones between the joints
 void drawBody(PVector[] myJoints) {
