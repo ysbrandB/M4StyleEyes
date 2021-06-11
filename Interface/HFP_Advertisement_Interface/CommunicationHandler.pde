@@ -29,7 +29,11 @@
     connectClothes();
     connectKinect();
 
+    try{
     port = new Serial(parent, Serial.list()[0], 9600);  // open the port!
+    }catch(Exception e){
+     println("no arduino connected"); 
+    }
   }
 
   void update(){
