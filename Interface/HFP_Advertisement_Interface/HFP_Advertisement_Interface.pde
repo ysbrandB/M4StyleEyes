@@ -1,5 +1,5 @@
 //HFP CreaTe 2021 
-//By Sterre Kuijper <Team Leader>, Frank Bosman, Jesse Boomkamp, Ysbrand Brugstede, Jelle Gerritsen,  Max Liebe, Marnix Lueb & Kimberley Siemons
+//By Sterre Kuijper <Team Leader>, Frank Bosman, Jesse Boomkamp, Ysbrand Brugstede, Jelle Gerritsen, Max Liebe, Marnix Lueb & Kimberley Siemons
 //The Style Eyes Project
 //Advertisement Interface of Style Eyes
 //Press R to Start

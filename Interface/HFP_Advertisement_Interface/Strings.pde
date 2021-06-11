@@ -37,7 +37,7 @@ class Strings {
   Strings() {
     s = int(random(0, 9)); //Chooses any random number for the string
     n = int(random(0, 7)); //Chooses any random number for the string
-    f = int(random(0, 1)); //Chooses any random number for the string
+    f = int(random(0, 3)); //Chooses any random number for the string
     bC = int(random(0, 3)); //Chooses any random number for the string
     bE = int(random(3, 9)); //Chooses any random number for the string
 
@@ -53,7 +53,7 @@ class Strings {
     Brand = Brands.getStringArray(); //Splits the brands
 
     Message = text[s]; //Sets 'Message' to one of the stings with the number from s
-    Message = Message.replace("Color_", BeginColor); //Replaces the word 'Color_' by the text at beginColor
+    Message = Message.replace("ColorQ_", BeginColor); //Replaces the word 'Color_' by the text at beginColor
     Message = Message.replace("Type_", BeginType); //Replaces the word 'Type' by the text at beginType
     
     Quote = NewsQuote[n]; //Sets 'Quote' to one of the stings with the number from n
@@ -62,6 +62,7 @@ class Strings {
 
     Fact = ScientificFact[f]; //Sets 'Fact' to one of the stings with the number from f
     Fact = Fact.replace("Color_", NewColor); //Replaces the word 'Color_' by the text at beginColor
+    Fact = Fact.replace("ColorQ_", BeginColor); //Replaces the word 'Color_' by the text at beginColor
     Fact = Fact.replace("Type_", NewType); //Replaces the word 'Type' by the text at beginType
 
     BrandCheap = Brand[bC]; //Sets 'BrandCheap' to one of the stings with the number from bC
@@ -97,7 +98,7 @@ class Strings {
   }
 
   void ScientificQuote() {
-    text(Fact,width/2+200, height*3/4, width, height);
+    text(Fact,width/2+150, height/2+150, width/2-200, height);
   }
 
   void Brands() {

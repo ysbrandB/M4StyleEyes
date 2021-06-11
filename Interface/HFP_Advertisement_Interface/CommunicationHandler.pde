@@ -1,47 +1,9 @@
 //lets get the main communication in this Handler so we can spread all data from here
 //
-//Marnix's code should **NOT** be placed here MAKE A DIFFERENT CLASS FOR THAT.
-
   class CommunicationHandler{
 
-  //----- DE GROOTSTE ANTI HENK (BULLSHIT) ------
-  // String colorRecog; 
-  // String clothTypeRecog;
-  // String clothRecog;
-  
-  // String colorRecom;
-  // String clothTypeRecom;
-  // String clothRecom;
-  
-  // int recogClrR;
-  // int recogClrG;
-  // int recogClrB;
-  
-  // static final int maxHValue = 360; //HSV will probably not be necessary
-  
-  // int recogClrH;
-  // int recogClrS;
-  // int recogClrV;
-  
-  // ComHandler(){
-
-  // colorMode(HSB, maxHValue, 100, 100);
-  
-  // clothRecog = colorRecog + "" + clothTypeRecog;
-  // clothRecom = colorRecom + "" + clothTypeRecom;
-  // }
-  
-  // //only reverses the Hue and not the Brightness or Saturation
-  // color reverseColor(){
-  //   int H = maxHValue - recogClrH; 
-  //   int S = recogClrS;
-  //   int V = recogClrV;
-  //   return color(H, S, V);
-  // }
-  //-----------------------------------------
-
   //AI clothing recognition.
-  PVector clothingColor;
+  color clothingColor;
   String clothingType = "";
   int hits = 0; //the amount of times this type of clothing has been recognised.
   Client clothesClient;
@@ -57,12 +19,17 @@
   PApplet context;
   int pollingRate = 2; //polls per second
 
+  //Arduino serial com
+  Serial port;
+
 
   CommunicationHandler(PApplet parent){
-    clothingColor = new PVector();
+    clothingColor = color(0);
     context = parent;
     connectClothes();
     connectKinect();
+
+    // port = new Serial(parent, Serial.list()[0], 9600);  // open the port!
   }
 
   void update(){
@@ -112,11 +79,11 @@
     
     clothingType = values[0];
     try {
-      clothingColor = new PVector(Integer.parseInt(values[1]), Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+      clothingColor = color(Integer.parseInt(values[1]), Integer.parseInt(values[2]), Integer.parseInt(values[3]));
       values[4] = values[4].substring(0, values[4].length() - 1); //removes the \n
       hits = Integer.parseInt(values[4]);
     }catch(Exception e) {
-      clothingColor = new PVector();
+      clothingColor = color(0);
       hits = 0;
     }
   }
@@ -129,5 +96,18 @@
 
   boolean isConnected(Client c) {
     return c != null && c.active();
+  }
+
+  void sendColor(color inputColor) {
+    int redValue = int(red(inputColor));
+    int greenValue = int(green(inputColor));
+    int blueValue = int(blue(inputColor));
+
+    String payload = redValue + "," + greenValue + "," + blueValue + ",";
+    try {
+      port.write(payload);
+    } catch (Exception e) {
+      println("Can't write to port, try to reconnect!");      
+    }    
   }
 }
