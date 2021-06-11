@@ -72,6 +72,7 @@ void draw() {
   case 1:
     pOne.display();
     speechSynth.recommendColor(); 
+        com.sendColor(colorPicker.getLastColor());
     //phaseCount++;
     //println("One");  // Prints "One"
     break;
