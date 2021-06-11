@@ -84,8 +84,9 @@ class PhaseTwo extends Slide {
     image(NewsHeads,90, 50); //Displays the news logo's
     fill(0);
     textFont(Oxford);
-    string.NewsQuote();
+    textLeading(50);
     textAlign(CENTER);
+    string.NewsQuote();
     textFont(Papers);
     string.ScientificQuote();
     textAlign(LEFT);

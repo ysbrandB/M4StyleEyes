@@ -5,7 +5,7 @@ class Strings {
   int s, n, f, bC, bE; //Intergers for randomness out of the database
   int chpRandomPrice;  //random number generated to calculate all cheap prices
   int expRandomPrice; //random number generated to calculate all expensive prices
-  
+
   int orgCheapPrice; //number for the original cheap brand price
   int orgExpensivePrice; //number for the original expensive brand price
 
@@ -34,6 +34,9 @@ class Strings {
   String BeginType = "T-Shirt"; //Placeholder recognized type
   String NewType = "Sweater"; //Placeholder recommended type
 
+  ColorPicker colorPicker;
+  TypePicker typePicker;
+
   Strings() {
     s = int(random(0, 9)); //Chooses any random number for the string
     n = int(random(0, 7)); //Chooses any random number for the string
@@ -55,8 +58,8 @@ class Strings {
     Message = text[s]; //Sets 'Message' to one of the stings with the number from s
     Message = Message.replace("ColorQ_", BeginColor); //Replaces the word 'Color_' by the text at beginColor
     Message = Message.replace("Type_", BeginType); //Replaces the word 'Type' by the text at beginType
-    
-    Quote = NewsQuote[n]; //Sets 'Quote' to one of the stings with the number from n
+
+    Quote = NewsQuote[4]; //Sets 'Quote' to one of the stings with the number from n
     Quote = Quote.replace("Color_", NewColor); //Replaces the word 'Color_' by the text at beginColor
     Quote = Quote.replace("Type_", NewType); //Replaces the word 'Type' by the text at beginType
 
@@ -76,10 +79,11 @@ class Strings {
 
     chpBrandPrice = chpRandomPrice + "9";
     expBrandPrice =  expRandomPrice + "9";
-    
+
     orgCheapPrice = chpRandomPrice + 1;
-    orgExpensivePrice = expRandomPrice + 5;;
-    
+    orgExpensivePrice = expRandomPrice + 5;
+    ;
+
     chpOriginalPrice = orgCheapPrice + "9";
     expOrignialPrice = orgExpensivePrice + "9";
 
@@ -87,25 +91,28 @@ class Strings {
     totalRecom = "NOW in SALE at" +"\n" + 
       BrandCheap + ": " + chpBrandPrice + "€"+ "  <-  Originally: " + (chpOriginalPrice) + "€" +"\n" + 
       BrandExpensive + ": " + expBrandPrice + "€"+ "  <-  Originally: " + (expOrignialPrice) + "€";
+
+    BeginColor = "Red"; //colorPicker.detectedColorName; //Placeholder recognized color
+    NewColor = "Blue"; //colorPicker.oppositeColorName; //Placeholder recommanded color
+    BeginType = "T-Shirt"; //Placeholder recognized type
+    NewType = "Sweater"; //Placeholder recommended type
   }
 
   void BeginMessage() {
     textAlign(LEFT);
-    text(Message,width/9, height/5, width/2-100, height);
+    text(Message, width/9, height/5, width/2-100, height);
   }
 
   void NewsQuote() {
-    textAlign(TOP, LEFT);
-    text(Quote, width/9, height/4, width/2-100, height/2); 
+    text(Quote, width/10-50, height/4+75, width/2-100, height/2);
   }
 
   void ScientificQuote() {
-        textAlign(TOP, LEFT);
-    text(Fact,width/2+150, height/2+150, width/2-200, height);
+    text(Fact, width/2+150, height/2+150, width/2-200, height);
   }
 
   void Brands() {
-        textAlign(TOP, LEFT);
+    textAlign(TOP, LEFT);
     text(encourageMessage, width/8, height/4-100);
     text(totalRecom, width/8, height/2);
   }

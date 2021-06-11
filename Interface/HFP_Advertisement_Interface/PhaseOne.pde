@@ -31,6 +31,7 @@ class PhaseOne extends Slide {
   void display() {
     background(bgColor);
     fill(0);
+    rectMode(BASELINE);
     textAlign(CENTER);
     string.BeginMessage();
 
