@@ -63,7 +63,7 @@ void draw() {
     pZero.display();
     if(com.hits >= HITS_THRESHOLD && distanceTrigger) {
       colorPicker.colorDetermination(com.clothingColor);
-      typePicker.typeDetermination(com.clothingType);
+      typePicker.typeDetermination("short_sleeve_top"/*com.clothingType*/);
       distanceTrigger = true;
     }
     //println("Zero" + t1);  // Prints "Zero"
@@ -119,6 +119,7 @@ void draw() {
 
 void keyPressed() {
   if (key == 'r' || key == 'R') {
+    com.hits = 5;
     colorPicker.colorDetermination(com.clothingColor);
     distanceTrigger = true;
   }
