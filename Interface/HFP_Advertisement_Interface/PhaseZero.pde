@@ -15,7 +15,6 @@ class PhaseZero extends Slide {
     scanning = false;
     irisPos = new PVector(width/2, height/2);
     colorFade = 200;
-    rectMode(CENTER);
     rotation = 0;
     trail.append(rotation);
     textAlign(CENTER, CENTER);
