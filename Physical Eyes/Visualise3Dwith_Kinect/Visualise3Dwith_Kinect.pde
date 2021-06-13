@@ -64,10 +64,10 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(20, -100, 10), 0));
+  eyes.add(new Eye(new PVector(40, -100, 50), 0));
   oldData.add("");
 
-  eyes.add(new Eye(new PVector(50, -80, 50), 1));
+  eyes.add(new Eye(new PVector(-40, -100, 50), 1));
   oldData.add("");
 
   size(1000, 1000, P3D);
@@ -172,17 +172,16 @@ void serialEvent(Serial myPort) {
   if (debug) {
     byte[] incomingBytes = myPort.readBytes();
     char incomingChar= char(incomingBytes[0]);
-    println(incomingChar);
     if (incomingChar=='w') {
-      debugNoise.z-=5;
+      debugNoise.z-=2;
     } else if (incomingChar=='s') {
-      debugNoise.z+=5;
+      debugNoise.z+=2;
     }
 
     if (incomingChar=='a') {
-      debugNoise.x-=5;
+      debugNoise.x-=2;
     } else if (incomingChar=='d') {
-      debugNoise.x+=5;
+      debugNoise.x+=2;
     }
   }
 }
@@ -274,7 +273,16 @@ void keyPressed() {
   if (key=='d') {
     debug=!debug;
   }
+
+  if (debug) {
+    if (keyCode==UP) {
+      debugNoise.y+=5;
+    } else if (keyCode==DOWN) {
+      debugNoise.y-=5;
+    }
+  }
 }
+
 
 
 //draw all the bones between the joints
