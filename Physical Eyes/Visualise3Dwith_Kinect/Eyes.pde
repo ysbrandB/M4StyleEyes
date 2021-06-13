@@ -78,8 +78,7 @@ class Eye {
         angleZ=360+angleZ;
       }
       angleZ-=90;
-    }
-    else if (pos.x<0) {
+    } else if (pos.x<0) {
       angleZ=int((lookZ.heading()+PI)/PI*180);
       if (angleZ<0) {
         angleZ=360+angleZ;

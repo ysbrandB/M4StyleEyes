@@ -14,7 +14,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define SERVOMIN  130 //minimum pulselength for servo
 #define SERVOMAX  610 // maximum pulselength for servo
 
-#define ANGLEMINLEFT 45 
+#define ANGLEMINLEFT 45
 #define ANGLEMAXRIGHT 135
 
 #define ANGLEMINDOWN 80
@@ -28,9 +28,8 @@ void setup() {
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
   Serial.begin(9600);
-  Serial.println("Ysbrand dit gaat niet werken lmao");
 
-   for (int i = 0; i < amountEyes; i++) {
+  for (int i = 0; i < amountEyes; i++) {
     blinking[i] = false;
   }
 
@@ -52,37 +51,52 @@ void loop() {
 
     int xval = xAngles[i];
     int yval = yAngles[i];
-    
+
     //LEFT RIGHT
     xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
     //xPulse = map(analogRead(A0),0, 1023, 220, 450);
-    pwm.setPWM((0+i*4), 0, xPulse);
+    pwm.setPWM((0 + i * 4), 0, xPulse);
 
     //UP DOWN
-    
-   yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
+
+    yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
     //yPulse = map(analogRead(A1),0, 1023, 520, 280);
-   Serial.println(yval);
-   // pwm.setPWM((1+i*4), 0, yPulse);
-   pwm.setPWM((1+i*4), 0, yPulse);
+    pwm.setPWM((1 + i * 4), 0, yPulse);
+    pwm.setPWM((1 + i * 4), 0, yPulse);
 
     //ramp the blinking value up and down to 100
     if (blinking[i]) {
       if (blinkingValues[i] < 100) {
-        blinkingValues[i]+=5;
+        blinkingValues[i] += 5;
       } else {
         blinking[i] = false;
       }
     } else {
       if (blinkingValues[i] > 0) {
-        blinkingValues[i]-=3;
+        blinkingValues[i] -= 3;
       }
     }
 
     //set the blinking servos to the right values
-    pwm.setPWM((2+i*4), 0, map(blinkingValues[i], 0, 100, 500, 160));
-    pwm.setPWM((3+i*4), 0, map(blinkingValues[i], 0, 100, 230, 560));
+    pwm.setPWM((2 + i * 4), 0, map(blinkingValues[i], 0, 100, 500, 160));
+    pwm.setPWM((3 + i * 4), 0, map(blinkingValues[i], 0, 100, 230, 560));
   }
+
+  int xDir = analogRead(A0);
+  int yDir = analogRead(A1);
+
+  if (xDir < 490) {
+    Serial.println('d');
+  } else if (xDir > 510) {
+    Serial.println('a');
+  }
+
+  if (yDir < 500) {
+    Serial.println('w');
+  } else if (yDir > 540) {
+    Serial.println('s');
+  }
+
   delay(10);
 }
 
@@ -100,7 +114,6 @@ void serialEvent() {
     //als het einde van een oog is bereikt reset alle variabelen
     if (inChar == '|') {
       //UPDATE HIER DE SERVOS!
-      Serial.println("" + eyeId + "," + angleX + "," + angleY + '\n');
       int tempId = eyeId.toInt();
       int tempXAngle = angleX.toInt();
       int tempYAngle = angleY.toInt();

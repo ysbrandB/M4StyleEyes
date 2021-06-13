@@ -16,11 +16,11 @@ Server s;
 Server sInterface;
 
 //sketch in CM, -y is up
-//als we 360 graden kunnen draaien 0 graden = recht vanuit kinect
-//als 180 graden draaien opnieuw implementeren naar midden kijkend
+//Ogen bij startup kijken rechtdoor, rotatie is met de x as van de oogassembly door de kinect heen
 
 boolean draw= true;
 boolean useArduino=true;
+boolean debug=true;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
@@ -39,6 +39,7 @@ JSONArray eyePosData;
 ArrayList<Eye> eyes = new ArrayList<Eye>();
 ArrayList<String> oldData= new ArrayList<String>();
 ArrayList<PVector> heads= new ArrayList<PVector>();
+PVector debugNoise= new PVector(-10, -100, 100);
 
 void setup() {
   frameRate(30);
@@ -63,11 +64,11 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(-35, -80, 15), 0));
+  eyes.add(new Eye(new PVector(20, -100, 10), 0));
   oldData.add("");
 
- // eyes.add(new Eye(new PVector(50, -80, 50), 1));
-  //oldData.add("");
+  eyes.add(new Eye(new PVector(50, -80, 50), 1));
+  oldData.add("");
 
   size(1000, 1000, P3D);
   //fullScreen(P3D, 1);
@@ -167,12 +168,24 @@ void draw() {
   updateDigitalEyesTCP();
 }
 
-//void serialEvent(Serial myPort) {
-//  inString = myPort.readString();
-//  if (inString!="") {
-//    print("Received: "+inString);
-//  }
-//}
+void serialEvent(Serial myPort) {
+  if (debug) {
+    byte[] incomingBytes = myPort.readBytes();
+    char incomingChar= char(incomingBytes[0]);
+    println(incomingChar);
+    if (incomingChar=='w') {
+      debugNoise.z-=5;
+    } else if (incomingChar=='s') {
+      debugNoise.z+=5;
+    }
+
+    if (incomingChar=='a') {
+      debugNoise.x-=5;
+    } else if (incomingChar=='d') {
+      debugNoise.x+=5;
+    }
+  }
+}
 
 void drawAmbience() {
   ambientLight(255, 255, 255);
@@ -186,10 +199,15 @@ void drawAmbience() {
 }
 
 void displayNoise() {
-  PVector noise=new PVector(map(noise(time/2), 0, 1, -50, 50), map(noise(time), 0, 1, -200, 0), map(noise(time*2), 0, 1, 0, 200));
-  heads.add(noise);
-  drawPoint(noise, color(255, 0, 255));
-  time+=0.001;
+  if (debug) {
+    heads.add(debugNoise);
+    drawPoint(debugNoise, color(255, 255, 255));
+  } else {
+    PVector noise=new PVector(map(noise(time/2), 0, 1, -50, 50), map(noise(time), 0, 1, -200, 0), map(noise(time*2), 0, 1, 0, 200));
+    heads.add(noise);
+    drawPoint(noise, color(255, 0, 255));
+    time+=0.001;
+  }
 }
 
 void checkToStartInterface() {
@@ -204,7 +222,7 @@ void checkToStartInterface() {
       closestDist=distance;
     }
   }
-  
+
   if (closestDist<=minimumDistToCross) {
     if (!triggeredInterface) {
       sInterface.write("Start"+'\n');
@@ -249,6 +267,12 @@ void updatePhysicalEyesArduino() {
     if (useArduino&&frameCount%2==0) {
       port.write(arduinoPayload);
     }
+  }
+}
+
+void keyPressed() {
+  if (key=='d') {
+    debug=!debug;
   }
 }
 
