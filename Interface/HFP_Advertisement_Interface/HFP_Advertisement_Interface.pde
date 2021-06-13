@@ -44,7 +44,7 @@ void setup() {
   pOne = new PhaseOne(colorPicker, typePicker);
   pTwo = new PhaseTwo(colorPicker, typePicker);
   pThree = new PhaseThree();
-  
+
   //initialize the speech synthesizer
   speechSynth = new SpeechSynth(colorPicker, typePicker);
 
@@ -61,44 +61,35 @@ void draw() {
   switch(phaseCount) {
   case 0:
     pZero.display();
-    if(com.hits >= HITS_THRESHOLD && distanceTrigger) {
-      colorPicker.colorDetermination(com.clothingColor);
-      typePicker.typeDetermination("short_sleeve_top"/*com.clothingType*/);
-      distanceTrigger = true;
-    }
-    //println("Zero" + t1);  // Prints "Zero"
     break;
 
   case 1:
     pOne.display();
     speechSynth.recommendColor(); 
-    //phaseCount++;
-    //println("One");  // Prints "One"
     break;
 
   case 2: 
     pTwo.display();
-    //phaseCount++;
-    //println("Two");  // Prints "Two"
     break;
 
   case 3:
     pThree.display();
-    //phaseCount++;
-    //println("Three");  // Prints "Three"
     break;
   }
 
   //update current phase, phaseTimer is in seconds
   if (phaseTimer > 0) {
     phaseTimer -= 1/frameRate; 
-  } else if (phaseCount != 0 || (distanceTrigger && phaseCount == 0)) {
+    //check to start from the normal state to change to phase 1 or to the next phase
+  } else if (phaseCount != 0 || (distanceTrigger && phaseCount == 0 && com.hits >= HITS_THRESHOLD)) {
     phaseCount++;
     if (phaseCount > 3) phaseCount = 0;
 
     switch(phaseCount) { //determines the length of the next phase 
     case 1:
       phaseTimer = 8;
+      colorPicker.colorDetermination(com.clothingColor);
+      typePicker.typeDetermination(com.clothingType);
       pOne.init(com);
       break;
     case 2: 
@@ -109,11 +100,10 @@ void draw() {
       phaseTimer = 5;
       pThree.init(); 
       break;
-     case 0:
+    case 0:
       phaseTimer = 2;
     }
   }
-
   com.update();
 }
 
