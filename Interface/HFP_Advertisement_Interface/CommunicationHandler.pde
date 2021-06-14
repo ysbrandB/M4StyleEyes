@@ -85,7 +85,10 @@ class CommunicationHandler {
       if (kinectClient.available() > 0) {
         decodeKinect(kinectClient.readStringUntil('\n'));
         kinectClient.clear();
-      } 
+      }
+    } 
+    //Only poll the eyes when in phase 0 as fast as possible
+    if (phaseCount==0) {
       if (eyePosClient.available() > 0) {
         decodeEyes(eyePosClient.readStringUntil('\n'));
         eyePosClient.clear();
@@ -168,8 +171,5 @@ class CommunicationHandler {
     catch (Exception e) {
       println("Can't write to port, try to reconnect!");
     }
-  }
-  PVector getLookingPos() {
-    return lookingPos;
   }
 }

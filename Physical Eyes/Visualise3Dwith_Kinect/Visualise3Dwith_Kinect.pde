@@ -42,7 +42,7 @@ ArrayList<PVector> heads= new ArrayList<PVector>();
 PVector debugNoise= new PVector(-10, -100, 100);
 
 void setup() {
-  frameRate(30);
+  //frameRate(30);
   //make an eye for every json eye
   eyePosData = loadJSONArray("../EyePos.JSON");
   //Load the JSON setup file
@@ -166,6 +166,16 @@ void draw() {
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
+
+  if (debug) {
+    if (keyPressed) {
+      if (keyCode==UP) {
+        debugNoise.y+=1;
+      } else if (keyCode==DOWN) {
+        debugNoise.y-=1;
+      }
+    }
+  }
 }
 
 void serialEvent(Serial myPort) {
@@ -272,14 +282,6 @@ void updatePhysicalEyesArduino() {
 void keyPressed() {
   if (key=='d') {
     debug=!debug;
-  }
-
-  if (debug) {
-    if (keyCode==UP) {
-      debugNoise.y+=5;
-    } else if (keyCode==DOWN) {
-      debugNoise.y-=5;
-    }
   }
 }
 
