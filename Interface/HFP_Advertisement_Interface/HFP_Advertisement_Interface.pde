@@ -23,6 +23,7 @@ ColorPicker colorPicker;
 TypePicker typePicker;
 
 PhaseZero pZero;
+int areaEyes;
 PhaseOne pOne;
 PhaseTwo pTwo;
 PhaseThree pThree;

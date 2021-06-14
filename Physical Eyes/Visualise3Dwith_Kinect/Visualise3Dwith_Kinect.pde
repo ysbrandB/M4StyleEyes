@@ -19,7 +19,7 @@ Server sInterface;
 //Ogen bij startup kijken rechtdoor, rotatie is met de x as van de oogassembly door de kinect heen
 
 boolean draw= true;
-boolean useArduino=true;
+boolean useArduino=false;
 boolean debug=true;
 JSONObject setUpData;
 PVector kinectPos;
