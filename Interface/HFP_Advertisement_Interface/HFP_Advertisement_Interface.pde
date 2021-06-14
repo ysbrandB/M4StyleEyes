@@ -87,7 +87,7 @@ void draw() {
   if (phaseTimer > 0) {
     phaseTimer -= 1/frameRate; 
     //check to start from the normal state to change to phase 1 or to the next phase
-  } else if (phaseCount != 0 || (distanceTrigger && phaseCount == 0 && com.hits >= HITS_THRESHOLD)) {
+  } else if ((phaseCount != 0 && phaseCount != 1)|| (distanceTrigger && phaseCount == 0)||(phaseCount==1 && com.hits >= HITS_THRESHOLD)) {
     phaseCount++;
     if (phaseCount > 4) phaseCount = 0;
 
@@ -120,7 +120,10 @@ void keyPressed() {
   if (key == 'r' || key == 'R') {
     com.hits = 5;
     colorPicker.colorDetermination(com.clothingColor);
-    distanceTrigger = true;
+  }
+
+  if (key=='d'||key=='D') {
+    distanceTrigger=true;
   }
 
   if (key == BACKSPACE) {
