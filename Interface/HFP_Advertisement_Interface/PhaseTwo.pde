@@ -1,99 +1,71 @@
 class PhaseTwo extends Slide {
 
-  Tweet tweet;
-  PImage backgroundTweet;
-  PFont SegoeBold21;
-  PFont Segoe31;
-  PFont SegoeSemiBold19;
-  PFont Oxford;
-  PFont Papers;
-  PImage NewsHeads;
+  // String upperText;
+  // String lowerText;
 
-  int favorNumber;
-  int opposeNumber;
-  int randomNewsLogo;
-
-  float favorFactor;
-
-  color recogColor; //the recognized color from openCV
-  color recomColor;  //the recommended color being worn
-
-  String pollDescription;
-  String recomClothing;
-  String recogClothing;
-
-  ColorPicker colorPicker;
-  TypePicker typePicker;
-
+  // String recogText;
+  // String clothColorRecog;
+  // String clothRecog;
+  // String recomStartText;
+  // String clothColorRecom;
+  // String clothRecom;
+  // String recomEndText;
   Strings string;
 
+  PImage recomClothing; 
+
+  PFont MainText; //Font for the main text
+   ColorPicker colorPicker;
+   TypePicker typePicker;
+
   PhaseTwo(ColorPicker colorPicker, TypePicker typePicker) {
-    // string = new Strings(colorPicker);
 
-    randomNewsLogo = int(random(1,5));
-    Oxford = createFont("Font/Oxford.ttf", 80);
-    NewsHeads = loadImage("NewsLogos/"+ randomNewsLogo +".png");
-
-    Papers = createFont("Font/Paper.otf", 30);
-
-    backgroundTweet = loadImage("Image/emptyTweet.png");
-    SegoeBold21 = createFont("Segoe UI Bold", 21);
-    Segoe31 = createFont("Segoe UI", 31);
-    SegoeSemiBold19 = createFont("Segoe UI Semibold", 19);
-    tweet = new Tweet(backgroundTweet, SegoeBold21, Segoe31, SegoeSemiBold19);
-
-    favorNumber = 55 + int(random(0, 35));
-    opposeNumber = 100 - favorNumber;
-    favorFactor = float(favorNumber)/100;
-
-    recogColor = colorPicker.getLastColor();
-    recomColor = colorPicker.getLastOppositeColor();
-
-    pollDescription = "Official International Institute of Science Poll";
-    recomClothing = "Blue Sweater";
-    recogClothing = "White Polo";
-
-    this.colorPicker = colorPicker;
-    this.typePicker = typePicker;
+     MainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
+     this.colorPicker = colorPicker;
+     this.typePicker= typePicker;
+     recomClothing = loadImage("image/whitepolo.png");
+     textFont(MainText);
   }
 
   void init(CommunicationHandler com){
     string = new Strings(colorPicker);
-    com.sendColor(colorPicker.getLastOppositeColor());
+    com.sendColor(colorPicker.getLastColor());
   }
 
   void display() {
     background(bgColor);
-
-    //println(favourNumber);
-    //println(favourFactor);
-
-    noStroke();
-    fill(colorPicker.getLastColor());
-    rect(width/8, height/4*3+75, width/3, height/20);
-    fill(colorPicker.getLastOppositeColor());
-    rect(width/8, height/4*3+75, width/3 * favorFactor, height/20);
-
-
-    textFont(fontHeading);
-    fill(colorPicker.getLastOppositeColor());
-    text(favorNumber + "%", width/8 + 10, height/4*3+42);
-    fill(colorPicker.getLastColor());
-    text(opposeNumber + "%", width/8 + width/4 + 70, height/4*3+42);
     fill(0);
-    textFont(fontSub);
-    text(pollDescription, width/8-110, height/8*6-50);
-
-    tweet.display(new PVector(width*2/3-50, height/12-20));    
-
-    image(NewsHeads,90, 50); //Displays the news logo's
-    fill(0);
-    textFont(Oxford);
-    textLeading(50);
+    rectMode(BASELINE);
     textAlign(CENTER);
-    string.NewsQuote();
-    textFont(Papers);
-    string.ScientificQuote();
-    textAlign(LEFT);
+    string.BeginMessage();
+
+    image(recomClothing, width/4*3, height/2);
+     //colorPicker = new ColorPicker(222,5,0);
+     //colorPicker.update();
+
+     //recogText = "You are wearing a" + '\n';
+     //clothColorRecog = colorPicker.getLastColorName();
+     //clothRecog = typePicker.getLastTypeName();
+
+     //recomStartText = "However, these days" + '\n'; 
+     //clothColorRecom = colorPicker.getLastOppositeColorName();
+     //clothRecom = typePicker.getLastOppositeTypeName();
+     //recomEndText = " are far more" + '\n' + "fashionable";
+
+     //lowerText = clothRecom + recomEndText; 
+
+     //textFont(fontHeading);
+
+     //text(recogText, width/8, height/4);
+     //fill(colorPicker.getLastColor());
+     //text(clothColorRecog, width/8, height/4 +80);
+     //fill(0);
+     //text(clothRecog, width/8, height/4 +160);
+
+     //text(recomStartText, width/8, height/8*5);
+     //fill(colorPicker.getLastOppositeColor());
+     //text(clothColorRecom, width/8, height/8*5 + 80);
+     //fill(0);
+     //text(lowerText, width/8, height/8*5 + 160);
   }
 }
