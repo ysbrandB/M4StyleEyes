@@ -93,7 +93,7 @@ void draw() {
 
     switch(phaseCount) { //determines the length of the next phase 
     case 1:
-      phaseTimer = 5;
+      phaseTimer = 8;
       break;
     case 2: 
       phaseTimer = 8;

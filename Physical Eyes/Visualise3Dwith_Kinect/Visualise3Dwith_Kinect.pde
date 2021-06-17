@@ -19,7 +19,6 @@ Server sInterface;
 //Ogen bij startup kijken rechtdoor, rotatie is met de x as van de oogassembly door de kinect heen
 
 boolean draw= true;
-boolean useArduino=false;
 boolean debug=true;
 JSONObject setUpData;
 PVector kinectPos;
@@ -34,7 +33,7 @@ float time;
 int buffer=0;
 int desiredBufferTime=0;
 boolean triggeredInterface=false;
-
+boolean arduinoConnected=false;
 JSONArray eyePosData;
 ArrayList<Eye> eyes = new ArrayList<Eye>();
 ArrayList<String> oldData= new ArrayList<String>();
@@ -64,10 +63,10 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(40, -100, 50), 0));
+  eyes.add(new Eye(new PVector(20, -80, 10), 0));
   oldData.add("");
 
-  eyes.add(new Eye(new PVector(-40, -100, 50), 1));
+  eyes.add(new Eye(new PVector(-20, -80, 10), 1));
   oldData.add("");
 
   size(1000, 1000, P3D);
@@ -94,17 +93,15 @@ void setup() {
     rectMode(CENTER);
   }
   //print the available serial (arduino ports)
-  if (useArduino) {
-    println("Available serial ports:");
-    for (int i = 0; i<Serial.list().length; i++) { 
-      print("[" + i + "] ");
-      println(Serial.list()[i]);
-    }
-    //init the port
-    port = new Serial(this, Serial.list()[2], 9600);
-    port.bufferUntil('\n');
+  println("Available serial ports:");
+  for (int i = 0; i<Serial.list().length; i++) { 
+    print("[" + i + "] ");
+    println(Serial.list()[i]);
   }
+  //init the port
+  connectArduino();
 }
+
 
 void draw() {
   //if you wanna display: make the ground and lights and draw the green kinect dot
@@ -166,15 +163,12 @@ void draw() {
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
-
+  if (!arduinoConnected&&frameCount%60==0) {
+    println("Connecting");
+    connectArduino();
+  }
   if (debug) {
-    if (keyPressed) {
-      if (keyCode==UP) {
-        debugNoise.y+=1;
-      } else if (keyCode==DOWN) {
-        debugNoise.y-=1;
-      }
-    }
+    checkInput();
   }
 }
 
@@ -220,9 +214,6 @@ void displayNoise() {
 }
 
 void checkToStartInterface() {
-  //  int buffer=0;
-  //int desiredBufferTime=0;
-  //boolean triggeredInterface=false;
   float closestDist=999999999;
   for (int i=0; i<heads.size(); i++) {
     PVector head=heads.get(i);
@@ -273,14 +264,33 @@ void updatePhysicalEyesArduino() {
   }
   if (arduinoPayload.length()>=1) {
     //dont update 60 frames per second!
-    if (useArduino&&frameCount%2==0) {
-      port.write(arduinoPayload);
+    if (frameCount%2==0&&arduinoConnected) {
+      try {
+        port.write(arduinoPayload);
+      }
+      catch(Exception e) {
+        println("Arduino disconnected, retrying!");
+        arduinoConnected=false;
+      }
     }
   }
 }
 
+void connectArduino() {
+  try {
+    port = new Serial(this, Serial.list()[2], 9600);
+    port.bufferUntil('\n');
+    arduinoConnected=true;
+    println("EyeArduino Connected!");
+  }
+  catch(Exception e) {
+    println("Eyes Arduino not connected!");
+    arduinoConnected=false;
+  }
+}
+
 void keyPressed() {
-  if (key=='d') {
+  if (key=='e') {
     debug=!debug;
   }
 }
@@ -289,7 +299,12 @@ void keyPressed() {
 
 //draw all the bones between the joints
 void drawBody(PVector[] myJoints) {
-  color blue=color(0, 0, 255);
+  color blue;
+  if (!triggeredInterface) {
+    blue=color(0, 0, 255);
+  } else {
+    blue=color(255, 0, 255);
+  }
   //leftLeg
   draw3DLine(myJoints[15], myJoints[14], blue);
   draw3DLine(myJoints[14], myJoints[13], blue);
@@ -343,4 +358,24 @@ void draw3DLine(PVector pos1, PVector pos2, color c) {
   line(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
   stroke(0);
   strokeWeight(1);
+}
+
+void checkInput() {
+  if (keyPressed) {
+    if (keyCode==UP) {
+      debugNoise.y-=1;
+    } else if (keyCode==DOWN) {
+      debugNoise.y+=1;
+    }
+    if (key=='w') {
+      debugNoise.z-=1;
+    } else if (key=='s') {
+      debugNoise.z+=1;
+    }
+    if (key=='a') {
+      debugNoise.x-=1;
+    } else if (key=='d') {
+      debugNoise.x+=1;
+    }
+  }
 }
