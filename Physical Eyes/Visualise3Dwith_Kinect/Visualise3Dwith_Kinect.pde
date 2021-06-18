@@ -164,7 +164,7 @@ void draw() {
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
   if (!arduinoConnected&&frameCount%60==0) {
-    println("Connecting");
+    println("EyeArduino not connected! retrying");
     connectArduino();
   }
   if (debug) {
@@ -269,7 +269,6 @@ void updatePhysicalEyesArduino() {
         port.write(arduinoPayload);
       }
       catch(Exception e) {
-        println("Arduino disconnected, retrying!");
         arduinoConnected=false;
       }
     }

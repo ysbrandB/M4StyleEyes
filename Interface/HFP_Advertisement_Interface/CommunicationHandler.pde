@@ -76,7 +76,7 @@ class CommunicationHandler {
     //if a client isn't connected then stop this method.
     //if(!isConnected(clothesClient) || !isConnected(kinectClient)) return;
 
-    if (frameCount % ((int)frameRate / pollingRate) == 0) {
+    if ((int)frameRate > pollingRate && frameCount % ((int)frameRate / pollingRate) == 0) {
       if (clothesClient.available() > 0) {
         decodeClothes(clothesClient.readStringUntil('\n'));
         clothesClient.clear();
