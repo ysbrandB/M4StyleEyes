@@ -1,9 +1,9 @@
 {
    "Screen": {
         "x" : 0,
-        "y" : -100,
+        "y" : -130,
         "z" : 0,
-	"screenWidth": 40
+	"screenWidth": 150
     },
 	"Kinect":{
         "x" : 0,

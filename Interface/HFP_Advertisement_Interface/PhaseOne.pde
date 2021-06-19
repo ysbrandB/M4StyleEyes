@@ -12,7 +12,7 @@ class PhaseOne extends Slide {
     this.com = com;
     img = loadImage("./Image/bigEye.png");
     imageMode(CENTER);
-    scanning = false;
+    scanning = true;
     irisPos = new PVector(width/2, height/2);
     colorFade = 200;
     rotation = 0;
@@ -25,7 +25,7 @@ class PhaseOne extends Slide {
     fill(255);
     textSize(45);
     textAlign(TOP, LEFT);
-    text(com.clothingType + " [" + red(com.clothingColor) + "," + green(com.clothingColor) + "," + blue(com.clothingColor) + "] " + com.hits, 50, 50);
+    //text(com.clothingType + " [" + red(com.clothingColor) + "," + green(com.clothingColor) + "," + blue(com.clothingColor) + "] " + com.hits, 50, 50);
 
     textAlign(CENTER, CENTER);
     imageMode(CENTER);
@@ -48,6 +48,10 @@ class PhaseOne extends Slide {
       popMatrix();
       fill(0);
       text("Scanning...", width/2, height/20*17);
+      
+      fill(0);
+      textFont(fontHeading);
+      text("Let me St-EYE-le you!", width/2, height/10);
       
     } else {
       fill(0);

@@ -11,6 +11,8 @@ class PhaseTwo extends Slide {
   // String clothRecom;
   // String recomEndText;
   Strings string;
+  Eye eye;
+  int xTime=0;
 
   PImage recomClothing; 
 
@@ -19,7 +21,7 @@ class PhaseTwo extends Slide {
    TypePicker typePicker;
 
   PhaseTwo(ColorPicker colorPicker, TypePicker typePicker) {
-
+    eye= new Eye(width/4, height/4, 30);
      MainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
      this.colorPicker = colorPicker;
      this.typePicker= typePicker;
@@ -32,12 +34,16 @@ class PhaseTwo extends Slide {
     com.sendColor(colorPicker.getLastColor());
   }
 
-  void display() {
+  void display() {    
+    
     background(bgColor);
     fill(0);
     rectMode(BASELINE);
     textAlign(CENTER);
     string.BeginMessage();
+    //eye.display();
+    //xTime+=0.001;
+    //eye.update(new PVector(map(noise(xTime*2),0,1,0,width), map(noise(xTime),0,1,0,height)));
 
     image(recomClothing, width/4*3, height/2);
      //colorPicker = new ColorPicker(222,5,0);

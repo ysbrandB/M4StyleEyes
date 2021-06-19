@@ -33,8 +33,8 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  //fullScreen(2); 
-  size(1920, 1080); //for testing only
+  fullScreen(2); 
+  //size(1920, 1080); //for testing only
   imageMode(CENTER);
 
   com = new CommunicationHandler(this);
@@ -55,7 +55,6 @@ void setup() {
   phaseCount = 0;
   phaseTimer = 1;
 
-  //
   distanceTrigger = false;
 }
 
@@ -72,10 +71,11 @@ void draw() {
 
   case 2: 
     pTwo.display();
-    speechSynth.recommendColor(); 
+    speechSynth.speak(); 
     break;
 
   case 3:
+    speechSynth.speak(); 
     pThree.display();
     break;
 
@@ -100,16 +100,18 @@ void draw() {
       colorPicker.colorDetermination(com.clothingColor);
       typePicker.typeDetermination(com.clothingType);
       pTwo.init(com);
+      speechSynth.init(); 
       break;
     case 3: 
-      phaseTimer = 8; 
+      phaseTimer = 16; 
       pThree.init(com);
       break;
     case 4:
-      phaseTimer = 5;
+      phaseTimer = 10;
       pFour.init(); 
       break;
     case 0:
+      distanceTrigger=false;
       phaseTimer = 2; //delay for next time/input
     }
   }
@@ -129,8 +131,4 @@ void keyPressed() {
   if (key == BACKSPACE) {
     phaseCount = 0;
   }
-}
-
-void keyReleased() { //testing
-  distanceTrigger = false;
 }

@@ -82,20 +82,20 @@ void loop() {
     pwm.setPWM((3 + i * 4), 0, map(blinkingValues[i], 0, 100, 230, 560));
   }
 
-  int xDir = analogRead(A0);
-  int yDir = analogRead(A1);
-
-  if (xDir < 490) {
-    Serial.println('d');
-  } else if (xDir > 510) {
-    Serial.println('a');
-  }
-
-  if (yDir < 500) {
-    Serial.println('w');
-  } else if (yDir > 540) {
-    Serial.println('s');
-  }
+//  int xDir = analogRead(A0);
+//  int yDir = analogRead(A1);
+//
+//  if (xDir < 490) {
+//    Serial.println('d');
+//  } else if (xDir > 510) {
+//    Serial.println('a');
+//  }
+//
+//  if (yDir < 500) {
+//    Serial.println('w');
+//  } else if (yDir > 540) {
+//    Serial.println('s');
+//  }
 
   delay(10);
 }

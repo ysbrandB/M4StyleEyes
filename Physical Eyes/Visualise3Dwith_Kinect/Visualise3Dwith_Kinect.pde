@@ -63,10 +63,10 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(20, -80, 10), 0));
+  eyes.add(new Eye(new PVector(-50, -80, 10), 0));
   oldData.add("");
 
-  eyes.add(new Eye(new PVector(-20, -80, 10), 1));
+  eyes.add(new Eye(new PVector(50, -80, 10), 1));
   oldData.add("");
 
   size(1000, 1000, P3D);
@@ -163,7 +163,7 @@ void draw() {
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
-  if (!arduinoConnected&&frameCount%60==0) {
+  if (!arduinoConnected&&frameCount%240==0) {
     println("EyeArduino not connected! retrying");
     connectArduino();
   }
@@ -283,7 +283,6 @@ void connectArduino() {
     println("EyeArduino Connected!");
   }
   catch(Exception e) {
-    println("Eyes Arduino not connected!");
     arduinoConnected=false;
   }
 }

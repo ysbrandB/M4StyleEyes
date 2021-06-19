@@ -9,10 +9,10 @@ class PhaseZero {
   
   PhaseZero(CommunicationHandler com) {
     this.com=com;
-    eyes.add(new Eye(width/2, height/2, 200, com));
+    eyes.add(new Eye(width/2, height/2, 200));
     area = width * height;
   for (int i = 0; i < amount; i ++) {
-    eyes.add(new Eye(eyes,com));
+    eyes.add(new Eye(eyes));
     counter++;
     if (areaEyes/area >= 0.4) {
       println("Eyes are full!");

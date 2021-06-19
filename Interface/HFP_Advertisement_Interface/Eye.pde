@@ -15,19 +15,18 @@ class Eye {
   CommunicationHandler com;
 
   //constructor for center eye
-  Eye(float xPos, float yPos, float radius, CommunicationHandler com) {
+  Eye(float xPos, float yPos, float radius) {
     posEye = new PVector(xPos, yPos);
+    posPupil=posEye.copy();
     this.radius = radius;
     eyeColor = color(255, 0, 0);
     isCenterEye= true;
     offsetY = radius*1.4;
     isBlinking = false;
-    this.com=com;
   }
 
   //constructor for smaller eyes
-  Eye(ArrayList <Eye> eyes, CommunicationHandler com) {
-    this.com=com;
+  Eye(ArrayList <Eye> eyes) {
     while (!canPlaceEye(eyes)); 
     areaEyes += PI * radius * radius;
     isCenterEye = false;
@@ -36,7 +35,7 @@ class Eye {
   }
 
   boolean canPlaceEye(ArrayList <Eye> eyes) {
-     radius = random(10, 70);
+    radius = random(10, 70);
     posEye = new PVector(random(radius, width-radius), random(radius, height-radius));
     posPupil = new PVector(random(radius, width-radius), random(radius, height-radius));
     colorMode(HSB, 255);
@@ -100,26 +99,26 @@ class Eye {
     strokeWeight(1);
   }
 
-  void checkToGoBlink(){
-     n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, pZero.time);
+  void checkToGoBlink() {
+    n = noise(posEye.x * noiseFactor, posEye.y * noiseFactor, pZero.time);
     if (n > 0.7) {
       isBlinking = true;
     }
-}
-
-void update(PVector lookingPosition) {
-  if (isBlinking) {
-    offsetY -= radius*0.4;
-    if (offsetY < 0) isBlinking = false;
-  } else if (offsetY < radius * 1.4) {
-    offsetY += radius*0.4;
-    if (offsetY > radius * 1.4) offsetY = radius*1.4;
   }
 
-  EyeToPerson = PVector.sub(com.lookingPos, posEye);
-  EyeToPerson.setMag(radius*0.8);
-  posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
+  void update(PVector lookingPosition) {
+    if (isBlinking) {
+      offsetY -= radius*0.4;
+      if (offsetY < 0) isBlinking = false;
+    } else if (offsetY < radius * 1.4) {
+      offsetY += radius*0.4;
+      if (offsetY > radius * 1.4) offsetY = radius*1.4;
+    }
+    
+    EyeToPerson = PVector.sub(lookingPosition, posEye);
+    EyeToPerson.setMag(radius*0.8);
+    posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
 
-  if (lookingPosition.z == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(lookingPosition.x, lookingPosition.y), posEye).limit(radius*0.8));
-}
+    if (lookingPosition.z == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(lookingPosition.x, lookingPosition.y), posEye).limit(radius*0.8));
+  }
 }
