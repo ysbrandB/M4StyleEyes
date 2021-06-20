@@ -33,8 +33,8 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  fullScreen(2); 
-  //size(1920, 1080); //for testing only
+  //fullScreen(2); 
+  size(1920, 1080); //for testing only
   imageMode(CENTER);
 
   com = new CommunicationHandler(this);
@@ -59,7 +59,7 @@ void setup() {
 }
 
 void draw() {
-
+  speechSynth.speak(); 
   switch(phaseCount) {
   case 0:
     pZero.display();
@@ -71,11 +71,9 @@ void draw() {
 
   case 2: 
     pTwo.display();
-    speechSynth.speak(); 
     break;
 
-  case 3:
-    speechSynth.speak(); 
+  case 3: 
     pThree.display();
     break;
 

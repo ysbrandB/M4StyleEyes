@@ -62,36 +62,36 @@ class CommunicationHandler {
   }
 
   void update() {
-    //reconnect clients if needed.
-    if (!isConnected(clothesClient) && frameCount % 240 == 0) {
-      connectClothes();
-    }
-    if (!isConnected(kinectClient) && frameCount % 240 == 0) {
-      connectKinect();
-    }
-    if (!isConnected(eyePosClient) && frameCount % 240 == 0) {
-      connectEyes();
-    }
-
-    //if a client isn't connected then stop this method.
-    //if(!isConnected(clothesClient) || !isConnected(kinectClient)) return;
-
-    if ((int)frameRate > pollingRate && frameCount % ((int)frameRate / pollingRate) == 0) {
-      if (clothesClient.available() > 0) {
-        decodeClothes(clothesClient.readStringUntil('\n'));
-        clothesClient.clear();
-      }
-
-      if (kinectClient.available() > 0) {
-        decodeKinect(kinectClient.readStringUntil('\n'));
-        kinectClient.clear();
-      }
-    } 
     //Only poll the eyes when in phase 0 as fast as possible
     if (phaseCount==0) {
       if (eyePosClient.available() > 0) {
         decodeEyes(eyePosClient.readStringUntil('\n'));
         eyePosClient.clear();
+      }
+    }
+    //only poll the servers in the startup phases aka when not playing audio!
+    if (phaseCount==0||phaseCount==1) {
+      //reconnect clients if needed.
+      if (!isConnected(clothesClient) && frameCount % 240 == 0) {
+        connectClothes();
+      }
+      if (!isConnected(kinectClient) && frameCount % 240 == 0) {
+        connectKinect();
+      }
+      if (!isConnected(eyePosClient) && frameCount % 240 == 0) {
+        connectEyes();
+      }
+
+      if ((int)frameRate > pollingRate && frameCount % ((int)frameRate / pollingRate) == 0) {
+        if (clothesClient.available() > 0) {
+          decodeClothes(clothesClient.readStringUntil('\n'));
+          clothesClient.clear();
+        }
+
+        if (kinectClient.available() > 0) {
+          decodeKinect(kinectClient.readStringUntil('\n'));
+          kinectClient.clear();
+        }
       }
     }
   }

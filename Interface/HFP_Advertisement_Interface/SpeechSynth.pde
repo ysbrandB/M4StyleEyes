@@ -13,15 +13,14 @@ class SpeechSynth {
   int oppositeColorIndex = 0;
   int oppositeTypeIndex = 0;
 
-  int [] speakPause =  {200,200, 200,200, 200, 200};
-  float speakTimer=0;
-  
+  float [] speakPause =  {0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
+
   SoundFile youRWearingA;
   SoundFile[] colorSounds = new SoundFile[COLOR_AMOUNT];
   SoundFile[] typeSounds = new SoundFile[TYPE_AMOUNT];
   SoundFile a;
   SoundFile wouldFitYouWayBetter;
-  
+
   ArrayList <SoundFile> soundsToPlay;
   int currentIndex=0;
   float pauseTimer;
@@ -32,7 +31,7 @@ class SpeechSynth {
   TypePicker typePicker;
 
   SpeechSynth(ColorPicker colorPicker, TypePicker typePicker) {
-    speakTimer = speakPause[0];
+    soundsToPlay=new ArrayList<SoundFile>();
     roboDelay = new Delay(HFP_Advertisement_Interface.this);
 
     youRWearingA = new SoundFile(HFP_Advertisement_Interface.this, "wav/youarewearinga.wav");
@@ -68,13 +67,12 @@ class SpeechSynth {
     //THESE INDICES SHOULD BE ASSIGNED VIA THE SWITCH STATEMENT!
     colorIndex = 0;
     typeIndex = 0;
-    oppositeColorIndex = 0;
+    oppositeColorIndex = 2;
     oppositeTypeIndex = 0;
-    
+
     soundsToPlay=new ArrayList<SoundFile>();
     currentIndex=0;
-    speakTimer=0;
-    
+
     soundsToPlay.add(youRWearingA);
     soundsToPlay.add(colorSounds[colorIndex]);
     soundsToPlay.add(typeSounds[typeIndex]);
@@ -91,14 +89,12 @@ class SpeechSynth {
       if (!track.isPlaying()&&pauseTimer<=0) {
         track.amp(SOUND_AMP);
         track.play();
-        println(currentIndex);
-        if(currentIndex<6){
-        pauseTimer=speakPause[currentIndex]+track.duration();
+        if (currentIndex<6) {
+          pauseTimer=speakPause[currentIndex]+track.duration();
         }
         currentIndex++;
-      }else if(!track.isPlaying()){
-      pauseTimer -= 1000 / frameRate;
-    }
+      }
+      pauseTimer -= 1 / frameRate;
     }
   }
 }
