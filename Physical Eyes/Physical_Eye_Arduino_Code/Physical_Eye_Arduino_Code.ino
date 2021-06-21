@@ -1,15 +1,13 @@
 //Ysbrand Burgstede Physical Eye Project M4 for blinking physical eyes
 
-int amountEyes = 6;
-int xAngles[6];
-int yAngles[6];
-bool blinking[6];
-int blinkingValues[6];
-
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+//Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver pwmLeft = Adafruit_PWMServoDriver(0x40);
+Adafruit_PWMServoDriver pwmRight = Adafruit_PWMServoDriver(0x60);
+
+#define EYEPAIRAMOUNT 6
 
 #define SERVOMIN  130 //minimum pulselength for servo
 #define SERVOMAX  610 // maximum pulselength for servo
@@ -20,6 +18,11 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define ANGLEMINDOWN 80
 #define ANGLEMAXUP 100
 
+int xAngles[EYEPAIRAMOUNT];
+int yAngles[EYEPAIRAMOUNT];
+bool blinking[EYEPAIRAMOUNT];
+int blinkingValues[EYEPAIRAMOUNT];
+
 
 int xPulse;
 int yPulse;
@@ -29,21 +32,36 @@ void setup() {
   pinMode(A1, INPUT);
   Serial.begin(9600);
 
-  for (int i = 0; i < amountEyes; i++) {
+  for (int i = 0; i < EYEPAIRAMOUNT; i++) {
     blinking[i] = false;
   }
 
-  for (int i = 0; i < amountEyes; i++) {
+  for (int i = 0; i < EYEPAIRAMOUNT; i++) {
     xAngles[i] = 90;
     yAngles[i] = 90;
     blinkingValues[i] = 0;
   }
-  pwm.begin();
-  pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+  pwmLeft.begin();
+  pwmLeft.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+
+  pwmRight.begin();
+  pwmRight.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
 }
 
 void loop() {
-  for (int i = 0; i < 4; i++) {//for each set of eyes (now four for one servo board)
+  for (int i = 0; i < EYEPAIRAMOUNT; i++) {//for each set of eyes
+    Adafruit_PWMServoDriver pwm;
+    int modulatedCounter;
+
+    //set the servodriver to the left or the right
+    if (i < EYEPAIRAMOUNT / 2) {
+      //modulatedcounter is voor het rechterservoboard het i-het aantal ogen op links
+      modulatedCounter=i;
+      pwm = pwmLeft;
+    } else {
+      pwm = pwmRight;
+      modulatedCounter=i-(EYEPAIRAMOUNT/2);
+    }
     //decide to randomly blink
     if (random(0, 2000) < 2) {
       blinking[i] = true;
@@ -55,14 +73,12 @@ void loop() {
     //LEFT RIGHT
     xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
     //xPulse = map(analogRead(A0),0, 1023, 220, 450);
-    pwm.setPWM((0 + i * 4), 0, xPulse);
-
+    pwm.setPWM((0 + modulatedCounter * 4), 0, xPulse);
     //UP DOWN
 
     yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
     //yPulse = map(analogRead(A1),0, 1023, 520, 280);
-    pwm.setPWM((1 + i * 4), 0, yPulse);
-    pwm.setPWM((1 + i * 4), 0, yPulse);
+    pwm.setPWM((1 + modulatedCounter * 4), 0, yPulse);
 
     //ramp the blinking value up and down to 100
     if (blinking[i]) {
@@ -78,24 +94,9 @@ void loop() {
     }
 
     //set the blinking servos to the right values
-    pwm.setPWM((2 + i * 4), 0, map(blinkingValues[i], 0, 100, 500, 160));
-    pwm.setPWM((3 + i * 4), 0, map(blinkingValues[i], 0, 100, 230, 560));
+    pwm.setPWM((2 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 500, 160));
+    pwm.setPWM((3 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 230, 560));
   }
-
-//  int xDir = analogRead(A0);
-//  int yDir = analogRead(A1);
-//
-//  if (xDir < 490) {
-//    Serial.println('d');
-//  } else if (xDir > 510) {
-//    Serial.println('a');
-//  }
-//
-//  if (yDir < 500) {
-//    Serial.println('w');
-//  } else if (yDir > 540) {
-//    Serial.println('s');
-//  }
 
   delay(10);
 }
@@ -120,6 +121,10 @@ void serialEvent() {
       xAngles[tempId] = constrain(tempXAngle, ANGLEMINLEFT, ANGLEMAXRIGHT);
       yAngles[tempId] = constrain(tempYAngle, ANGLEMINDOWN, ANGLEMAXUP);
 
+       if (tempId == 0) {
+        Serial.println(tempYAngle);
+      }
+      
       id = false;
       eyeId = "";
       nextAngle = false;

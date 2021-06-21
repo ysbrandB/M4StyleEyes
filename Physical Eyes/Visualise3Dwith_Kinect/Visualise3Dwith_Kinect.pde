@@ -41,7 +41,7 @@ ArrayList<PVector> heads= new ArrayList<PVector>();
 PVector debugNoise= new PVector(-10, -100, 100);
 
 void setup() {
-  //frameRate(30);
+  frameRate(30);
   //make an eye for every json eye
   eyePosData = loadJSONArray("../EyePos.JSON");
   //Load the JSON setup file
@@ -58,19 +58,13 @@ void setup() {
   screen=new Eye(screenPos, -1);
   time=0;
 
-  //for (int i = 0; i < eyePosData.size(); i++) {
-  //  JSONObject eye = eyePosData.getJSONObject(i);
-  //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
-  //  oldData.add("");
-  //}
-  eyes.add(new Eye(new PVector(-50, -80, 10), 0));
-  oldData.add("");
-
-  eyes.add(new Eye(new PVector(50, -80, 10), 1));
-  oldData.add("");
+  for (int i = 0; i < eyePosData.size(); i++) {
+    JSONObject eye = eyePosData.getJSONObject(i);
+    eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
+    oldData.add("");
+  }
 
   size(1000, 1000, P3D);
-  //fullScreen(P3D, 1);
 
   //make a new cam element
   camera = new PeasyCam(this, -2, 0, -1, 100);
@@ -163,7 +157,7 @@ void draw() {
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
-  if (!arduinoConnected&&frameCount%240==0) {
+  if (!arduinoConnected&&frameCount%120==0) {
     println("EyeArduino not connected! retrying");
     connectArduino();
   }
@@ -174,19 +168,7 @@ void draw() {
 
 void serialEvent(Serial myPort) {
   if (debug) {
-    byte[] incomingBytes = myPort.readBytes();
-    char incomingChar= char(incomingBytes[0]);
-    if (incomingChar=='w') {
-      debugNoise.z-=2;
-    } else if (incomingChar=='s') {
-      debugNoise.z+=2;
-    }
-
-    if (incomingChar=='a') {
-      debugNoise.x-=2;
-    } else if (incomingChar=='d') {
-      debugNoise.x+=2;
-    }
+    println(myPort.readString());
   }
 }
 
@@ -264,7 +246,7 @@ void updatePhysicalEyesArduino() {
   }
   if (arduinoPayload.length()>=1) {
     //dont update 60 frames per second!
-    if (frameCount%2==0&&arduinoConnected) {
+    if (frameCount%1==0&&arduinoConnected) {
       try {
         port.write(arduinoPayload);
       }
@@ -277,7 +259,7 @@ void updatePhysicalEyesArduino() {
 
 void connectArduino() {
   try {
-    port = new Serial(this, Serial.list()[2], 9600);
+    port = new Serial(this, Serial.list()[0], 9600);
     port.bufferUntil('\n');
     arduinoConnected=true;
     println("EyeArduino Connected!");
