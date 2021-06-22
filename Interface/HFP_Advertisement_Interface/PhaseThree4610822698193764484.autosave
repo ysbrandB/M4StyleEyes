@@ -1,9 +1,12 @@
 class PhaseThree extends Slide {
 
+  PFont mainText; //font for main the main text
+
   int chpRandomPrice;  //random number generated to calculate all cheap prices
   int expRandomPrice; //random number generated to calculate all expensive prices
   
-  Strings string;
+  int orgCheapPrice; //number for the original cheap brand price
+  int orgExpensivePrice; //number for the original expensive brand price
 
   String clothRecom;
   
@@ -16,7 +19,12 @@ class PhaseThree extends Slide {
   String expOrignialPrice; //randomly generated original expensive brand price
   String encourageMessage; //encourages the person the buy the product
 
-  PhaseThree() {
+  Strings string;
+
+  PhaseThree(PFont pThreeMainText) {
+    string = new Strings();
+    mainText = pThreeMainText;
+    
     clothRecom = "White Polo";
     
     encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + clothRecom + " too!"; 
@@ -36,18 +44,20 @@ class PhaseThree extends Slide {
     chpOriginalPrice = orgCheapPrice + "9";
     expOrignialPrice = orgExpensivePrice + "9";
 
+    string.Brands();
+
     totalRecom = "NOW in SALE at" +"\n" + 
-      cheapBrand + ": " + chpBrandPrice + "€"+ "  <-  Originally: " + (chpOriginalPrice) + "€" +"\n" + 
-      expensiveBrand + ": " + expBrandPrice + "€"+ "  <-  Originally: " + (expOrignialPrice) + "€";
+      BrandCheap + ": " + chpBrandPrice + "€"+ "  <-  Originally: " + (chpOriginalPrice) + "€" +"\n" + 
+      BrandExpensive + ": " + expBrandPrice + "€"+ "  <-  Originally: " + (expOrignialPrice) + "€";
   }
 
   void display() {
     background(bgColor);
 
-    textFont(fontHeading);
+    textFont(mainText);
     
-    text(encourageMessage, width / 8, height / 4);
+    text(encourageMessage, width/8, height/4);
     
-    text(totalRecom, width / 8, height / 1.5);
+    text(totalRecom, width/8, height/3*2);
   }
 }

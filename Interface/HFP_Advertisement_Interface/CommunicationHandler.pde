@@ -52,47 +52,56 @@
   boolean overCross; //the user is over the red cross
   Client kinectClient;
   String kinectIp = "127.0.0.1";
-  int kinectPort = 1000;
+  int kinectPort = 10000;
+  
+  PApplet context;
+  int pollingRate = 2; //polls per second
 
 
   CommunicationHandler(PApplet parent){
     clothingColor = new PVector();
-    connectClothes(parent);
-    connectKinect(parent);
+    context = parent;
+    connectClothes();
+    connectKinect();
   }
 
-  void update(PApplet parent){
+  void update(){
     //reconnect clients if needed.
-    if(!isConnected(clothesClient) && frameCount % 30 == 0) {
-      connectClothes(parent);
+    if(!isConnected(clothesClient) && frameCount % 240 == 0) {
+      connectClothes();
     }
-    if(!isConnected(kinectClient) && frameCount % 30 == 0) {
-      connectKinect(parent);
+    if(!isConnected(kinectClient) && frameCount % 240 == 0) {
+      connectKinect();
     }
 
     //if a client isn't connected then stop this method.
-    if(!isConnected(clothesClient) || !isConnected(kinectClient)) return;
+    //if(!isConnected(clothesClient) || !isConnected(kinectClient)) return;
 
-    if(clothesClient.available() > 0){
-      decodeClothes(clothesClient.readStringUntil('\n'));
-    }
+    if(frameCount % ((int)frameRate / pollingRate) == 0) {
+      if(clothesClient.available() > 0){
+        decodeClothes(clothesClient.readStringUntil('\n'));
+        clothesClient.clear();
+      }
 
-    if(kinectClient.available() > 0){
-      decodeKinect(kinectClient.readStringUntil('\n'));
+      if(kinectClient.available() > 0){
+        decodeKinect(kinectClient.readStringUntil('\n'));
+        kinectClient.clear();
+      } 
     }
   }
 
-  void connectClothes(PApplet parent){
+  void connectClothes(){
     try {
-      clothesClient = new Client(parent, clothesIp, clothesPort);
+      clothesClient = new Client(context, clothesIp, clothesPort);
+      println("connected to clothing recognition server");
     } catch (Exception e) {
       println("can't connect to server");
     }
   }
 
-  void connectKinect(PApplet parent){
+  void connectKinect(){
     try {
-      kinectClient = new Client(parent, kinectIp, kinectPort);
+      kinectClient = new Client(context, kinectIp, kinectPort);
     } catch (Exception e) {
       println("can't connect to the kinect server");
     }
@@ -103,17 +112,19 @@
     
     clothingType = values[0];
     try {
-      clothingColor = new PVector(Integer.parseInt(values[3]), Integer.parseInt(values[2]), Integer.parseInt(values[1]));
+      clothingColor = new PVector(Integer.parseInt(values[1]), Integer.parseInt(values[2]), Integer.parseInt(values[3]));
+      values[4] = values[4].substring(0, values[4].length() - 1); //removes the \n
       hits = Integer.parseInt(values[4]);
     }catch(Exception e) {
-      println("Couldn't parse int, defaulting to 0...");
       clothingColor = new PVector();
       hits = 0;
     }
   }
 
   void decodeKinect(String input){
-
+    if(input.contains("Start")){
+      distanceTrigger=true;
+    }    
   }
 
   boolean isConnected(Client c) {

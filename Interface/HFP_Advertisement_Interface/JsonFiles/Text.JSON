@@ -1,0 +1,32 @@
+{
+    "startMsg" : [
+        "Nice Color_ Type_ but did you know that Color_ Type_ are becomming less populair?",
+        "How fun a Color_ Type_ but did you know that Color_ Type_ are less attractive?",
+        "I like your Color_ Type_ but did you know that Color_ Type_ were once seen as low-class?",
+        "I do like your Color_ Type_ but did you know that Color_ Type_ are around for multiple centuries? They are getting outdated.",
+        "What a fun Color_ Type_ are you wearing but a Color_ Type_ is most worn by young children"
+    ],
+
+    "NewsHeads" : [
+        "Color_ often means beautiful and colorful.",
+        "Color_ is america's favorite color.",
+        "Color_ is a relaxing color.",
+        "Color_ is the color of winners.",
+        "Women dressed in Color_ are more attractive to men.",
+        "Color_ was once seen as a high-class color.",
+        "Color_ stimulates hunger"
+    ],
+
+    "ScientificFacts" : [
+        "Blah, Blah, Better by 30%, Blah"
+    ],
+
+    "Brands" : [
+        "Jones & Jack", 
+        "Shipperman", 
+        "Kalvin Clein",
+        "Luois VitØn",
+        "Armini", 
+        "Blurberry"
+]
+}

@@ -4,7 +4,7 @@ int amountEyes = 6;
 int xAngles[6];
 int yAngles[6];
 bool blinking[6];
-
+int blinkingValues[6];
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
@@ -19,8 +19,6 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define ANGLEMINDOWN 80
 #define ANGLEMAXUP 100
 
-
-
 int xval;
 int yval;
 
@@ -33,38 +31,56 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Ysbrand dit gaat niet werken lmao");
   pwm.begin();
-
+   pwm.setPWM(1, 0, 520);
   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+  
   for (int i = 0; i < 6; i++) {
     blinking[i] = false;
   }
-  delay(100);
+
+  for (int i = 0; i < sizeof(xAngles); i++) {
+    xAngles[i] = 90;
+    yAngles[i] = 90;
+    blinkingValues[i] = 0;
+  }
 }
 
 void loop() {
-  for (int i = 0; i < 6; i++) {
-    xval = xAngles[0];
-    yval = yAngles[0];
+  for (int i = 0; i < 4; i++) {
+    if (random(0, 1000) < 2) {
+      blinking[i] = true;
+    }
+
+    xval = xAngles[i];
+    yval = yAngles[i];
 
     //LEFT RIGHT
     xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
-    //xPulse = map(analogRead(0),0, 1023, 220, 450);
-    pwm.setPWM(0, 0, xPulse);
+    //xPulse = map(analogRead(A0),0, 1023, 220, 450);
+    pwm.setPWM((0+i*4), 0, xPulse);
 
     //UP DOWN
     yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
-    //yPulse = map(analogRead(1),0, 1023, 280, 520);
-    pwm.setPWM(1, 0, yPulse);
+    // yPulse = map(analogRead(A1),0, 1023, 520, 280);
+    //Serial.println(yPulse);
+    pwm.setPWM((1+i*4), 0, yPulse);
 
     if (blinking[i]) {
+      if (blinkingValues[i] < 100) {
+        blinkingValues[i]+=10;
+      } else {
+        blinking[i] = false;
+      }
+    } else {
+      if (blinkingValues[i] > 0) {
+        blinkingValues[i]-=5;
+      }
     }
 
-    pwm.setPWM(4, 0, map(analogRead(0), 0, 1023, 230, 560));
-    //Serial.println(map(analogRead(0),0,1023,230,560));
-    //160
-
-    pwm.setPWM(2, 0, map(analogRead(0), 0, 1023, 500, 160));
-    delay(5);
+    pwm.setPWM((2+i*4), 0, map(blinkingValues[i], 0, 100, 500, 160));
+    pwm.setPWM((3+i*4), 0, map(blinkingValues[i], 0, 100, 230, 560));
+    
+    delay(1);
   }
 }
 
@@ -109,7 +125,6 @@ void serialEvent() {
       }
       break;
     }
-
     if (!id) {
       eyeId += inChar;
     }

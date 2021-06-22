@@ -62,7 +62,7 @@ void setup() {
   //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
   //  oldData.add("");
   //}
-  eyes.add(new Eye(new PVector(20, -100, 100), 0));
+  eyes.add(new Eye(new PVector(-50, -100, 200), 0));
   oldData.add("");
 
   eyes.add(new Eye(new PVector(50, -100, 50), 1));
@@ -166,12 +166,12 @@ void draw() {
   updateDigitalEyesTCP();
 }
 
-void serialEvent(Serial myPort) {
-  inString = myPort.readString();
-  if (inString!="") {
-    print("Received: "+inString);
-  }
-}
+//void serialEvent(Serial myPort) {
+//  inString = myPort.readString();
+//  if (inString!="") {
+//    print("Received: "+inString);
+//  }
+//}
 
 void drawAmbience() {
   ambientLight(255, 255, 255);
@@ -206,8 +206,8 @@ void checkToStartInterface() {
   
   if (closestDist<=minimumDistToCross) {
     if (!triggeredInterface) {
-      sInterface.write("Start ");
-      println("Start", desiredBufferTime);
+      sInterface.write("Start"+'\n');
+      print("Start"+'\n');
       triggeredInterface=true;
     }
   } else {
