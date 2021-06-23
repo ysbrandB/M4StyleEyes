@@ -1,5 +1,5 @@
-//HFP CreaTe 2021 
-//By Sterre Kuijper <Team Leader>, Frank Bosman, Jesse Boomkamp, Ysbrand Brugstede, Jelle Gerritsen,  Max Liebe, Marnix Lueb & Kimberley Siemons
+//HFP CreaTe 2021  //<>//
+//By Sterre Kuijper <Team Leader>, Frank Bosman, Jesse Boomkamp, Ysbrand Brugstede, Jelle Gerritsen, Max Liebe, Marnix Lueb & Kimberley Siemons
 //The Style Eyes Project
 //Advertisement Interface of Style Eyes
 //Press R to Start
@@ -23,9 +23,11 @@ ColorPicker colorPicker;
 TypePicker typePicker;
 
 PhaseZero pZero;
+int areaEyes;
 PhaseOne pOne;
 PhaseTwo pTwo;
 PhaseThree pThree;
+PhaseFour pFour;
 
 SpeechSynth speechSynth;
 ColorPicker colorPicker;
@@ -42,10 +44,11 @@ void setup() {
 
   //initialize all phases
   pZero = new PhaseZero(com);
-  pOne = new PhaseOne(colorPicker, typePicker);
+  pOne = new PhaseOne(com);
   pTwo = new PhaseTwo(colorPicker, typePicker);
-  pThree = new PhaseThree();
-  
+  pThree = new PhaseThree(colorPicker, typePicker);
+  pFour = new PhaseFour();
+
   //initialize the speech synthesizer
   speechSynth = new SpeechSynth(colorPicker, typePicker);
 
@@ -53,79 +56,78 @@ void setup() {
   phaseCount = 0;
   phaseTimer = 1;
 
-  //
   distanceTrigger = false;
 }
 
 void draw() {
-
+  speechSynth.speak(); 
   switch(phaseCount) {
   case 0:
     pZero.display();
-    if(com.hits >= HITS_THRESHOLD && distanceTrigger) {
-      colorPicker.colorDetermination(com.clothingColor);
-      typePicker.typeDetermination(com.clothingType);
-      distanceTrigger = true;
-    }
-    //println("Zero" + t1);  // Prints "Zero"
     break;
 
   case 1:
     pOne.display();
-    speechSynth.recommendColor(); 
-    //phaseCount++;
-    //println("One");  // Prints "One"
     break;
 
   case 2: 
     pTwo.display();
-    //phaseCount++;
-    //println("Two");  // Prints "Two"
     break;
 
-  case 3:
+  case 3: 
     pThree.display();
-    //phaseCount++;
-    //println("Three");  // Prints "Three"
     break;
+
+  case 4:
+    pFour.display();
   }
 
   //update current phase, phaseTimer is in seconds
   if (phaseTimer > 0) {
     phaseTimer -= 1/frameRate; 
-  } else if (phaseCount != 0 || (distanceTrigger && phaseCount == 0)) {
+    //check to start from the normal state to change to phase 1 or to the next phase
+  } else if ((phaseCount != 0 && phaseCount != 1)|| (distanceTrigger && phaseCount == 0)||(phaseCount==1 && com.hits >= HITS_THRESHOLD)) {
     phaseCount++;
-    if (phaseCount > 3) phaseCount = 0;
+    if (phaseCount > 4) phaseCount = 0;
 
     switch(phaseCount) { //determines the length of the next phase 
     case 1:
       phaseTimer = 8;
       break;
     case 2: 
-      phaseTimer = 8; 
+      phaseTimer = 8;
+      colorPicker.colorDetermination(com.clothingColor);
+      typePicker.typeDetermination(com.clothingType);
+      pTwo.init(com);
+      speechSynth.init(); 
       break;
     case 3: 
-      phaseTimer = 5; 
+      phaseTimer = 16; 
+      pThree.init(com);
       break;
-     case 0:
-      phaseTimer = 2;
+    case 4:
+      phaseTimer = 10;
+      pFour.init(); 
+      break;
+    case 0:
+      distanceTrigger=false;
+      phaseTimer = 2; //delay for next time/input
     }
   }
-
   com.update();
 }
 
 void keyPressed() {
   if (key == 'r' || key == 'R') {
+    com.hits = 5;
     colorPicker.colorDetermination(com.clothingColor);
-    distanceTrigger = true;
+  }
+
+  if (key=='d'||key=='D') {
+    distanceTrigger=true;
   }
 
   if (key == BACKSPACE) {
     phaseCount = 0;
   }
-}
-
-void keyReleased() { //testing
-  distanceTrigger = false;
 }

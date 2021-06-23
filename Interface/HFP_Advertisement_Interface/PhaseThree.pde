@@ -1,53 +1,99 @@
 class PhaseThree extends Slide {
 
-  int chpRandomPrice;  //random number generated to calculate all cheap prices
-  int expRandomPrice; //random number generated to calculate all expensive prices
-  
+  Tweet tweet;
+  PImage backgroundTweet;
+  PFont SegoeBold21;
+  PFont Segoe31;
+  PFont SegoeSemiBold19;
+  PFont Oxford;
+  PFont Papers;
+  PImage NewsHeads;
+
+  int favorNumber;
+  int opposeNumber;
+  int randomNewsLogo;
+
+  float favorFactor;
+
+  color recogColor; //the recognized color from openCV
+  color recomColor;  //the recommended color being worn
+
+  String pollDescription;
+  String recomClothing;
+  String recogClothing;
+
+  ColorPicker colorPicker;
+  TypePicker typePicker;
+
   Strings string;
 
-  String clothRecom;
-  
-  String totalRecom; //total message
-  String cheapBrand; //the randomly selected cheap brand
-  String expensiveBrand; //the randomly selected expensive brand
-  String chpBrandPrice; //randomly generated cheap brand price
-  String expBrandPrice; //randomly generated expensive brand price
-  String chpOriginalPrice; //randomly generated original expensive brand price
-  String expOrignialPrice; //randomly generated original expensive brand price
-  String encourageMessage; //encourages the person the buy the product
+  PhaseThree(ColorPicker colorPicker, TypePicker typePicker) {
+    // string = new Strings(colorPicker);
 
-  PhaseThree() {
-    clothRecom = "White Polo";
-    
-    encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + clothRecom + " too!"; 
-    
-    cheapBrand = "Jack & Jones"; //placeholder
-    expensiveBrand = "Louis Viton"; //placeholder
+    randomNewsLogo = int(random(1,5));
+    Oxford = createFont("Font/Oxford.ttf", 80);
+    NewsHeads = loadImage("NewsLogos/"+ randomNewsLogo +".png");
 
-    chpRandomPrice = int(random(1, 5));
-    expRandomPrice = int(random(10, 20));
+    Papers = createFont("Font/Paper.otf", 30);
 
-    chpBrandPrice = chpRandomPrice + "9";
-    expBrandPrice =  expRandomPrice + "9";
-    
-    orgCheapPrice = chpRandomPrice + 1;
-    orgExpensivePrice = expRandomPrice + 5;;
-    
-    chpOriginalPrice = orgCheapPrice + "9";
-    expOrignialPrice = orgExpensivePrice + "9";
+    backgroundTweet = loadImage("Image/emptyTweet.png");
+    SegoeBold21 = createFont("Segoe UI Bold", 21);
+    Segoe31 = createFont("Segoe UI", 31);
+    SegoeSemiBold19 = createFont("Segoe UI Semibold", 19);
+    tweet = new Tweet(backgroundTweet, SegoeBold21, Segoe31, SegoeSemiBold19);
 
-    totalRecom = "NOW in SALE at" +"\n" + 
-      cheapBrand + ": " + chpBrandPrice + "€"+ "  <-  Originally: " + (chpOriginalPrice) + "€" +"\n" + 
-      expensiveBrand + ": " + expBrandPrice + "€"+ "  <-  Originally: " + (expOrignialPrice) + "€";
+    favorNumber = 55 + int(random(0, 35));
+    opposeNumber = 100 - favorNumber;
+    favorFactor = float(favorNumber)/100;
+
+    recogColor = colorPicker.getLastColor();
+    recomColor = colorPicker.getLastOppositeColor();
+
+    pollDescription = "Official International Institute of Science Poll";
+    recomClothing = "Blue Sweater";
+    recogClothing = "White Polo";
+
+    this.colorPicker = colorPicker;
+    this.typePicker = typePicker;
+  }
+
+  void init(CommunicationHandler com){
+    string = new Strings(colorPicker);
+    com.sendColor(colorPicker.getLastOppositeColor());
   }
 
   void display() {
     background(bgColor);
 
+    //println(favourNumber);
+    //println(favourFactor);
+
+    noStroke();
+    fill(colorPicker.getLastColor());
+    rect(width/8, height/4*3+75, width/3, height/20);
+    fill(colorPicker.getLastOppositeColor());
+    rect(width/8, height/4*3+75, width/3 * favorFactor, height/20);
+
+
     textFont(fontHeading);
-    
-    text(encourageMessage, width / 8, height / 4);
-    
-    text(totalRecom, width / 8, height / 1.5);
+    fill(colorPicker.getLastOppositeColor());
+    text(favorNumber + "%", width/8 + 10, height/4*3+42);
+    fill(colorPicker.getLastColor());
+    text(opposeNumber + "%", width/8 + width/4 + 70, height/4*3+42);
+    fill(0);
+    textFont(fontSub);
+    text(pollDescription, width/8-110, height/8*6-50);
+
+    tweet.display(new PVector(width*2/3-50, height/12-20));    
+
+    image(NewsHeads,90, 50); //Displays the news logo's
+    fill(0);
+    textFont(Oxford);
+    textLeading(50);
+    textAlign(CENTER);
+    string.NewsQuote();
+    textFont(Papers);
+    string.ScientificQuote();
+    textAlign(LEFT);
   }
 }

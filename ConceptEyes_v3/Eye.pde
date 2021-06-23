@@ -1,5 +1,4 @@
 class Eye {
-
   PVector posEye;
   PVector posPupil;
   PVector EyeToPerson;
@@ -110,9 +109,6 @@ class Eye {
     if (n > 0.7) {
       isBlinking = true;
     }
-    //if (blink.dist(posEye)<100) {
-    //  isBlinking=true;
-    //}
   }
 
   void update(PVector lookingPosition) {

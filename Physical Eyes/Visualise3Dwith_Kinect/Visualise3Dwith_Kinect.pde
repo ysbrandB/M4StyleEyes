@@ -9,17 +9,17 @@ KinectPV2 kinect;
 import processing.serial.*;
 Serial port;
 String inString;
+
 //TCP communication with eyes
 import processing.net.*;
 Server s;
 Server sInterface;
 
 //sketch in CM, -y is up
-//als we 360 graden kunnen draaien 0 graden = recht vanuit kinect
-//als 180 graden draaien opnieuw implementeren naar midden kijkend
+//Ogen bij startup kijken rechtdoor, rotatie is met de x as van de oogassembly door de kinect heen
 
 boolean draw= true;
-boolean useArduino=true;
+boolean debug=true;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
@@ -33,11 +33,12 @@ float time;
 int buffer=0;
 int desiredBufferTime=0;
 boolean triggeredInterface=false;
-
+boolean arduinoConnected=false;
 JSONArray eyePosData;
 ArrayList<Eye> eyes = new ArrayList<Eye>();
 ArrayList<String> oldData= new ArrayList<String>();
 ArrayList<PVector> heads= new ArrayList<PVector>();
+PVector debugNoise= new PVector(-10, -100, 100);
 
 void setup() {
   frameRate(30);
@@ -57,19 +58,13 @@ void setup() {
   screen=new Eye(screenPos, -1);
   time=0;
 
-  //for (int i = 0; i < eyePosData.size(); i++) {
-  //  JSONObject eye = eyePosData.getJSONObject(i);
-  //  eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
-  //  oldData.add("");
-  //}
-  eyes.add(new Eye(new PVector(-50, -100, 200), 0));
-  oldData.add("");
-
-  eyes.add(new Eye(new PVector(50, -100, 50), 1));
-  oldData.add("");
+  for (int i = 0; i < eyePosData.size(); i++) {
+    JSONObject eye = eyePosData.getJSONObject(i);
+    eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id")));
+    oldData.add("");
+  }
 
   size(1000, 1000, P3D);
-  //fullScreen(P3D, 1);
 
   //make a new cam element
   camera = new PeasyCam(this, -2, 0, -1, 100);
@@ -92,17 +87,15 @@ void setup() {
     rectMode(CENTER);
   }
   //print the available serial (arduino ports)
-  if (useArduino) {
-    println("Available serial ports:");
-    for (int i = 0; i<Serial.list().length; i++) { 
-      print("[" + i + "] ");
-      println(Serial.list()[i]);
-    }
-    //init the port
-    port = new Serial(this, Serial.list()[2], 9600);
-    port.bufferUntil('\n');
+  println("Available serial ports:");
+  for (int i = 0; i<Serial.list().length; i++) { 
+    print("[" + i + "] ");
+    println(Serial.list()[i]);
   }
+  //init the port
+  connectArduino();
 }
+
 
 void draw() {
   //if you wanna display: make the ground and lights and draw the green kinect dot
@@ -164,14 +157,20 @@ void draw() {
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
+  if (!arduinoConnected&&frameCount%120==0) {
+    println("EyeArduino not connected! retrying");
+    connectArduino();
+  }
+  if (debug) {
+    checkInput();
+  }
 }
 
-//void serialEvent(Serial myPort) {
-//  inString = myPort.readString();
-//  if (inString!="") {
-//    print("Received: "+inString);
-//  }
-//}
+void serialEvent(Serial myPort) {
+  if (debug) {
+    println(myPort.readString());
+  }
+}
 
 void drawAmbience() {
   ambientLight(255, 255, 255);
@@ -185,16 +184,18 @@ void drawAmbience() {
 }
 
 void displayNoise() {
-  PVector noise=new PVector(map(noise(time/2), 0, 1, -50, 50), map(noise(time), 0, 1, -200, 0), map(noise(time*2), 0, 1, 0, 200));
-  heads.add(noise);
-  drawPoint(noise, color(255, 0, 255));
-  time+=0.001;
+  if (debug) {
+    heads.add(debugNoise);
+    drawPoint(debugNoise, color(255, 255, 255));
+  } else {
+    PVector noise=new PVector(map(noise(time/2), 0, 1, -50, 50), map(noise(time), 0, 1, -200, 0), map(noise(time*2), 0, 1, 0, 200));
+    heads.add(noise);
+    drawPoint(noise, color(255, 0, 255));
+    time+=0.001;
+  }
 }
 
 void checkToStartInterface() {
-  //  int buffer=0;
-  //int desiredBufferTime=0;
-  //boolean triggeredInterface=false;
   float closestDist=999999999;
   for (int i=0; i<heads.size(); i++) {
     PVector head=heads.get(i);
@@ -203,7 +204,7 @@ void checkToStartInterface() {
       closestDist=distance;
     }
   }
-  
+
   if (closestDist<=minimumDistToCross) {
     if (!triggeredInterface) {
       sInterface.write("Start"+'\n');
@@ -245,16 +246,45 @@ void updatePhysicalEyesArduino() {
   }
   if (arduinoPayload.length()>=1) {
     //dont update 60 frames per second!
-    if (useArduino&&frameCount%5==0) {
-      port.write(arduinoPayload);
+    if (frameCount%1==0&&arduinoConnected) {
+      try {
+        port.write(arduinoPayload);
+      }
+      catch(Exception e) {
+        arduinoConnected=false;
+      }
     }
   }
 }
 
+void connectArduino() {
+  try {
+    port = new Serial(this, Serial.list()[0], 9600);
+    port.bufferUntil('\n');
+    arduinoConnected=true;
+    println("EyeArduino Connected!");
+  }
+  catch(Exception e) {
+    arduinoConnected=false;
+  }
+}
+
+void keyPressed() {
+  if (key=='e') {
+    debug=!debug;
+  }
+}
+
+
 
 //draw all the bones between the joints
 void drawBody(PVector[] myJoints) {
-  color blue=color(0, 0, 255);
+  color blue;
+  if (!triggeredInterface) {
+    blue=color(0, 0, 255);
+  } else {
+    blue=color(255, 0, 255);
+  }
   //leftLeg
   draw3DLine(myJoints[15], myJoints[14], blue);
   draw3DLine(myJoints[14], myJoints[13], blue);
@@ -308,4 +338,24 @@ void draw3DLine(PVector pos1, PVector pos2, color c) {
   line(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
   stroke(0);
   strokeWeight(1);
+}
+
+void checkInput() {
+  if (keyPressed) {
+    if (keyCode==UP) {
+      debugNoise.y-=1;
+    } else if (keyCode==DOWN) {
+      debugNoise.y+=1;
+    }
+    if (key=='w') {
+      debugNoise.z-=1;
+    } else if (key=='s') {
+      debugNoise.z+=1;
+    }
+    if (key=='a') {
+      debugNoise.x-=1;
+    } else if (key=='d') {
+      debugNoise.x+=1;
+    }
+  }
 }

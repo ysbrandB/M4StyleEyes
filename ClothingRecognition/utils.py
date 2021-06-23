@@ -76,4 +76,6 @@ def get_clothing_cropped(image, cloth):
 
 def get_dominant_color(img):
     colors, count = np.unique(img.reshape(-1, img.shape[-1]), axis=0, return_counts=True)
-    return colors[count.argmax()]
+    if count.any():
+        return colors[count.argmax()]
+    return (255, 255, 255)
