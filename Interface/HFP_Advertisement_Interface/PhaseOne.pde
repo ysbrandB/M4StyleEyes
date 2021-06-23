@@ -1,5 +1,5 @@
 class PhaseOne extends Slide {
-  
+
   CommunicationHandler com;
   PImage img;
   boolean scanning;
@@ -35,7 +35,7 @@ class PhaseOne extends Slide {
     if (scanning) {
       pushMatrix();
       translate(width/2, height/2);
-      for(int i = 0; i<trail.size();i++){
+      for (int i = 0; i<trail.size(); i++) {
         pushMatrix();
         rotate(radians(trail.get(i)));
         fill(255, 255/trail.size()*float(i + 1));
@@ -48,18 +48,16 @@ class PhaseOne extends Slide {
       popMatrix();
       fill(0);
       text("Scanning...", width/2, height/20*17);
-      
+
       fill(0);
       textFont(fontHeading);
       text("Let me St-EYE-le you!", width/2, height/10);
-      
     } else {
       fill(0);
       textFont(fontHeading);
       text("Let me St-EYE-le you!", width/2, height/10);
-      fill(255,0,0);
+      fill(255, 0, 0);
       text("Step up onto the red cross!", width/2, height/20*17);
     }
-  
   }
 }

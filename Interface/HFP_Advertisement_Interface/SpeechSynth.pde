@@ -1,30 +1,23 @@
 //// Have Fun & Play Project
 //// Style Eyes Speech Synthesizer
-//// By Jelle Gerritsen
+//// By Jelle Gerritsen and Ysbrand Burgstede
 
 class SpeechSynth {
-  static final int COLOR_AMOUNT = 9;
-  static final int TYPE_AMOUNT = 5;
+
   static final int MAX_PAUSE_AMOUNT = 6;
   static final float SOUND_AMP = 0.1;
 
-  int colorIndex = 0;
-  int typeIndex = 0;
-  int oppositeColorIndex = 0;
-  int oppositeTypeIndex = 0;
+  HashMap<String, SoundFile> soundLookUp = new HashMap<String, SoundFile>();
 
   float [] speakPause =  {0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
 
   SoundFile youRWearingA;
-  SoundFile[] colorSounds = new SoundFile[COLOR_AMOUNT];
-  SoundFile[] typeSounds = new SoundFile[TYPE_AMOUNT];
   SoundFile a;
   SoundFile wouldFitYouWayBetter;
 
   ArrayList <SoundFile> soundsToPlay;
   int currentIndex=0;
   float pauseTimer;
-
 
   Delay roboDelay;
   ColorPicker colorPicker;
@@ -42,14 +35,19 @@ class SpeechSynth {
     roboDelay.process(a, 0.04);
     roboDelay.process(wouldFitYouWayBetter, 0.04);
 
-    for (int i = 0; i < COLOR_AMOUNT; i++) {
-      colorSounds[i] = new SoundFile(HFP_Advertisement_Interface.this, "wav/cr" + i + ".wav");
-      roboDelay.process(colorSounds[i], 0.04);
-    }
-
-    for (int i = 0; i < TYPE_AMOUNT; i++) {
-      typeSounds[i] = new SoundFile(HFP_Advertisement_Interface.this, "wav/ct" + i + ".wav");
-      roboDelay.process(typeSounds[i], 0.04);
+    String path=sketchPath()+"\\wav";
+    java.io.File folder = new java.io.File(path);
+    String [] fileNames=folder.list();
+    printArray(fileNames);
+    for (String fileName : fileNames) {
+      println(fileName);
+      if (fileName.contains(".wav")) {
+        String name=fileName.substring(0, fileName.lastIndexOf('.'));
+        String myPath=path+'\\'+fileName;
+        println(myPath);
+        SoundFile thisAudioFile= new SoundFile(HFP_Advertisement_Interface.this, myPath);
+        soundLookUp.put(name, thisAudioFile);
+      }
     }
 
     roboDelay.set(0.018, 0.55);
@@ -63,150 +61,58 @@ class SpeechSynth {
     String typeName = typePicker.getLastTypeName();
     String oppositeColorName = colorPicker.getLastOppositeColorName();
     String oppositeTypeName = typePicker.getLastOppositeTypeName();
-    //below here needs to be a switch statement that decides index of the sound file based on the color name
-    //THESE INDICES SHOULD BE ASSIGNED VIA THE SWITCH STATEMENT!
-    colorIndex = 0;
-    typeIndex = 0;
-    oppositeColorIndex = 2;
-    oppositeTypeIndex = 0;
 
+    SoundFile colorAudio=soundLookUp.get(colorName);
+    SoundFile typeAudio=soundLookUp.get(typeName);
+    SoundFile oppositeAudio=soundLookUp.get(oppositeColorName);
+    SoundFile oppositeTypeAudio=soundLookUp.get(oppositeTypeName);
     soundsToPlay=new ArrayList<SoundFile>();
     currentIndex=0;
 
     soundsToPlay.add(youRWearingA);
-    soundsToPlay.add(colorSounds[colorIndex]);
-    soundsToPlay.add(typeSounds[typeIndex]);
+    if (colorAudio!=null) {
+      soundsToPlay.add(colorAudio);
+    } else {
+      println("Couldn't find the audio for: "+colorName);
+    }
+    if (typeAudio!=null) {
+      soundsToPlay.add(typeAudio);
+    } else {
+      println("Couldn't find the audio for: "+typeName);
+    }
     soundsToPlay.add(a);
-    soundsToPlay.add(colorSounds[oppositeColorIndex]);
-    soundsToPlay.add(typeSounds[oppositeTypeIndex]);
+    if (oppositeAudio!=null) {
+      soundsToPlay.add(oppositeAudio);
+    } else {
+      println("Couldn't find the audio for: "+oppositeColorName);
+    }
+    if (oppositeTypeAudio!=null) {
+      soundsToPlay.add(oppositeTypeAudio);
+    } else {
+      println("Couldn't find the audio for: "+oppositeTypeName);
+    }
     soundsToPlay.add(wouldFitYouWayBetter);
   }
 
   void speak() {
     //Checkt elke keer of de huidige soundfile afgelopen is en de timer ook en speelt dan de track af
     if (currentIndex<soundsToPlay.size()) {
-      SoundFile track=soundsToPlay.get(currentIndex);
-      if (!track.isPlaying()&&pauseTimer<=0) {
-        track.amp(SOUND_AMP);
-        track.play();
-        if (currentIndex<6) {
-          pauseTimer=speakPause[currentIndex]+track.duration();
+      try {
+        SoundFile track=soundsToPlay.get(currentIndex);
+        if (!track.isPlaying()&&pauseTimer<=0) {
+          track.amp(SOUND_AMP);
+          track.play();
+          if (currentIndex<6) {
+            pauseTimer=speakPause[currentIndex]+track.duration();
+          }
+          currentIndex++;
         }
+        pauseTimer -= 1 / frameRate;
+      }
+      catch(Exception e) {
+        println("Something went wrong with the sound! playing next track"+e);
         currentIndex++;
       }
-      pauseTimer -= 1 / frameRate;
     }
   }
 }
-
-//void recommendColor() {
-//  String colorName = colorPicker.getLastColorName();
-//  String typeName = typePicker.getLastTypeName();
-//  //String colorName = "Blue";
-//  //String typeName = "Polo";
-//  String oppositeColorName = colorPicker.getLastOppositeColorName();
-//  String oppositeTypeName = typePicker.getLastOppositeTypeName();
-//  //String oppositeColorName = "Red";
-//  //String oppositeTypeName = "Shirt";
-
-//  //below here needs to be a switch statement that decides index of the sound file based on the color name
-//  //THESE INDICES SHOULD BE ASSIGNED VIA THE SWITCH STATEMENT!
-//  int colorIndex = 0;
-//  int typeIndex = 0;
-//  int oppositeColorIndex = 0;
-//  int oppositeTypeIndex = 0;
-
-//  if (speakTimer <= 0) {
-//    isPlaying = false;
-//  }
-
-//  if (speakTimer > 0) {
-//    speakTimer -= 1000 / frameRate;
-//  } else if (pauseCounter < 7) {
-//    pauseCounter++;
-//    if (pauseCounter < 6) {
-//      speakTimer = speakPause[pauseCounter];
-//    }
-//  }
-
-//  if (!recomHasPlayed && !isPlaying) {
-//    println(pauseCounter);
-//    switch(pauseCounter) { //determines the length of the next phase 
-//    case 0:
-//    if(!youRWearingA.isPlaying()){
-//      youRWearingA.amp(SOUND_AMP);
-//      youRWearingA.play();
-//      break;
-//    }
-//    case 1: 
-//      colorSounds[colorIndex].amp(SOUND_AMP);
-//      colorSounds[colorIndex].play();
-
-//      break;
-//    case 2: 
-//      typeSounds[typeIndex].amp(SOUND_AMP);
-//      typeSounds[typeIndex].play(); 
-
-
-//      break;
-//    case 3:
-//      a.amp(SOUND_AMP);
-//      a.play();
-
-//      break;
-//    case 4:
-//      colorSounds[oppositeColorIndex].amp(SOUND_AMP);
-//      colorSounds[oppositeColorIndex].play();
-
-
-//      break;
-//    case 5:
-//      typeSounds[oppositeTypeIndex].amp(SOUND_AMP);
-//      typeSounds[oppositeTypeIndex].play();
-
-
-
-//      break;
-//    case 6:
-//      wouldFitYouWayBetter.amp(SOUND_AMP);
-//      wouldFitYouWayBetter.play();
-
-//      recomHasPlayed=true;
-//      break;
-//    case 7:
-//      recomHasPlayed=false;
-//      pauseCounter=0;
-//      isPlaying=false;
-//      speakTimer=0;
-//    }
-//  }
-//}
-
-//  if (!recomHasPlayed) {
-//    //analyse sentence
-//    youRWearingA.amp(soundamp);
-//    youRWearingA.play();
-//    delay(speakPause[pauseCounter]);
-//    colour[detClColour].amp(soundamp);
-//    colour[detClColour].play();
-//    delay(speakPause[pauseCounter]);
-//    clothingtype[detClType].amp(soundamp);
-//    clothingtype[detClType].play();
-//    delay(1400);
-
-//    //recommendation sentence
-//    a.amp(soundamp);
-//    a.play();
-//    delay(500);
-//    colour[recClColour].amp(soundamp);
-//    colour[recClColour].play();
-//    delay(600);
-//    clothingtype[recClType].amp(soundamp);
-//    clothingtype[recClType].play();
-//    delay(800);
-//    wouldFitYouWayBetter.amp(soundamp);
-//    wouldFitYouWayBetter.play();
-//  }
-
-//  recomHasPlayed = true;
-//}

@@ -7,7 +7,11 @@
 import processing.sound.*;
 import processing.net.*;
 import processing.serial.*;
+import java.util.Map;
+import java.io.File;
+
 CommunicationHandler com;
+
 
 static final int HITS_THRESHOLD = 5;
 
@@ -30,7 +34,7 @@ PhaseThree pThree;
 PhaseFour pFour;
 
 SpeechSynth speechSynth;
-ColorPicker colorPicker;
+
 
 void setup() {
 

@@ -30,7 +30,7 @@ class PhaseThree extends Slide {
   PhaseThree(ColorPicker colorPicker, TypePicker typePicker) {
     // string = new Strings(colorPicker);
 
-    randomNewsLogo = int(random(1,5));
+    randomNewsLogo = int(random(1, 5));
     Oxford = createFont("Font/Oxford.ttf", 80);
     NewsHeads = loadImage("NewsLogos/"+ randomNewsLogo +".png");
 
@@ -57,7 +57,7 @@ class PhaseThree extends Slide {
     this.typePicker = typePicker;
   }
 
-  void init(CommunicationHandler com){
+  void init(CommunicationHandler com) {
     string = new Strings(colorPicker);
     com.sendColor(colorPicker.getLastOppositeColor());
   }
@@ -86,7 +86,7 @@ class PhaseThree extends Slide {
 
     tweet.display(new PVector(width*2/3-50, height/12-20));    
 
-    image(NewsHeads,90, 50); //Displays the news logo's
+    image(NewsHeads, 90, 50); //Displays the news logo's
     fill(0);
     textFont(Oxford);
     textLeading(50);

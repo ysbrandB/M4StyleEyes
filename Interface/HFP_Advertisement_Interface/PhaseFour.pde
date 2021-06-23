@@ -2,11 +2,11 @@ class PhaseFour extends Slide {
 
   // int chpRandomPrice;  //random number generated to calculate all cheap prices
   // int expRandomPrice; //random number generated to calculate all expensive prices
-  
+
   Strings string;
 
   // String clothRecom;
-  
+
   // String totalRecom; //total message
   // String cheapBrand; //the randomly selected cheap brand
   // String expensiveBrand; //the randomly selected expensive brand
@@ -19,9 +19,9 @@ class PhaseFour extends Slide {
   PhaseFour() {
     // string = new Strings(colorPicker);
     // clothRecom = "White Polo";
-    
+
     // encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + clothRecom + " too!"; 
-    
+
     // cheapBrand = "Jack & Jones"; //placeholder
     // expensiveBrand = "Louis Viton"; //placeholder
 
@@ -30,10 +30,10 @@ class PhaseFour extends Slide {
 
     // chpBrandPrice = chpRandomPrice + "9";
     // expBrandPrice =  expRandomPrice + "9";
-    
+
     // orgCheapPrice = chpRandomPrice + 1;
     // orgExpensivePrice = expRandomPrice + 5;;
-    
+
     // chpOriginalPrice = orgCheapPrice + "9";
     // expOrignialPrice = orgExpensivePrice + "9";
 
@@ -43,7 +43,7 @@ class PhaseFour extends Slide {
   }
 
 
-  void init(){
+  void init() {
     string = new Strings(colorPicker);
   }
 

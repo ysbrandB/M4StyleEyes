@@ -3,7 +3,7 @@ class Slide {
 
   color bgColor = color(192, 200, 206); //gives the background color
   boolean isFinished = false;
-  
+
   PFont fontHeading;
   PFont fontSub;
 

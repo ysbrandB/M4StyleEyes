@@ -114,7 +114,7 @@ class Eye {
       offsetY += radius*0.4;
       if (offsetY > radius * 1.4) offsetY = radius*1.4;
     }
-    
+
     EyeToPerson = PVector.sub(lookingPosition, posEye);
     EyeToPerson.setMag(radius*0.8);
     posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
