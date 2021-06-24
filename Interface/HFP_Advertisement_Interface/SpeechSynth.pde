@@ -61,7 +61,7 @@ class SpeechSynth {
     String typeName = typePicker.getLastTypeName();
     String oppositeColorName = colorPicker.getLastOppositeColorName();
     String oppositeTypeName = typePicker.getLastOppositeTypeName();
-
+    
     SoundFile colorAudio=soundLookUp.get(colorName);
     SoundFile typeAudio=soundLookUp.get(typeName);
     SoundFile oppositeAudio=soundLookUp.get(oppositeColorName);
