@@ -41,7 +41,6 @@ class Eye {
 
   //update the lookingvector and calculate its angles
   void update() {
-
     closestDist=999999999;
     for (int i=0; i<heads.size(); i++) {
       float distance=PVector.dist(heads.get(i), pos);
@@ -60,7 +59,6 @@ class Eye {
     if (pos.x<0) {
       angleY=int((lookY.heading()+PI)/PI*180);
       angleY=180-(angleY-neutralYAngle);
-      //println("LEFT:"+ angleY);
     }
     if (pos.x>0) {
       angleY=int((lookY.heading())/PI*180);
@@ -68,7 +66,6 @@ class Eye {
         angleY=360+angleY;
       }
       angleY=neutralYAngle-angleY;
-      //println("RIGHT:"+ angleY);
     }
 
     PVector lookZ=new PVector(headToEye.x, headToEye.y);

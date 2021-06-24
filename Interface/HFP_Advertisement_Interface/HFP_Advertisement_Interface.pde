@@ -12,7 +12,6 @@ import java.io.File;
 
 CommunicationHandler com;
 
-
 static final int HITS_THRESHOLD = 5;
 
 int phaseCount;
@@ -39,8 +38,8 @@ SpeechSynth speechSynth;
 void setup() {
 
   //fullScreen(2); 
-  //size(1920,1080);
-  size(960, 540); //for testing only
+  size(1920,1080);
+  //size(960, 540); //for testing only
   imageMode(CENTER);
 
   com = new CommunicationHandler(this);
@@ -128,7 +127,7 @@ void keyPressed() {
     colorPicker.colorDetermination(com.clothingColor);
   }
 
-  if (key=='d'||key=='D') {
+  if (key=='t'||key=='T') {
     distanceTrigger=true;
   }
 

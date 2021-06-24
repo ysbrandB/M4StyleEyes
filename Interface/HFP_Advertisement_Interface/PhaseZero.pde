@@ -28,7 +28,7 @@ class PhaseZero {
 
     //draw eyes
     for (Eye eye : eyes) {
-      eye.update(com.lookingPos);
+      eye.update(com.lookingPositions);
       eye.display();
     }
     //make the eyes blink by per a random amount of frames

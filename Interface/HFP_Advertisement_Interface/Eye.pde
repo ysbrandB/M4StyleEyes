@@ -106,7 +106,7 @@ class Eye {
     }
   }
 
-  void update(PVector lookingPosition) {
+  void update(ArrayList <PVector> lookingPositions) {
     if (isBlinking) {
       offsetY -= radius*0.4;
       if (offsetY < 0) isBlinking = false;
@@ -114,11 +114,18 @@ class Eye {
       offsetY += radius*0.4;
       if (offsetY > radius * 1.4) offsetY = radius*1.4;
     }
+    //find the closest person for every individual eye and considering all the people
+    float closestDist=999999999;
+    for (PVector vector : lookingPositions) {
+      if (PVector.dist(posEye, vector)<closestDist) {
+        EyeToPerson = PVector.sub(vector, posEye);
+        EyeToPerson.setMag(radius*0.8);
+        posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
+        println("Vector is closer"+ vector.x+"");
+        closestDist=PVector.dist(posEye, vector);
+      }
+    }
 
-    EyeToPerson = PVector.sub(lookingPosition, posEye);
-    EyeToPerson.setMag(radius*0.8);
-    posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
-
-    if (lookingPosition.z == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(lookingPosition.x, lookingPosition.y), posEye).limit(radius*0.8));
+    if (lookingPositions.get(0).z == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(lookingPositions.get(0).x, lookingPositions.get(0).y), posEye).limit(radius*0.8));
   }
 }
