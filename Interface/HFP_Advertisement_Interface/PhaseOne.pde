@@ -27,9 +27,12 @@ class PhaseOne extends Slide {
     textAlign(TOP, LEFT);
     //text(com.clothingType + " [" + red(com.clothingColor) + "," + green(com.clothingColor) + "," + blue(com.clothingColor) + "] " + com.hits, 50, 50);
 
+    fill(255);
+    ellipse(irisPos.x, irisPos.y, width/2.6, height/2);
     textAlign(CENTER, CENTER);
     imageMode(CENTER);
     image(img, width/2, height/2, height, height);
+
     fill(0);
     circle(irisPos.x, irisPos.y, height/4);
     if (scanning) {

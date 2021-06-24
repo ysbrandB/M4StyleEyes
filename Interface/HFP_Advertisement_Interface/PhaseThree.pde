@@ -8,6 +8,8 @@ class PhaseThree extends Slide {
   PFont Oxford;
   PFont Papers;
   PImage NewsHeads;
+  PImage recomClothingImage; 
+  PImage bigEyeSlides;
 
   int favorNumber;
   int opposeNumber;
@@ -29,9 +31,12 @@ class PhaseThree extends Slide {
 
   PhaseThree(ColorPicker colorPicker, TypePicker typePicker) {
     // string = new Strings(colorPicker);
-
+    
+    recomClothingImage = loadImage("image/Clothing/White.T-Shirt.png");
+    bigEyeSlides = loadImage("image/bigEyeSlides.png");
+    
     randomNewsLogo = int(random(1, 5));
-    Oxford = createFont("Font/Oxford.ttf", 80);
+    Oxford = createFont("Font/Oxford.ttf", height/30);
     NewsHeads = loadImage("NewsLogos/"+ randomNewsLogo +".png");
 
     Papers = createFont("Font/Paper.otf", 30);
@@ -64,30 +69,47 @@ class PhaseThree extends Slide {
 
   void display() {
     background(bgColor);
-
-    //println(favourNumber);
-    //println(favourFactor);
-
-    noStroke();
+    
+    image(bigEyeSlides, width/20+3, height/17+3, width/10, height/10);
+    
+    strokeWeight(3);
+    if (colorPicker.getLastColor() == color(0,0,0)) {
+      stroke(255);
+    } else {
+      stroke(colorPicker.getLastColor());
+    }
+    noFill();
+    rect(0, 0, 0.58*width, 0.5*height);
+    rect(0, 0.5*height, 0.58*width, height);
+    rect(0.58*width, 0, width-2, 0.7*height);
+    rect(0.58*width, 0.7*height, width, height);
+    
+    image(recomClothingImage, 0.79*width, height/2.9, 0.35*width, 0.67*height);
+    
+    strokeWeight(0.5);
+    stroke(colorPicker.getLastOppositeColor());
     fill(colorPicker.getLastColor());
     rect(width/8, height/4*3+75, width/3, height/20);
     fill(colorPicker.getLastOppositeColor());
     rect(width/8, height/4*3+75, width/3 * favorFactor, height/20);
 
-
     textFont(fontHeading);
     fill(colorPicker.getLastOppositeColor());
     text(favorNumber + "%", width/8 + 10, height/4*3+42);
-    fill(colorPicker.getLastColor());
+    if (colorPicker.getLastColor() == color(0,0,0)) {
+      fill(255);
+    } else {
+      fill(colorPicker.getLastColor());
+    }
     text(opposeNumber + "%", width/8 + width/4 + 70, height/4*3+42);
-    fill(0);
+    fill(255);
     textFont(fontSub);
-    text(pollDescription, width/8-110, height/8*6-50);
+    text(pollDescription, width/7.9, height/8*6.3);
 
-    tweet.display(new PVector(width*2/3-50, height/12-20));    
+    //tweet.display(new PVector(width*2/3-50, height/12-20));    
 
-    image(NewsHeads, 90, 50); //Displays the news logo's
-    fill(0);
+    image(NewsHeads, 90, 50, 900, 180); //Displays the news logo's
+    fill(255);
     textFont(Oxford);
     textLeading(50);
     textAlign(CENTER);

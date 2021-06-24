@@ -4,6 +4,7 @@ class PhaseFour extends Slide {
   // int expRandomPrice; //random number generated to calculate all expensive prices
 
   Strings string;
+  PImage bigEyeSlides;
 
   // String clothRecom;
 
@@ -17,6 +18,7 @@ class PhaseFour extends Slide {
   // String encourageMessage; //encourages the person the buy the product
 
   PhaseFour() {
+    bigEyeSlides = loadImage("image/bigEyeSlides.png");
     // string = new Strings(colorPicker);
     // clothRecom = "White Polo";
 
@@ -49,9 +51,11 @@ class PhaseFour extends Slide {
 
   void display() {
     background(bgColor);
+    
+    image(bigEyeSlides, width/20+3, height/17+3, width/10, height/10);
 
     textFont(fontHeading);
-    fill(0);
+    fill(255);
     string.Brands();
   }
 }

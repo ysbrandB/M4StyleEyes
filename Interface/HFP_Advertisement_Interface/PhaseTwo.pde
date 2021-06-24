@@ -14,7 +14,8 @@ class PhaseTwo extends Slide {
   Eye eye;
   int xTime=0;
 
-  PImage recomClothing; 
+  PImage recomClothing;
+  PImage bigEyeSlides;
 
   PFont MainText; //Font for the main text
   ColorPicker colorPicker;
@@ -22,11 +23,12 @@ class PhaseTwo extends Slide {
 
   PhaseTwo(ColorPicker colorPicker, TypePicker typePicker) {
     eye= new Eye(width/4, height/4, 30);
-    MainText = createFont("Font/ARLRDBD_0.TTF", 80); //lettertype Arial rounded MT Bold
+    MainText = createFont("Font/Typewriter.otf", height/25); //lettertype Arial rounded MT Bold
     this.colorPicker = colorPicker;
     this.typePicker= typePicker;
-    recomClothing = loadImage("image/whitepolo.png");
-    textFont(MainText);
+    bigEyeSlides = loadImage("image/bigEyeSlides.png");
+    recomClothing = loadImage("image/Clothing/White.T-Shirt.png");
+    
   }
 
   void init(CommunicationHandler com) {
@@ -37,15 +39,19 @@ class PhaseTwo extends Slide {
   void display() {    
 
     background(bgColor);
-    fill(0);
+    
+    image(bigEyeSlides, width/20, height/17, width/10, height/10);
+    
+    textFont(MainText);
+    fill(255);
     rectMode(BASELINE);
-    textAlign(CENTER);
+    textAlign(CENTER, CENTER);
     string.BeginMessage();
     //eye.display();
     //xTime+=0.001;
     //eye.update(new PVector(map(noise(xTime*2),0,1,0,width), map(noise(xTime),0,1,0,height)));
 
-    image(recomClothing, width/4*3, height/2);
+    image(recomClothing, width/4*3, height/2, width/3, height/1.5);
     //colorPicker = new ColorPicker(222,5,0);
     //colorPicker.update();
 
