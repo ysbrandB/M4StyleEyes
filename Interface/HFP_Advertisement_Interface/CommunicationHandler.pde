@@ -153,7 +153,6 @@ class CommunicationHandler {
     }
     lookingPositions= new ArrayList <PVector>();
     String[] seperateVectors=split(ontvangen, "|");
-    printArray(seperateVectors);
     for (String vector : seperateVectors) {
       String[] temp=split(vector, ",");
       //ontvangen= (x, y, z) 

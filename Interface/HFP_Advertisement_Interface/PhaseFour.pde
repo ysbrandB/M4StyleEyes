@@ -1,61 +1,41 @@
 class PhaseFour extends Slide {
 
-  // int chpRandomPrice;  //random number generated to calculate all cheap prices
-  // int expRandomPrice; //random number generated to calculate all expensive prices
-
-  Strings string;
+  //Strings string;
+  String encourageMessage;
+  String totalRecom;
   PImage bigEyeSlides;
+  String[] Brand;
+  String BrandCheap;
+  String BrandExpensive;
 
-  // String clothRecom;
-
-  // String totalRecom; //total message
-  // String cheapBrand; //the randomly selected cheap brand
-  // String expensiveBrand; //the randomly selected expensive brand
-  // String chpBrandPrice; //randomly generated cheap brand price
-  // String expBrandPrice; //randomly generated expensive brand price
-  // String chpOriginalPrice; //randomly generated original expensive brand price
-  // String expOrignialPrice; //randomly generated original expensive brand price
-  // String encourageMessage; //encourages the person the buy the product
-
-  PhaseFour() {
+  PhaseFour(JSONObject textData) {
     bigEyeSlides = loadImage("image/bigEyeSlides.png");
-    // string = new Strings(colorPicker);
-    // clothRecom = "White Polo";
-
-    // encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + clothRecom + " too!"; 
-
-    // cheapBrand = "Jack & Jones"; //placeholder
-    // expensiveBrand = "Louis Viton"; //placeholder
-
-    // chpRandomPrice = int(random(1, 5));
-    // expRandomPrice = int(random(10, 20));
-
-    // chpBrandPrice = chpRandomPrice + "9";
-    // expBrandPrice =  expRandomPrice + "9";
-
-    // orgCheapPrice = chpRandomPrice + 1;
-    // orgExpensivePrice = expRandomPrice + 5;;
-
-    // chpOriginalPrice = orgCheapPrice + "9";
-    // expOrignialPrice = orgExpensivePrice + "9";
-
-    // totalRecom = "NOW in SALE at" +"\n" + 
-    //   cheapBrand + ": " + chpBrandPrice + "€"+ "  <-  Originally: " + (chpOriginalPrice) + "€" +"\n" + 
-    //   expensiveBrand + ": " + expBrandPrice + "€"+ "  <-  Originally: " + (expOrignialPrice) + "€";
+    JSONArray Brands = textData.getJSONArray("Brands"); //Gets all the brands
+     Brand = Brands.getStringArray(); //Splits the brands
   }
 
 
-  void init() {
-    string = new Strings(colorPicker);
+  void init() {    
+    BrandCheap = Brand[int(random(0,Brand.length))]; //Sets 'BrandCheap' to one of the stings with the number from bC
+    BrandExpensive = Brand[int(random(0,Brand.length))]; //Sets 'BrandExpensive' to one of the stings with the number from bE
+    
+    //Writes a ad with the recommanded color and type 
+    encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + colorPicker.getLastOppositeColorName() + " " + typePicker.getLastOppositeTypeName() + " too!"; 
+
+    //Writes the final message with the "chosen" brands, the new price and the old one.
+    totalRecom = "NOW in SALE at" +"\n" + 
+      BrandCheap + ": €" + int(random(10,40))+".99"+ "  <-  Originally: " + "€"+int(random(40,100)) +"\n"+
+      BrandExpensive+ ": " + int(random(75,175)) + "€"+ "  <-  Originally: " + "€"+ int(random(175,400));
   }
 
   void display() {
     background(bgColor);
-    
     image(bigEyeSlides, width/20+3, height/17+3, width/10, height/10);
 
     textFont(fontHeading);
     fill(255);
-    string.Brands();
+    textAlign(TOP, LEFT);
+    text(encourageMessage, width/8, height/4-100);
+    text(totalRecom, width/8, height/2);
   }
 }

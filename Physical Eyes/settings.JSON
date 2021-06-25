@@ -1,13 +1,13 @@
 {
    "Screen": {
         "x" : 0,
-        "y" : -100,
+        "y" : -175,
         "z" : 0,
-	"screenWidth": 200
+	"screenWidth": 195
     },
 	"Kinect":{
         "x" : 0,
-        "y" : -100,
+        "y" : -135,
         "z" : 0
     },
 	"Cross":{

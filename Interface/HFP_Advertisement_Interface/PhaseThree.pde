@@ -7,7 +7,7 @@ class PhaseThree extends Slide {
   PFont SegoeSemiBold19;
   PFont Oxford;
   PFont Papers;
-  PImage NewsHeads;
+  PImage NewsHeadsPicture;
   PImage recomClothingImage; 
   PImage bigEyeSlides;
 
@@ -23,21 +23,30 @@ class PhaseThree extends Slide {
   String pollDescription;
   String recomClothing;
   String recogClothing;
+  
+  String Quote;
+  String Fact;
+  
+  String[] NewsQuote; //String for all the newsmessages
+  String[] ScientificFact; //String for all the scientific papar quotes
 
   ColorPicker colorPicker;
   TypePicker typePicker;
 
-  Strings string;
+  //Strings string;
 
-  PhaseThree(ColorPicker colorPicker, TypePicker typePicker) {
-    // string = new Strings(colorPicker);
+  PhaseThree(ColorPicker colorPicker, TypePicker typePicker, JSONObject textData) {
+    JSONArray NewsHeads = textData.getJSONArray("NewsHeads"); //Gets the text for the news quotes
+    JSONArray ScientificFacts = textData.getJSONArray("ScientificFacts"); //Gets the scientific quotes
+    
+    NewsQuote = NewsHeads.getStringArray(); //Splits the quotes
+    ScientificFact = ScientificFacts.getStringArray(); //Splits the quotes
     
     recomClothingImage = loadImage("image/Clothing/White.T-Shirt.png");
     bigEyeSlides = loadImage("image/bigEyeSlides.png");
     
-    randomNewsLogo = int(random(1, 5));
     Oxford = createFont("Font/Oxford.ttf", height/30);
-    NewsHeads = loadImage("NewsLogos/"+ randomNewsLogo +".png");
+    NewsHeadsPicture = loadImage("NewsLogos/"+ int(random(1, 5)) +".png");
 
     Papers = createFont("Font/Paper.otf", 30);
 
@@ -63,8 +72,17 @@ class PhaseThree extends Slide {
   }
 
   void init(CommunicationHandler com) {
-    string = new Strings(colorPicker);
+    //string = new Strings(colorPicker);
     com.sendColor(colorPicker.getLastOppositeColor());
+    
+    Quote = NewsQuote[int(random(0,NewsQuote.length))]; //Sets 'Quote' to one of the stings with the number from n
+    Quote = Quote.replace("Color_", colorPicker.getLastOppositeColorName()); //Replaces the word 'Color_' by the text at beginColor
+    Quote = Quote.replace("Type_", typePicker.getLastOppositeTypeName()); //Replaces the word 'Type' by the text at beginType
+
+    Fact = ScientificFact[int(random(0,ScientificFact.length))]; //Sets 'Fact' to one of the stings with the number from f
+    Fact = Fact.replace("Color_", colorPicker.getLastOppositeColorName()); //Replaces the word 'Color_' by the text at beginColor
+    Fact = Fact.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
+    Fact = Fact.replace("Type_",  typePicker.getLastOppositeTypeName()); //Replaces the word 'Type' by the text at beginType
   }
 
   void display() {
@@ -108,14 +126,14 @@ class PhaseThree extends Slide {
 
     //tweet.display(new PVector(width*2/3-50, height/12-20));    
 
-    image(NewsHeads, 90, 50, 900, 180); //Displays the news logo's
+    image(NewsHeadsPicture, 90, 50, 900, 180); //Displays the news logo's
     fill(255);
     textFont(Oxford);
     textLeading(50);
     textAlign(CENTER);
-    string.NewsQuote();
+    text(Quote, width/10-50, height/4+75, width/2-100, height/2);
     textFont(Papers);
-    string.ScientificQuote();
+    text(Fact, width/2+150, height/2+150, width/4, height);
     textAlign(LEFT);
   }
 }

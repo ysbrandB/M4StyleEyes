@@ -17,7 +17,6 @@ static final int HITS_THRESHOLD = 5;
 int phaseCount;
 float phaseTimer;
 int t1 = 0;
-
 Boolean distanceTrigger;
 
 Boolean hasPlayed;
@@ -37,10 +36,13 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  //fullScreen(2); 
-  size(1920,1080);
+  fullScreen(2); 
+  //size(1920,1080);
   //size(960, 540); //for testing only
   imageMode(CENTER);
+  
+  //Load all JSON data
+  JSONObject textData= loadJSONObject("JsonFiles/Text.JSON"); //Gets the json file
 
   com = new CommunicationHandler(this);
   colorPicker = new ColorPicker();
@@ -49,9 +51,9 @@ void setup() {
   //initialize all phases
   pZero = new PhaseZero(com);
   pOne = new PhaseOne(com);
-  pTwo = new PhaseTwo(colorPicker, typePicker);
-  pThree = new PhaseThree(colorPicker, typePicker);
-  pFour = new PhaseFour();
+  pTwo = new PhaseTwo(colorPicker, typePicker, textData);
+  pThree = new PhaseThree(colorPicker, typePicker, textData);
+  pFour = new PhaseFour(textData);
 
   //initialize the speech synthesizer
   speechSynth = new SpeechSynth(colorPicker, typePicker);
@@ -61,6 +63,7 @@ void setup() {
   phaseTimer = 1;
 
   distanceTrigger = false;
+  
 }
 
 void draw() {
