@@ -17,7 +17,7 @@ class CommunicationHandler {
   int kinectPort = 10000;
 
   //Eye Pos Data
-  PVector lookingPos= new PVector(0, 0, 0);//the vector the eyes have to look at
+  ArrayList <PVector> lookingPositions= new ArrayList <PVector>();
   Client eyePosClient;
   String eyeIp = "127.0.0.1";
   int eyePort = 10001;
@@ -35,6 +35,7 @@ class CommunicationHandler {
 
 
   CommunicationHandler(PApplet parent) {
+    lookingPositions.add(new PVector(width/2, height/2, 200));
     clothingColor = color(0);
     context = parent;
     connectClothes();
@@ -145,14 +146,24 @@ class CommunicationHandler {
   }
 
   void decodeEyes(String ontvangen) {
-    String[] temp=split(ontvangen, ",");
-    //ontvangen= (x, y, z) 
-    //ontvangen=in meters;
-    //to convert to pixels do meters times pixels/meters ratio and add half the screen
-    float x=float(temp[0])*swPixDIVswCM;
-    float y=float(temp[1])*swPixDIVswCM;
-    float z=float(temp[2])*swPixDIVswCM;
-    lookingPos=PVector.add(new PVector(x, y, z), new PVector(width/2, height/2));
+    //add all the lookingvectors for every person in sight
+    //delete the last '\n'
+    if ( ontvangen.charAt( ontvangen.length()-1) == '\n' ) {
+      ontvangen = ontvangen.substring( 0, ontvangen.length()-1 );
+    }
+    lookingPositions= new ArrayList <PVector>();
+    String[] seperateVectors=split(ontvangen, "|");
+    printArray(seperateVectors);
+    for (String vector : seperateVectors) {
+      String[] temp=split(vector, ",");
+      //ontvangen= (x, y, z) 
+      //ontvangen=in meters;
+      //to convert to pixels do meters times pixels/meters ratio and add half the screen
+      float x=float(temp[0])*swPixDIVswCM;
+      float y=float(temp[1])*swPixDIVswCM;
+      float z=float(temp[2])*swPixDIVswCM;
+      lookingPositions.add(PVector.add(new PVector(x, y, z), new PVector(width/2, height/2)));
+    }
   }
 
   boolean isConnected(Client c) {

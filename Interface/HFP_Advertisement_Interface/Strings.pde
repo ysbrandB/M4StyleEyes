@@ -101,7 +101,7 @@ class Strings {
 
   void BeginMessage() {
     textAlign(LEFT);
-    text(Message, width/9, height/5, width/2-100, height);
+    text(Message, width/13, height/4, width/2.3, height);
   }
 
   void NewsQuote() {
@@ -109,7 +109,7 @@ class Strings {
   }
 
   void ScientificQuote() {
-    text(Fact, width/2+150, height/2+150, width/2-200, height);
+    text(Fact, width/2+150, height/2+150, width/4, height);
   }
 
   void Brands() {

@@ -28,8 +28,6 @@ int xPulse;
 int yPulse;
 
 void setup() {
-  pinMode(A0, INPUT);
-  pinMode(A1, INPUT);
   Serial.begin(9600);
 
   for (int i = 0; i < EYEPAIRAMOUNT; i++) {
@@ -37,7 +35,7 @@ void setup() {
   }
 
   for (int i = 0; i < EYEPAIRAMOUNT; i++) {
-    xAngles[i] = 90;
+    xAngles[i] =90;
     yAngles[i] = 90;
     blinkingValues[i] = 0;
   }

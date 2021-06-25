@@ -18,11 +18,13 @@ Server sInterface;
 //sketch in CM, -y is up
 //Ogen bij startup kijken rechtdoor, rotatie is met de x as van de oogassembly door de kinect heen
 
-boolean draw= true;
-boolean debug=true;
+boolean draw=true;
+boolean debug=false;
+boolean screenFollowMultiplePeople=true;
 JSONObject setUpData;
 PVector kinectPos;
 PVector screenPos;
+int physicalScreenWidth;
 PVector crossPos;
 float minimumDistToCross;
 //the eye that is in the place of the middle of the screen to calc that lookingvector
@@ -38,7 +40,8 @@ JSONArray eyePosData;
 ArrayList<Eye> eyes = new ArrayList<Eye>();
 ArrayList<String> oldData= new ArrayList<String>();
 ArrayList<PVector> heads= new ArrayList<PVector>();
-PVector debugNoise= new PVector(-10, -100, 100);
+PVector debugNoise= new PVector(-20, -100, 100);
+PVector debugNoise2= new PVector(20, -100, 100);
 
 void setup() {
   frameRate(30);
@@ -54,7 +57,7 @@ void setup() {
   kinectPos=new PVector(kinectData.getFloat("x"), kinectData.getFloat("y"), kinectData.getFloat("z")); 
   crossPos= new PVector (crossData.getFloat("x"), crossData.getFloat("y"), crossData.getFloat("z")); 
   screenPos=new PVector(screenData.getFloat("x"), screenData.getFloat("y"), screenData.getFloat("z"));
-
+  physicalScreenWidth=screenData.getInt("screenWidth");
   screen=new Eye(screenPos, -1);
   time=0;
 
@@ -116,12 +119,13 @@ void draw() {
     fill(255, 0, 0);
     textSize(10);
     text(frameRate, 50, -50);
+    //draw the line where the screen is
+    draw3DLine(new PVector(screenPos.x+physicalScreenWidth/2, screenPos.y, screenPos.z), new PVector(screenPos.x-physicalScreenWidth/2, screenPos.y, screenPos.z), color(0, 0, 0));
   }
 
 
   // Get the 3D data points from the 3D skeleton (access to Z point)
   ArrayList<KSkeleton> skeleton3DArray =  kinect.getSkeleton3d();
-
   //Empty the arraylist for all the heads tracked this frame
   heads = new ArrayList<PVector>();
 
@@ -150,14 +154,14 @@ void draw() {
       }
     }
   }
-  checkToStartInterface();
+  //checkToStartInterface();
   //als er niemand getrackt word laat alle ogen een arbitrary punt (paars in het overview) volgen
   if (heads.size()<1) {
     displayNoise();
   }
   updatePhysicalEyesArduino();
   updateDigitalEyesTCP();
-  if (!arduinoConnected&&frameCount%120==0) {
+  if (!arduinoConnected&&frameCount%360==0) {
     println("EyeArduino not connected! retrying");
     connectArduino();
   }
@@ -187,6 +191,8 @@ void displayNoise() {
   if (debug) {
     heads.add(debugNoise);
     drawPoint(debugNoise, color(255, 255, 255));
+    heads.add(debugNoise2);
+    drawPoint(debugNoise2, color(100, 100, 255));
   } else {
     PVector noise=new PVector(map(noise(time/2), 0, 1, -50, 50), map(noise(time), 0, 1, -200, 0), map(noise(time*2), 0, 1, 0, 200));
     heads.add(noise);
@@ -220,15 +226,31 @@ void checkToStartInterface() {
   }
 }
 void updateDigitalEyesTCP() {
-  //Adjust the lookingPos for the screen by the difference between kinect and screenmid
-  //update the lookingvector of the screen
-  screen.update();
-  //send the lookingvector over TCP to the eyeSketch
-  PVector adjustedLookingPos=PVector.sub(screen.closestHead, screen.pos);
-  String TCPpayload=""+adjustedLookingPos.x+","+adjustedLookingPos.y+","+adjustedLookingPos.z+"\n";
-  //(x,y,z,'\n')
-  //write the coords to the drawing sketch
-  s.write(TCPpayload);
+  // update the lookingvector of the screen
+    screen.update();
+  if (screenFollowMultiplePeople) {
+    //send all the heads to interface
+    String TCPPayload="";
+    for (PVector head : heads) {
+      PVector adjustedLookingPos=PVector.sub(head, screen.pos);
+      TCPPayload+=""+adjustedLookingPos.x+","+adjustedLookingPos.y+","+adjustedLookingPos.z+"|";
+    }
+    //delete the last |
+    if ( TCPPayload.charAt( TCPPayload.length()-1) == '|' ) {
+      TCPPayload = TCPPayload.substring( 0, TCPPayload.length()-1 );
+    }
+    TCPPayload+='\n';
+    s.write(TCPPayload);
+  } else {
+    //send just the closest head to interface
+    //Adjust the lookingPos for the screen by the difference between kinect and screenmid
+    //send the lookingvector over TCP to the eyeSketch
+    PVector adjustedLookingPos=PVector.sub(screen.closestHead, screen.pos);
+    String TCPpayload=""+adjustedLookingPos.x+","+adjustedLookingPos.y+","+adjustedLookingPos.z+"\n";
+    //(x,y,z,'\n')
+    //write the coords to the drawing sketch
+    s.write(TCPpayload);
+  }
 }
 
 void updatePhysicalEyesArduino() {
@@ -246,11 +268,12 @@ void updatePhysicalEyesArduino() {
   }
   if (arduinoPayload.length()>=1) {
     //dont update 60 frames per second!
-    if (frameCount%1==0&&arduinoConnected) {
+    if (arduinoConnected) {
       try {
         port.write(arduinoPayload);
       }
       catch(Exception e) {
+        println("Arduino broke!");
         arduinoConnected=false;
       }
     }
@@ -259,7 +282,7 @@ void updatePhysicalEyesArduino() {
 
 void connectArduino() {
   try {
-    port = new Serial(this, Serial.list()[0], 9600);
+    port = new Serial(this, Serial.list()[1], 9600);
     port.bufferUntil('\n');
     arduinoConnected=true;
     println("EyeArduino Connected!");
@@ -279,47 +302,47 @@ void keyPressed() {
 
 //draw all the bones between the joints
 void drawBody(PVector[] myJoints) {
-  color blue;
+  color someColor;
   if (!triggeredInterface) {
-    blue=color(0, 0, 255);
+    someColor=color(0, 0, 255);
   } else {
-    blue=color(255, 0, 255);
+    someColor=color(255, 0, 255);
   }
   //leftLeg
-  draw3DLine(myJoints[15], myJoints[14], blue);
-  draw3DLine(myJoints[14], myJoints[13], blue);
-  draw3DLine(myJoints[13], myJoints[12], blue);
-  draw3DLine(myJoints[12], myJoints[0], blue);
+  draw3DLine(myJoints[15], myJoints[14], someColor);
+  draw3DLine(myJoints[14], myJoints[13], someColor);
+  draw3DLine(myJoints[13], myJoints[12], someColor);
+  draw3DLine(myJoints[12], myJoints[0], someColor);
 
   //rightLeg
-  draw3DLine(myJoints[19], myJoints[18], blue);
-  draw3DLine(myJoints[18], myJoints[17], blue);
-  draw3DLine(myJoints[17], myJoints[16], blue);
-  draw3DLine(myJoints[16], myJoints[0], blue);
+  draw3DLine(myJoints[19], myJoints[18], someColor);
+  draw3DLine(myJoints[18], myJoints[17], someColor);
+  draw3DLine(myJoints[17], myJoints[16], someColor);
+  draw3DLine(myJoints[16], myJoints[0], someColor);
 
   //leftArm
-  draw3DLine(myJoints[21], myJoints[7], blue);
-  draw3DLine(myJoints[7], myJoints[6], blue);
-  draw3DLine(myJoints[6], myJoints[5], blue);
-  draw3DLine(myJoints[5], myJoints[4], blue);
-  draw3DLine(myJoints[4], myJoints[20], blue);
+  draw3DLine(myJoints[21], myJoints[7], someColor);
+  draw3DLine(myJoints[7], myJoints[6], someColor);
+  draw3DLine(myJoints[6], myJoints[5], someColor);
+  draw3DLine(myJoints[5], myJoints[4], someColor);
+  draw3DLine(myJoints[4], myJoints[20], someColor);
   //leftThumb
-  draw3DLine(myJoints[22], myJoints[6], blue);
+  draw3DLine(myJoints[22], myJoints[6], someColor);
 
   //rightArm
-  draw3DLine(myJoints[23], myJoints[11], blue);
-  draw3DLine(myJoints[11], myJoints[10], blue);
-  draw3DLine(myJoints[10], myJoints[9], blue);
-  draw3DLine(myJoints[9], myJoints[8], blue);
-  draw3DLine(myJoints[8], myJoints[20], blue);
+  draw3DLine(myJoints[23], myJoints[11], someColor);
+  draw3DLine(myJoints[11], myJoints[10], someColor);
+  draw3DLine(myJoints[10], myJoints[9], someColor);
+  draw3DLine(myJoints[9], myJoints[8], someColor);
+  draw3DLine(myJoints[8], myJoints[20], someColor);
   //rightThumb
-  draw3DLine(myJoints[24], myJoints[10], blue);
+  draw3DLine(myJoints[24], myJoints[10], someColor);
 
   //spine
-  draw3DLine(myJoints[0], myJoints[1], blue);
-  draw3DLine(myJoints[1], myJoints[20], blue);
-  draw3DLine(myJoints[20], myJoints[2], blue);
-  draw3DLine(myJoints[2], myJoints[3], blue);
+  draw3DLine(myJoints[0], myJoints[1], someColor);
+  draw3DLine(myJoints[1], myJoints[20], someColor);
+  draw3DLine(myJoints[20], myJoints[2], someColor);
+  draw3DLine(myJoints[2], myJoints[3], someColor);
 }
 
 //draw a point with on position pos
@@ -342,20 +365,31 @@ void draw3DLine(PVector pos1, PVector pos2, color c) {
 
 void checkInput() {
   if (keyPressed) {
-    if (keyCode==UP) {
+    if (key=='w') {
       debugNoise.y-=1;
-    } else if (keyCode==DOWN) {
+    } else if (key=='s') {
       debugNoise.y+=1;
     }
-    if (key=='w') {
+    if (keyCode==SHIFT) {
       debugNoise.z-=1;
-    } else if (key=='s') {
+    } else if (key==' ') {
       debugNoise.z+=1;
     }
     if (key=='a') {
       debugNoise.x-=1;
     } else if (key=='d') {
       debugNoise.x+=1;
+    }
+
+    if (keyCode==UP) {
+      debugNoise2.y-=1;
+    } else if (keyCode==DOWN) {
+      debugNoise2.y+=1;
+    }
+    if (keyCode==LEFT) {
+      debugNoise2.x-=1;
+    } else if (keyCode==RIGHT) {
+      debugNoise2.x+=1;
     }
   }
 }
