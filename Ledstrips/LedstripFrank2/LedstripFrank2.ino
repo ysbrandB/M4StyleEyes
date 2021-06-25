@@ -1,6 +1,6 @@
 #include <FastLED.h>
 
-#define LED_PIN     5
+#define LED_PIN     5  
 #define NUM_LEDS    100 //300
 #define BRIGHTNESS  255 //255 is max
 #define LED_TYPE    WS2811
@@ -61,9 +61,12 @@ void loop() {
       }
 
       currentColor++;
-      if (currentColor > 2) {
+      if (currentColor > 2 || valueStr.substring(0) == '\n') {
         currentColor = 0;
         shouldUpdate = true;
+
+        if(red == 0 && green == 0 && blue == 0) scanning = true;
+        else scanning = false;
       }
     } else {
       currentColor = 0;
