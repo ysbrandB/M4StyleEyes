@@ -13,7 +13,7 @@ clothing_types = ['short_sleeve_top', 'long_sleeve_top', 'short_sleeve_outwear',
                   'vest', 'sling', 'shorts', 'trousers', 'skirt', 'short_sleeve_dress',
                   'long_sleeve_dress', 'vest_dress', 'sling_dress']
 
-capture = cv2.VideoCapture(1)
+capture = cv2.VideoCapture(2)
 readCorrectly, frame = capture.read()
 cv2.imshow('preview', frame)
 
@@ -73,10 +73,10 @@ def detect(image):
         type = detected_objects[0]['label']
         if not type == detected_type:
             hits = 0
-            detected_color = color
             detected_type = type
         else:
             hits += 1
+        detected_color = color
         image_bounding_box = draw_bounding_box(crop_img, detected_objects[0], color)
         cv2.imshow('clothes', image_bounding_box)
     else:

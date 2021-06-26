@@ -7,7 +7,7 @@ class ColorPicker {
   JSONObject colorData;
   JSONArray colors;
   
-  int maxGreyscaleDifference = 20;
+  int maxGreyscaleDifference = 60;
   int maxHueDifference = 10;
   int maxSaturationDifference = 10;
   int maxBrightnessDifference = 10;

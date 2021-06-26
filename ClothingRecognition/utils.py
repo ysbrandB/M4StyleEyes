@@ -60,7 +60,7 @@ def get_clothing_cropped(image, cloth):
     width = image.shape[1]
     height = image.shape[0]
     margin = 40
-    max_width = 200
+    max_width = 250
 
     # crop out one cloth
     x1 = margin + int(cloth['x1'] * width)
