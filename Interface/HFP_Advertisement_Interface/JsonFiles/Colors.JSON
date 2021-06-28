@@ -5,79 +5,456 @@
             "name": "Black",
             "rgb": [0,0,0],
             "opposite": "White",
-            "grayscale": "true"
+            "grayscale": "true",
+            "display": [0,0,0]
+        },
+        {
+            "name": "Black",
+            "rgb": [40,40,40],
+            "opposite": "White",
+            "grayscale": "true",
+            "display": [0,0,0]
         },
         {
             "name": "White",
             "rgb": [255,255,255],
             "opposite": "Black",
-            "grayscale": "true"
+            "grayscale": "true",
+            "display": [255, 255, 255]
+        },
+        {
+            "name": "White",
+            "rgb": [220,220,220],
+            "opposite": "Black",
+            "grayscale": "true",
+            "display": [255, 255, 255]
         },
         {
             "name": "Light Gray",
             "rgb": [190,190,190],
             "opposite": "Pink",
-            "grayscale": "true"
+            "grayscale": "true",
+            "display": [190, 190, 190]
+        },
+        {
+            "name": "Light Gray",
+            "rgb": [170,170,170],
+            "opposite": "Pink",
+            "grayscale": "true",
+            "display": [190, 190, 190]
+        },
+        {
+            "name": "Dark Gray",
+            "rgb": [140,140,140],
+            "opposite": "Green",
+            "grayscale": "true",
+            "display": [110, 110, 110]
         },
         {
             "name": "Dark Gray",
             "rgb": [110,110,110],
             "opposite": "Green",
-            "grayscale": "true"
+            "grayscale": "true",
+            "display": [110, 110, 110]
         },
         {
             "name": "Red",
             "rgb": [255,0,0],
             "opposite": "Green",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [166, 66, 46],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [171, 101, 87],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [103,34,37],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [186, 20, 81],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [140, 6, 48],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [166, 28, 56],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [122, 5, 21],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [156, 34, 40],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
+        },
+        {
+            "name": "Red",
+            "rgb": [148, 18, 18],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display": [255, 0, 0]
         },
         {
             "name": "Orange",
             "rgb": [255,135,10],
             "opposite": "Blue",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display": [255,135,10]
+        },
+        {
+            "name": "Orange",
+            "rgb": [150, 37, 0],
+            "opposite": "Blue",
+            "grayscale": "false",
+            "display": [255,135,10]
+        },
+        {
+            "name": "Orange",
+            "rgb": [186, 46, 0],
+            "opposite": "Blue",
+            "grayscale": "false",
+            "display": [255,135,10]
+        },
+        {
+            "name": "Orange",
+            "rgb": [207, 83, 0],
+            "opposite": "Blue",
+            "grayscale": "false",
+            "display": [255,135,10]
+        },
+        {
+            "name": "Orange",
+            "rgb": [196, 95, 0],
+            "opposite": "Blue",
+            "grayscale": "false",
+            "display": [255,135,10]
         },
         {
             "name": "Brown",
             "rgb": [145,75,5],
             "opposite": "Green",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display" : [145,75,5]
+        },
+        {
+            "name": "Brown",
+            "rgb": [97, 36, 16],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display" : [145,75,5]
+        },
+        {
+            "name": "Brown",
+            "rgb": [128, 41, 13],
+            "opposite": "Green",
+            "grayscale": "false",
+            "display" : [145,75,5]
         },
         {
             "name": "Yellow",
             "rgb": [255,220,0],
             "opposite": "Purple",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display" : [255,220,0]
+        },
+        {
+            "name": "Yellow",
+            "rgb": [171, 153, 38],
+            "opposite": "Purple",
+            "grayscale": "false",
+            "display" : [255,220,0]
+        },
+        {
+            "name": "Yellow",
+            "rgb": [112, 103, 42],
+            "opposite": "Purple",
+            "grayscale": "false",
+            "display" : [255,220,0]
+        },
+        {
+            "name": "Yellow",
+            "rgb": [161, 155, 0],
+            "opposite": "Purple",
+            "grayscale": "false",
+            "display" : [255,220,0]
+        },
+        {
+            "name": "Yellow",
+            "rgb": [194, 161, 43],
+            "opposite": "Purple",
+            "grayscale": "false",
+            "display" : [255,220,0]
         },
         {
             "name": "Green",
             "rgb": [20,220,20],
             "opposite": "Red",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display" : [20,220,20]
+        },
+        {
+            "name": "Green",
+            "rgb": [164, 181, 33],
+            "opposite": "Red",
+            "grayscale": "false",
+            "display" : [20,220,20]
+        },
+        {
+            "name": "Green",
+            "rgb": [127, 143, 3],
+            "opposite": "Red",
+            "grayscale": "false",
+            "display" : [20,220,20]
+        },
+        {
+            "name": "Green",
+            "rgb": [118, 163, 3],
+            "opposite": "Red",
+            "grayscale": "false",
+            "display" : [20,220,20]
+        },
+        {
+            "name": "Green",
+            "rgb": [63, 105, 0],
+            "opposite": "Red",
+            "grayscale": "false",
+            "display" : [20,220,20]
+        },
+        {
+            "name": "Green",
+            "rgb": [64, 130, 26],
+            "opposite": "Red",
+            "grayscale": "false",
+            "display" : [20,220,20]
+        },
+        {
+            "name": "Green",
+            "rgb": [9, 117, 56],
+            "opposite": "Red",
+            "grayscale": "false",
+            "display" : [20,220,20]
         },
         {
             "name": "Turquoise",
             "rgb": [0,255,210],
             "opposite": "Brown",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display" : [0,255,210]
+        },
+        {
+            "name": "Turquoise",
+            "rgb": [9, 117, 81],
+            "opposite": "Brown",
+            "grayscale": "false",
+            "display" : [0,255,210]
+        },
+        {
+            "name": "Turquoise",
+            "rgb": [31, 153, 129],
+            "opposite": "Brown",
+            "grayscale": "false",
+            "display" : [0,255,210]
+        },
+        {
+            "name": "Turquoise",
+            "rgb": [5, 102, 83],
+            "opposite": "Brown",
+            "grayscale": "false",
+            "display" : [0,255,210]
+        },
+        {
+            "name": "Turquoise",
+            "rgb": [35, 173, 171],
+            "opposite": "Brown",
+            "grayscale": "false",
+            "display" : [0,255,210]
+        },
+        {
+            "name": "Turquoise",
+            "rgb": [11, 122, 121],
+            "opposite": "Brown",
+            "grayscale": "false",
+            "display" : [0,255,210]
         },
         {
             "name": "Blue",
             "rgb": [5,110,255],
             "opposite": "Orange",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display" : [5,110,255]
+        },
+        {
+            "name": "Blue",
+            "rgb": [20, 94, 112],
+            "opposite": "Orange",
+            "grayscale": "false",
+            "display" : [5,110,255]
+        },
+        {
+            "name": "Blue",
+            "rgb": [0, 123, 153],
+            "opposite": "Orange",
+            "grayscale": "false",
+            "display" : [5,110,255]
+        },
+        {
+            "name": "Blue",
+            "rgb": [32, 88, 128],
+            "opposite": "Orange",
+            "grayscale": "false",
+            "display" : [5,110,255]
+        },
+        {
+            "name": "Blue",
+            "rgb": [2, 71, 120],
+            "opposite": "Orange",
+            "grayscale": "false",
+            "display" : [5,110,255]
+        },
+        {
+            "name": "Blue",
+            "rgb": [40, 86, 184],
+            "opposite": "Orange",
+            "grayscale": "false",
+            "display" : [5,110,255]
+        },
+        {
+            "name": "Blue",
+            "rgb": [33, 37, 163],
+            "opposite": "Orange",
+            "grayscale": "false",
+            "display" : [5,110,255]
         },
         {
             "name": "Purple",
             "rgb": [160,0,255],
             "opposite": "Yellow",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display" : [160,0,255]
+        },
+        {
+            "name": "Purple",
+            "rgb": [50, 30, 130],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [160,0,255]
+        },
+        {
+            "name": "Purple",
+            "rgb": [32, 8, 92],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [160,0,255]
+        },
+        {
+            "name": "Purple",
+            "rgb": [81, 29, 140],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [160,0,255]
+        },
+        {
+            "name": "Purple",
+            "rgb": [95, 15, 186],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [160,0,255]
+        },
+        {
+            "name": "Purple",
+            "rgb": [82, 13, 120],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [160,0,255]
+        },
+        {
+            "name": "Purple",
+            "rgb": [158, 31, 204],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [160,0,255]
         },
         {
             "name": "Pink",
             "rgb": [255,0,210],
             "opposite": "Yellow",
-            "grayscale": "false"
+            "grayscale": "false",
+            "display" : [255,0,210]
+        },
+        {
+            "name": "Pink",
+            "rgb": [191, 49, 204],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [255,0,210]
+        },
+        {
+            "name": "Pink",
+            "rgb": [148, 10, 143],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [255,0,210]
+        },
+        {
+            "name": "Pink",
+            "rgb": [179, 48, 174],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [255,0,210]
+        },
+        {
+            "name": "Pink",
+            "rgb": [128, 18, 104],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [255,0,210]
+        },
+        {
+            "name": "Pink",
+            "rgb": [212, 51, 177],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [255,0,210]
+        },
+        {
+            "name": "Pink",
+            "rgb": [163, 21, 106],
+            "opposite": "Yellow",
+            "grayscale": "false",
+            "display" : [255,0,210]
         }
     ]
 }
