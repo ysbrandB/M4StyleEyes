@@ -6,13 +6,11 @@ class PhaseTwo extends Slide {
   PImage recomClothing;
   PImage bigEyeSlides;
   JSONObject startMsg;
-  PFont MainText; //Font for the main text
   ColorPicker colorPicker;
   TypePicker typePicker;
    String[] text;
   PhaseTwo(ColorPicker colorPicker, TypePicker typePicker, JSONObject data) {
     eye= new Eye(width/4, height/4, 30);
-    MainText = createFont("Font/Typewriter.otf", height/25); //lettertype Arial rounded MT Bold
     this.colorPicker = colorPicker;
     this.typePicker= typePicker;
     bigEyeSlides = loadImage("image/bigEyeSlides.png");

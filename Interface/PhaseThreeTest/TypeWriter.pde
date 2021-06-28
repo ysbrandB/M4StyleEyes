@@ -17,7 +17,6 @@ class Typewriter{
     float boxWidth;
     int txtSize;
     color txtColor;
-    PFont font;
 
     //animation
     float animationTime;    
@@ -35,33 +34,30 @@ class Typewriter{
     color oppositeColor;
     String[] formatedStr;
     
-    //een tyfus bende aan constructors ;) oké ben er nu ook mentaal klaar mee. ik fix het straks wel, ooit.
-    // Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
-    //     constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, mainColorName, mainColor, oppositeColorName, oppositeColor);
-    // }
-     Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor, PFont font){
-        constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, mainColorName, mainColor, oppositeColorName, oppositeColor, font);
+    //een tyfus bende aan constructors ;) 
+     Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
+        constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, mainColorName, mainColor, oppositeColorName, oppositeColor);
     }
-    // Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
-    //     constructor(txt, pos, boxWidth, txtSize, txtColor, animationTime, type, mainColorName, mainColor, oppositeColorName, oppositeColor);
-    // }
-    // Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime, String type, String mainColorName, color mainColor){
-    //     constructor(txt, pos, boxWidth, txtSize, txtColor, animationTime, type, mainColorName, mainColor, "", color(0));
-    // }
-    // Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime){
-    //     constructor(txt, pos, boxWidth, txtSize, txtColor, animationTime, type, "", color(0), "", color(0));
-    // }
-    // Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor){
-    //     constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, "", color(0), "", color(0));
-    // }
-    // Typewriter(String txt, PVector pos, float boxWidth){
-    //     constructor(txt, pos, boxWidth, 10, color(0), DEFAULT_ANIMATION_TIME, type, "", color(0), "", color(0));
-    // }
-    // Typewriter(String txt, PVector pos){
-    //     constructor(txt, pos, width - pos.x, 10, color(0), DEFAULT_ANIMATION_TIME, type, "", color(0), "", color(0));
-    // }
+    Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
+        constructor(txt, pos, boxWidth, txtSize, txtColor, animationTime, type, mainColorName, mainColor, oppositeColorName, oppositeColor);
+    }
+    Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime, String type, String mainColorName, color mainColor){
+        constructor(txt, pos, boxWidth, txtSize, txtColor, animationTime, type, mainColorName, mainColor, "", color(0));
+    }
+    Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime){
+        constructor(txt, pos, boxWidth, txtSize, txtColor, animationTime, type, "", color(0), "", color(0));
+    }
+    Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor){
+        constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, "", color(0), "", color(0));
+    }
+    Typewriter(String txt, PVector pos, float boxWidth){
+        constructor(txt, pos, boxWidth, 10, color(0), DEFAULT_ANIMATION_TIME, type, "", color(0), "", color(0));
+    }
+    Typewriter(String txt, PVector pos){
+        constructor(txt, pos, width - pos.x, 10, color(0), DEFAULT_ANIMATION_TIME, type, "", color(0), "", color(0));
+    }
 
-    void constructor(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor, PFont font){
+    void constructor(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
         this.txt = txt;
         this.pos = pos;
         this.boxWidth = boxWidth;
@@ -77,8 +73,6 @@ class Typewriter{
         this.oppositeColorName = oppositeColorName;
         this.oppositeColor = oppositeColor;
 
-        this.font = font;
-
         currentLetter = 0;
         blinkingTimer = 0;
 
@@ -87,8 +81,7 @@ class Typewriter{
         txt = txt.replaceAll(REPLACE_TYPE.toLowerCase(), type.toLowerCase());
 
         //formates the string to fit in the boxwidth
-        textFont(font, txtSize);
-        // textSize(txtSize);
+        textSize(txtSize);
         String[] words = split(txt, ' ');
         int line = 0;
         StringList tempFormatedStr = new StringList();
@@ -105,9 +98,8 @@ class Typewriter{
     }
 
     void display(){
-        textFont(font, txtSize);
         textAlign(LEFT);
-        // textSize(txtSize);
+        textSize(txtSize);
 
         if(!isAnimating){ //if the txt isn't animating || for optimization.
             for(int line = 0; line < formatedStr.length; line++){
