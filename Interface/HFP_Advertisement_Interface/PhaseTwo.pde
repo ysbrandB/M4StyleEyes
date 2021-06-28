@@ -2,10 +2,12 @@ class PhaseTwo extends Slide {
   String Message;
   Eye eye;
   int xTime=0;
-
+  Typewriter typeWriter;
+  color clothingColor;
   PImage recomClothing;
   PImage bigEyeSlides;
   JSONObject startMsg;
+  String loadImage;
   ColorPicker colorPicker;
   TypePicker typePicker;
    String[] text;
@@ -13,8 +15,10 @@ class PhaseTwo extends Slide {
     eye= new Eye(width/4, height/4, 30);
     this.colorPicker = colorPicker;
     this.typePicker= typePicker;
+    loadImage = "image/Clothing/ColorQ_.Type_.png";
+     //Replaces the word 'Type' by the text at beginType
     bigEyeSlides = loadImage("image/bigEyeSlides.png");
-    recomClothing = loadImage("image/Clothing/White.T-Shirt.png");
+    
     
     JSONArray startMsg = data.getJSONArray("startMsg"); //Gets the text for the begin message
     text = startMsg.getStringArray(); //Splits the messages
@@ -22,10 +26,14 @@ class PhaseTwo extends Slide {
 
   void init(CommunicationHandler com) {
     com.sendColor(colorPicker.getLastColor());
-    
-    Message = text[int(random(0,text.length))]; //Sets 'Message' to one of the stings with the number from s
+    clothingColor= colorPicker.getLastColor();
+    Message = text[int(random(0,text.length))]; //Sets 'Message' to one of the strings with the number from s
     Message = Message.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
     Message = Message.replace("Type_", typePicker.getLastTypeName()); //Replaces the word 'Type' by the text at beginType
+    loadImage = loadImage.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
+    loadImage = loadImage.replace("Type_", typePicker.getLastTypeName());
+    recomClothing = loadImage(loadImage);
+    typeWriter=new Typewriter(Message, new PVector(width/16,width/8), width/2-width/8, 40, color(255), "DIT MAAKT NIET UIT", "DIT MAAKT OOK NIET UIT", clothingColor, colorPicker.getLastColorName(), clothingColor, fontSub);
   }
 
   void display() {    
@@ -39,7 +47,9 @@ class PhaseTwo extends Slide {
     rectMode(BASELINE);
     textAlign(CENTER, CENTER);
     textAlign(LEFT);
-    text(Message, width/13, height/4, width/2.3, height);
+    typeWriter.update();
+    typeWriter.display();
+    //text(Message, width/13, height/4, width/2.3, height);
     image(recomClothing, width/4*3, height/2, width/3, height/1.5);
   }
 }
