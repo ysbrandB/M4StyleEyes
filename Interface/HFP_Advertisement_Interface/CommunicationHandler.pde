@@ -33,7 +33,6 @@ class CommunicationHandler {
   //Arduino serial com
   Serial port;
 
-
   CommunicationHandler(PApplet parent) {
     lookingPositions.add(new PVector(width/2, height/2, 200));
     clothingColor = color(0);
@@ -178,7 +177,7 @@ class CommunicationHandler {
 
     String data = redValue + "," + greenValue + "," + blueValue + ",";
     String payload = "Color";
-    for(int i = 1; i<5; i++){
+    for (int i = 1; i<5; i++) {
       payload += "|" + data;
     }
     try {
@@ -189,10 +188,10 @@ class CommunicationHandler {
     }
   }
 
-  void ledstripScan(){
+  void ledstripScan() {
     String payload = "Scan";
     // for(int i = 1; i<5; i++){ //old shit
-      // payload;
+    // payload;
     // }
     try {
       port.write(payload + '\n');

@@ -36,25 +36,25 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  //fullScreen(2); 
-  size(1920,1080);
+  fullScreen(2); 
+  //size(1920, 1080);
   imageMode(CENTER);
 
   //initialize all clothingPictures and load them into the hasmap
   HashMap<String, PImage> clothingLookup = new HashMap<String, PImage>();
 
-    String path=sketchPath()+"\\Image\\Clothing";
-    java.io.File folder = new java.io.File(path);
-    String [] fileNames=folder.list();
-    for (String fileName : fileNames) {
-      if (fileName.contains(".png")) {
-        String name=fileName.substring(0, fileName.lastIndexOf('.'));
-        String myPath=path+'\\'+fileName;
-        PImage thisImageFile= loadImage(myPath);
-        clothingLookup.put(name, thisImageFile);
-      }
+  String path=sketchPath()+"\\Image\\Clothing";
+  java.io.File folder = new java.io.File(path);
+  String [] fileNames=folder.list();
+  for (String fileName : fileNames) {
+    if (fileName.contains(".png")) {
+      String name=fileName.substring(0, fileName.lastIndexOf('.'));
+      String myPath=path+'\\'+fileName;
+      PImage thisImageFile= loadImage(myPath);
+      clothingLookup.put(name, thisImageFile);
     }
-  
+  }
+
   //Load all JSON data
   JSONObject textData= loadJSONObject("JsonFiles/Text.JSON"); //Gets the json file
 
@@ -77,7 +77,6 @@ void setup() {
   phaseTimer = 1;
 
   distanceTrigger = false;
-  
 }
 
 void draw() {
@@ -141,6 +140,7 @@ void draw() {
 void keyPressed() {
   if (key == 'r' || key == 'R') {
     com.hits = 5;
+    com.clothingColor=color(200,200,30);
     colorPicker.colorDetermination(com.clothingColor);
   }
 

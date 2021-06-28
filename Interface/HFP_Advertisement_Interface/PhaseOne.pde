@@ -20,11 +20,11 @@ class PhaseOne extends Slide {
     timer = timePerStep;
   }
 
-  void init(){
+  void init() {
     com.ledstripScan();
   }
 
-    void display() {
+  void display() {
     background(bgColor);
     textSize(45);
     textAlign(CENTER, CENTER);

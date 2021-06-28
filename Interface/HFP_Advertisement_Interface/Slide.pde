@@ -20,7 +20,6 @@ class Slide {
     Segoe31 = createFont("Segoe UI", 31); //for tweet
     SegoeSemiBold19 = createFont("Segoe UI Semibold", 19); //for tweet
     MainText = createFont("Font/Typewriter.otf", height/25); //lettertype Arial rounded MT Bold
-
   }
 
   void display() {
