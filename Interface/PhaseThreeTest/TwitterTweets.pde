@@ -28,7 +28,7 @@ class Tweet {
     setLikes();
     setTextTweet();
 
-    imagePath = "Image/twitterAcounts/volkswagen.png";
+    imagePath = "../HFP_Advertisement_Interface/Image/twitterAcounts/volkswagen.png";
     account = loadImage(imagePath);
 
     this.SegoeBold21 = SegoeBold21;

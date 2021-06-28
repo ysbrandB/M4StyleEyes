@@ -38,7 +38,6 @@ void setup() {
 
   //fullScreen(2); 
   size(1920,1080);
-  //size(960, 540); //for testing only
   imageMode(CENTER);
   
   //Load all JSON data
@@ -109,7 +108,7 @@ void draw() {
       speechSynth.init(); 
       break;
     case 3: 
-      phaseTimer = 2; //16
+      phaseTimer = 20; //16
       pThree.init(com);
       break;
     case 4:
