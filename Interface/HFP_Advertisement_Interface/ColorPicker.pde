@@ -7,11 +7,7 @@ class ColorPicker {
   JSONObject colorData;
   JSONArray colors;
   
-  int maxGreyscaleDifference = 60;
-  int maxHueDifference = 10;
-  int maxSaturationDifference = 10;
-  int maxBrightnessDifference = 10;
-  
+  int maxGreyscaleDifference = 40;  
 
   ColorPicker() {
     colorData = loadJSONObject("./JsonFiles/Colors.JSON");
@@ -43,15 +39,9 @@ class ColorPicker {
 
     //filter through all the colors and find the best match
     JSONObject closestColor = null;
-    int adjHueDifference = maxHueDifference;
-    int adjSaturationDifference = maxSaturationDifference;
-    int adjBrightnessDifference = maxBrightnessDifference;
     while(closestColor == null) {
         int closestBrightness = 1000;
-        boolean foundHue = false;
-        boolean foundSaturation = false;
-        boolean foundBrightness = false;
-        
+        int lowerTotalDistance = 255 * 3;
         for(int i = 0; i < colors.size(); i++) {
           //read the rgb color from the JSON database
           JSONObject colorObject = colors.getJSONObject(i);
@@ -62,16 +52,10 @@ class ColorPicker {
             int dbHue = (int)hue(dbColor);
             int dbSaturation = (int)saturation(dbColor);
             int dbBrightness = (int)brightness(dbColor);
-            if(abs(hue - dbHue) <= adjHueDifference) {
-              foundHue = true;
-              if(abs(saturation - dbSaturation) <= adjSaturationDifference) {
-                foundSaturation = true;
-                if(abs(brightness - dbBrightness) <= adjBrightnessDifference) {
-                  foundBrightness = true;
-                  //this color is a definite better choice, so make it the new best match
-                  closestColor = colorObject;
-                }
-              }
+            int totalDistance = abs(hue - dbHue) + abs(saturation - dbSaturation) + abs(brightness - dbBrightness);
+            if(totalDistance < lowerTotalDistance) {
+              closestColor = colorObject;
+              lowerTotalDistance = totalDistance;
             }
           }else if(colorObject.getBoolean("grayscale")){
             int dbBrightness = (int)brightness(dbColor);
@@ -82,14 +66,11 @@ class ColorPicker {
             }
           }
         }
-        if(!foundHue) adjHueDifference += 10;
-        else if(!foundSaturation) adjSaturationDifference += 10;
-        else if(!foundBrightness) adjBrightnessDifference += 10;
     }
     
     //update the detected color and opposite color
     detectedColorName = closestColor.getString("name");
-    detectedColor = intArrayToColor(closestColor.getJSONArray("rgb").getIntArray());
+    detectedColor = intArrayToColor(closestColor.getJSONArray("display").getIntArray());
     oppositeColorName = closestColor.getString("opposite");
     for(int i = 0; i < colors.size(); i++) {
       JSONObject obj = colors.getJSONObject(i);
