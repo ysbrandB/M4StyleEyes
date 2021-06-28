@@ -12,7 +12,7 @@ class SpeechSynth {
   HashMap<String, SoundFile> soundLookUp = new HashMap<String, SoundFile>();
   ArrayList<SoundFile> sounds = new ArrayList<SoundFile>();
 
-  // [] speakPause =  {0.1, 0.1, 0.1, 0.1, 0.1, 0.1}; //speakpause array that gives the pause time in seconds
+   float[] speakPause =  {0.1, 0.1, 0.1, 0.1, 0.1, 0.1}; //speakpause array that gives the pause time in seconds
 
   SoundFile youRWearingA;
   SoundFile a;
@@ -50,9 +50,7 @@ class SpeechSynth {
     String path=sketchPath()+"\\wav";
     java.io.File folder = new java.io.File(path);
     String [] fileNames=folder.list();
-    printArray(fileNames);
     for (String fileName : fileNames) {
-      println(fileName);
       if (fileName.contains(".wav")) {
         String name=fileName.substring(0, fileName.lastIndexOf('.'));
         String myPath=path+'\\'+fileName;
@@ -116,7 +114,6 @@ class SpeechSynth {
 
   //plays all samples in the correct order from the soundsToPlay arrayList
   void speak() {
-    println(frameRate);
     //Checkt elke keer of de huidige soundfile afgelopen is en de timer ook en speelt dan de track af
     if (currentIndex<soundsToPlay.size()) {
       try {

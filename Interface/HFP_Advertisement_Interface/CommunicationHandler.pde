@@ -4,7 +4,7 @@ class CommunicationHandler {
 
   //AI clothing recognition.
   color clothingColor;
-  String clothingType = "";
+  String clothingType = "short_sleeve_top";
   int hits = 0; //the amount of times this type of clothing has been recognised.
   Client clothesClient;
   String clothesIp = "127.0.0.1";
@@ -153,7 +153,6 @@ class CommunicationHandler {
     }
     lookingPositions= new ArrayList <PVector>();
     String[] seperateVectors=split(ontvangen, "|");
-    printArray(seperateVectors);
     for (String vector : seperateVectors) {
       String[] temp=split(vector, ",");
       //ontvangen= (x, y, z) 

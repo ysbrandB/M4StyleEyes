@@ -121,11 +121,9 @@ class Eye {
         EyeToPerson = PVector.sub(vector, posEye);
         EyeToPerson.setMag(radius*0.8);
         posPupil = new PVector(EyeToPerson.x, EyeToPerson.y).add(posEye);
-        println("Vector is closer"+ vector.x+"");
         closestDist=PVector.dist(posEye, vector);
       }
     }
-
     if (lookingPositions.get(0).z == 0) posPupil = PVector.add(posEye, PVector.sub(new PVector(lookingPositions.get(0).x, lookingPositions.get(0).y), posEye).limit(radius*0.8));
   }
 }

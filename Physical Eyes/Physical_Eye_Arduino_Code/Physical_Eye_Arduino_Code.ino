@@ -38,7 +38,7 @@ void setup() {
     xAngles[i] =90;
     yAngles[i] = 90;
     blinkingValues[i] = 0;
-  }
+  } 
   pwmLeft.begin();
   pwmLeft.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
 

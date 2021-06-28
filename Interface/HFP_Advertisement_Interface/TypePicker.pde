@@ -1,27 +1,19 @@
-import java.util.Map;
-import java.util.HashMap;
-
 class TypePicker {
-    Map<String, String> typeDictionary;
-    String lastType = "Tuinbroek";
-    String lastOppositeType = "Zwembroek";
-    
+    String lastType = "T-Shirt";
+    String lastOppositeType = "Long Shirt";
+
+    JSONObject conversions;
+    JSONObject opposites;
+
     TypePicker() {
-        //THIS IS A TEMPORARY SOLUTION AND SHOULD BE REPLACED BY THE VALUES FROM THE JSON DATABASE
-        typeDictionary = new HashMap<String, String>()
-        {{
-            put("short_sleeve_top", "T-Shirt");
-            put("long_sleeve_top", "Sweater");
-            put("short_sleeve_outwear", "Tuinbroek");
-            put("long_sleeve_outwear", "Jacket");
-            put("vest", "Tanktop");
-        }};
+        JSONObject typeData = loadJSONObject("./JsonFiles/Conversion.JSON");
+        conversions = typeData.getJSONObject("conversions");
+        opposites = typeData.getJSONObject("opposites");
     }
 
     void typeDetermination(String primitive) {
-        //lastType = typeDictionary.get(primitive);
-        lastType = "short_sleeve_top";
-        lastOppositeType = "long_sleeve_outwear"; //Dit moet dus later random uit de lijst van types worden gekozen
+        lastType = conversions.getString(primitive);
+        lastOppositeType = opposites.getString(lastType);
     }
 
     String getLastTypeName() {
