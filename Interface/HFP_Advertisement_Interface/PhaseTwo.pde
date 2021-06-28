@@ -2,26 +2,30 @@ class PhaseTwo extends Slide {
   String Message;
   Eye eye;
   int xTime=0;
-  Typewriter typeWriter;
-  color clothingColor;
-  PImage recomClothing;
+
+  PImage clothes;
   PImage bigEyeSlides;
   JSONObject startMsg;
   String loadImage;
   ColorPicker colorPicker;
   TypePicker typePicker;
+  HashMap<String, PImage> clothingLookup;
+  PImage backupShirt;
+  int imgAspect;
    String[] text;
-  PhaseTwo(ColorPicker colorPicker, TypePicker typePicker, JSONObject data) {
+
+  PhaseTwo(ColorPicker colorPicker, TypePicker typePicker, JSONObject data, HashMap clothingLookup) {
+    this.clothingLookup=clothingLookup;
     eye= new Eye(width/4, height/4, 30);
     this.colorPicker = colorPicker;
     this.typePicker= typePicker;
-    loadImage = "image/Clothing/ColorQ_.Type_.png";
-     //Replaces the word 'Type' by the text at beginType
     bigEyeSlides = loadImage("image/bigEyeSlides.png");
+    recomClothing = loadImage("image/Clothing/White.T-Shirt.png");
     
     
     JSONArray startMsg = data.getJSONArray("startMsg"); //Gets the text for the begin message
     text = startMsg.getStringArray(); //Splits the messages
+        backupShirt=loadImage(sketchPath()+"\\Image\\backUpShirt.png");
   }
 
   void init(CommunicationHandler com) {
@@ -30,26 +34,18 @@ class PhaseTwo extends Slide {
     Message = text[int(random(0,text.length))]; //Sets 'Message' to one of the strings with the number from s
     Message = Message.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
     Message = Message.replace("Type_", typePicker.getLastTypeName()); //Replaces the word 'Type' by the text at beginType
-    loadImage = loadImage.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
-    loadImage = loadImage.replace("Type_", typePicker.getLastTypeName());
-    recomClothing = loadImage(loadImage);
-    typeWriter=new Typewriter(Message, new PVector(width/16,width/8), width/2-width/8, 40, color(255), "DIT MAAKT NIET UIT", "DIT MAAKT OOK NIET UIT", clothingColor, colorPicker.getLastColorName(), clothingColor, fontSub);
   }
 
   void display() {    
 
     background(bgColor);
     
-    image(bigEyeSlides, width/20, height/17, width/10, height/10);
-    
     textFont(MainText);
     fill(255);
     rectMode(BASELINE);
     textAlign(CENTER, CENTER);
     textAlign(LEFT);
-    typeWriter.update();
-    typeWriter.display();
-    //text(Message, width/13, height/4, width/2.3, height);
+    text(Message, width/13, height/4, width/2.3, height);
     image(recomClothing, width/4*3, height/2, width/3, height/1.5);
   }
 }
