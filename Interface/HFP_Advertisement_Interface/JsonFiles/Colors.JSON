@@ -14,33 +14,21 @@
             "grayscale": "true"
         },
         {
-            "name": "Light Grey",
+            "name": "Light Gray",
             "rgb": [190,190,190],
             "opposite": "Pink",
             "grayscale": "true"
         },
         {
-            "name": "Dark Grey",
+            "name": "Dark Gray",
             "rgb": [110,110,110],
             "opposite": "Green",
             "grayscale": "true"
         },
         {
-            "name": "Light Red",
-            "rgb": [255,105,105],
-            "opposite": "Dark Green",
-            "grayscale": "false"
-        },
-        {
             "name": "Red",
             "rgb": [255,0,0],
             "opposite": "Green",
-            "grayscale": "false"
-        },
-        {
-            "name": "Dark Red",
-            "rgb": [165,0,0],
-            "opposite": "Lime",
             "grayscale": "false"
         },
         {
@@ -52,13 +40,7 @@
         {
             "name": "Brown",
             "rgb": [145,75,5],
-            "opposite": "Dark Green",
-            "grayscale": "false"
-        },
-        {
-            "name": "Light Yellow",
-            "rgb": [255,245,0],
-            "opposite": "Dark Purple",
+            "opposite": "Green",
             "grayscale": "false"
         },
         {
@@ -68,38 +50,14 @@
             "grayscale": "false"
         },
         {
-            "name": "Dark Yellow",
-            "rgb": [255,190,10],
-            "opposite": "Pink",
-            "grayscale": "false"
-        },
-        {
-            "name": "Lime",
-            "rgb": [0,255,0],
-            "opposite": "Dark Red",
-            "grayscale": "false"
-        },
-        {
             "name": "Green",
             "rgb": [20,220,20],
             "opposite": "Red",
             "grayscale": "false"
         },
         {
-            "name": "Dark Green",
-            "rgb": [0,140,5],
-            "opposite": "Light Red",
-            "grayscale": "false"
-        },
-        {
             "name": "Turquoise",
             "rgb": [0,255,210],
-            "opposite": "Brown",
-            "grayscale": "false"
-        },
-        {
-            "name": "Light Blue",
-            "rgb": [5,200,255],
             "opposite": "Brown",
             "grayscale": "false"
         },
@@ -110,27 +68,15 @@
             "grayscale": "false"
         },
         {
-            "name": "Dark Blue",
-            "rgb": [0,70,160],
-            "opposite": "Orange",
-            "grayscale": "false"
-        },
-        {
             "name": "Purple",
             "rgb": [160,0,255],
             "opposite": "Yellow",
             "grayscale": "false"
         },
         {
-            "name": "Dark Purple",
-            "rgb": [105,5,180],
-            "opposite": "Light Yellow",
-            "grayscale": "false"
-        },
-        {
             "name": "Pink",
             "rgb": [255,0,210],
-            "opposite": "Dark Yellow",
+            "opposite": "Yellow",
             "grayscale": "false"
         }
     ]

@@ -50,9 +50,7 @@ class SpeechSynth {
     String path=sketchPath()+"\\wav";
     java.io.File folder = new java.io.File(path);
     String [] fileNames=folder.list();
-    printArray(fileNames);
     for (String fileName : fileNames) {
-      println(fileName);
       if (fileName.contains(".wav")) {
         String name=fileName.substring(0, fileName.lastIndexOf('.'));
         String myPath=path+'\\'+fileName;

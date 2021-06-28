@@ -36,18 +36,19 @@ class Screen {
         }
         TCPPayload+='\n';
         s.write(TCPPayload);
-      } else {
-        //send just the closest head to interface
-        //Adjust the lookingPos for the screen by the difference between kinect and screenmid
-        //send the lookingvector over TCP to the eyeSketch
-        PVector adjustedLookingPos=PVector.sub(screenEye.closestHead, screen.pos);
-        String TCPpayload=""+adjustedLookingPos.x+","+adjustedLookingPos.y+","+adjustedLookingPos.z+"\n";
-        //(x,y,z,'\n')
-        //write the coords to the drawing sketch
-        s.write(TCPpayload);
       }
+    } else {
+      //send just the closest head to interface
+      //Adjust the lookingPos for the screen by the difference between kinect and screenmid
+      //send the lookingvector over TCP to the eyeSketch
+      PVector adjustedLookingPos=PVector.sub(screenEye.closestHead, screen.pos);
+      String TCPpayload=""+adjustedLookingPos.x+","+adjustedLookingPos.y+","+adjustedLookingPos.z+"\n";
+      //(x,y,z,'\n')
+      //write the coords to the drawing sketch
+      s.write(TCPpayload);
     }
   }
+
   float getHalfPhysicalScreenWidth() {
     return (physicalScreenWidth/2);
   }

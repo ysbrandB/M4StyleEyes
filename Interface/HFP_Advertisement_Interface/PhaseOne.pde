@@ -2,7 +2,6 @@ class PhaseOne extends Slide {
 
   CommunicationHandler com;
   PImage img;
-  boolean scanning;
   PVector irisPos;
   int colorFade;
   int rotation;
@@ -12,7 +11,6 @@ class PhaseOne extends Slide {
     this.com = com;
     img = loadImage("./Image/bigEye.png");
     imageMode(CENTER);
-    scanning = true;
     irisPos = new PVector(width/2, height/2);
     colorFade = 200;
     rotation = 0;
@@ -25,8 +23,6 @@ class PhaseOne extends Slide {
     fill(255);
     textSize(45);
     textAlign(TOP, LEFT);
-    //text(com.clothingType + " [" + red(com.clothingColor) + "," + green(com.clothingColor) + "," + blue(com.clothingColor) + "] " + com.hits, 50, 50);
-
     fill(255);
     ellipse(irisPos.x, irisPos.y, width/2.6, height/2);
     textAlign(CENTER, CENTER);
@@ -35,7 +31,6 @@ class PhaseOne extends Slide {
 
     fill(0);
     circle(irisPos.x, irisPos.y, height/4);
-    if (scanning) {
       pushMatrix();
       translate(width/2, height/2);
       for (int i = 0; i<trail.size(); i++) {
@@ -55,12 +50,5 @@ class PhaseOne extends Slide {
       fill(0);
       textFont(fontHeading);
       text("Let me St-EYE-le you!", width/2, height/10);
-    } else {
-      fill(0);
-      textFont(fontHeading);
-      text("Let me St-EYE-le you!", width/2, height/10);
-      fill(255, 0, 0);
-      text("Step up onto the red cross!", width/2, height/20*17);
-    }
   }
 }

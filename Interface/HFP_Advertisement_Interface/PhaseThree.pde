@@ -32,8 +32,7 @@ class PhaseThree extends Slide {
 
   ColorPicker colorPicker;
   TypePicker typePicker;
-
-  //Strings string;
+  ArrayList <PImage> NewsHeadsPictureList= new ArrayList<PImage>();
 
   PhaseThree(ColorPicker colorPicker, TypePicker typePicker, JSONObject textData) {
     JSONArray NewsHeads = textData.getJSONArray("NewsHeads"); //Gets the text for the news quotes
@@ -46,8 +45,9 @@ class PhaseThree extends Slide {
     bigEyeSlides = loadImage("image/bigEyeSlides.png");
     
     Oxford = createFont("Font/Oxford.ttf", height/30);
-    NewsHeadsPicture = loadImage("NewsLogos/"+ int(random(1, 5)) +".png");
-
+    for(int i=1; i<6;i++){
+    NewsHeadsPictureList.add(loadImage("NewsLogos/"+i +".png"));
+    }
     Papers = createFont("Font/Paper.otf", 30);
 
     backgroundTweet = loadImage("Image/emptyTweet.png");
@@ -72,7 +72,6 @@ class PhaseThree extends Slide {
   }
 
   void init(CommunicationHandler com) {
-    //string = new Strings(colorPicker);
     com.sendColor(colorPicker.getLastOppositeColor());
     
     Quote = NewsQuote[int(random(0,NewsQuote.length))]; //Sets 'Quote' to one of the stings with the number from n
@@ -83,12 +82,12 @@ class PhaseThree extends Slide {
     Fact = Fact.replace("Color_", colorPicker.getLastOppositeColorName()); //Replaces the word 'Color_' by the text at beginColor
     Fact = Fact.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
     Fact = Fact.replace("Type_",  typePicker.getLastOppositeTypeName()); //Replaces the word 'Type' by the text at beginType
+
+    NewsHeadsPicture=NewsHeadsPictureList.get(int(random(NewsHeadsPictureList.size())));
   }
 
   void display() {
     background(bgColor);
-    
-    image(bigEyeSlides, width/20+3, height/17+3, width/10, height/10);
     
     strokeWeight(3);
     if (colorPicker.getLastColor() == color(0,0,0)) {
@@ -96,11 +95,7 @@ class PhaseThree extends Slide {
     } else {
       stroke(colorPicker.getLastColor());
     }
-    noFill();
-    rect(0, 0, 0.58*width, 0.5*height);
-    rect(0, 0.5*height, 0.58*width, height);
-    rect(0.58*width, 0, width-2, 0.7*height);
-    rect(0.58*width, 0.7*height, width, height);
+    
     
     image(recomClothingImage, 0.79*width, height/2.9, 0.35*width, 0.67*height);
     

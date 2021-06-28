@@ -17,9 +17,9 @@ static final int HITS_THRESHOLD = 5;
 int phaseCount;
 float phaseTimer;
 int t1 = 0;
-Boolean distanceTrigger;
+boolean distanceTrigger;
 
-Boolean hasPlayed;
+boolean hasPlayed;
 
 ColorPicker colorPicker;
 TypePicker typePicker;
@@ -36,8 +36,8 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  fullScreen(2); 
-  //size(1920,1080);
+  //fullScreen(2); 
+  size(1920,1080);
   //size(960, 540); //for testing only
   imageMode(CENTER);
   

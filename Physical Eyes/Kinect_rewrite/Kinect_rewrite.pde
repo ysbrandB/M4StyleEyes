@@ -79,7 +79,7 @@ void draw() {
 
   //check if interface can be started and if so update it over tcp
   cross.show();
-  cross.update();
+  //cross.update();
 
   //show all the bodies
   for (Body body : bodies) {
@@ -137,3 +137,6 @@ void keyReleased() {
     noise2.changeDirection(key, false);
   }
 }
+void serialEvent(Serial p) { 
+  println(p.readString());
+} 

@@ -34,7 +34,10 @@ class Typewriter{
     color oppositeColor;
     String[] formatedStr;
     
-    //een tyfus bende aan constructors ;)
+    //een tyfus bende aan constructors ;) 
+     Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
+        constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, mainColorName, mainColor, oppositeColorName, oppositeColor);
+    }
     Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, float animationTime, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
         constructor(txt, pos, boxWidth, txtSize, txtColor, animationTime, type, mainColorName, mainColor, oppositeColorName, oppositeColor);
     }

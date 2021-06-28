@@ -1,11 +1,11 @@
 {
     "conversions": {
         "short_sleeve_top" : "T-Shirt",
-        "long_sleeve_top" : "Long Shirt",
-        "short_sleeve_outwear" : "Coat",
-        "long_sleeve_outwear" : "Coat",
-        "vest" : "Vest",
-        "sling" : "Vest",
+        "long_sleeve_top" : "Sweater",
+        "short_sleeve_outwear" : "Jacket",
+        "long_sleeve_outwear" : "Jacket",
+        "vest" : "Tanktop",
+        "sling" : "Tanktop",
         "shorts" : "Shorts",
         "trousers" : "Jeans",
         "skirt" : "Skirt",
@@ -15,10 +15,10 @@
         "sling_dress" : "Dress"
     },
     "opposites": {
-        "T-Shirt": "Long Shirt",
-        "Long Shirt": "Coat",
-        "Coat": "Vest",
-        "Vest": "T-Shirt",
+        "T-Shirt": "Sweater",
+        "Sweater": "Jacket",
+        "Jacket": "Tanktop",
+        "Tanktop": "T-Shirt",
         "Skirt": "Dress",
         "Dress": "Jeans",
         "Jeans": "Shorts",
