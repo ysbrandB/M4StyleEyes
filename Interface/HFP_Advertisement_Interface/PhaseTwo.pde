@@ -18,10 +18,7 @@ class PhaseTwo extends Slide {
     this.clothingLookup=clothingLookup;
     eye= new Eye(width/4, height/4, 30);
     this.colorPicker = colorPicker;
-    this.typePicker= typePicker;
-    bigEyeSlides = loadImage("image/bigEyeSlides.png");
-    recomClothing = loadImage("image/Clothing/White.T-Shirt.png");
-    
+    this.typePicker= typePicker;    
     
     JSONArray startMsg = data.getJSONArray("startMsg"); //Gets the text for the begin message
     text = startMsg.getStringArray(); //Splits the messages
@@ -30,7 +27,16 @@ class PhaseTwo extends Slide {
 
   void init(CommunicationHandler com) {
     com.sendColor(colorPicker.getLastColor());
-    clothingColor= colorPicker.getLastColor();
+    
+    clothes=clothingLookup.get(colorPicker.getLastOppositeColorName()+"."+typePicker.getLastOppositeTypeName());
+
+    if(clothes==null){
+      println("Couldnt find the picture for: "+ colorPicker.getLastOppositeColorName()+"."+typePicker.getLastOppositeTypeName());
+      clothes=backupShirt;
+      tint(colorPicker.getLastOppositeColor());
+    }
+    imgAspect=clothes.height/clothes.width;
+
     Message = text[int(random(0,text.length))]; //Sets 'Message' to one of the strings with the number from s
     Message = Message.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
     Message = Message.replace("Type_", typePicker.getLastTypeName()); //Replaces the word 'Type' by the text at beginType
@@ -46,6 +52,6 @@ class PhaseTwo extends Slide {
     textAlign(CENTER, CENTER);
     textAlign(LEFT);
     text(Message, width/13, height/4, width/2.3, height);
-    image(recomClothing, width/4*3, height/2, width/3, height/1.5);
+    image(clothes, width/4*3, height/2, width/3, height/1.5);
   }
 }
