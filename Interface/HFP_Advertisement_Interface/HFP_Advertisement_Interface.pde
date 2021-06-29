@@ -1,4 +1,4 @@
-//HFP CreaTe 2021  //<>// //<>//
+//HFP CreaTe 2021  //<>// //<>// //<>//
 //By Sterre Kuijper <Team Leader>, Frank Bosman, Jesse Boomkamp, Ysbrand Brugstede, Jelle Gerritsen, Max Liebe, Marnix Lueb & Kimberley Siemons
 //The Style Eyes Project
 //Advertisement Interface of Style Eyes
@@ -36,11 +36,25 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  //fullScreen(2); 
-  size(1920,1080);
-  //size(960, 540); //for testing only
+  fullScreen(2); 
+  //size(1920, 1080);
   imageMode(CENTER);
-  
+
+  //initialize all clothingPictures and load them into the hasmap
+  HashMap<String, PImage> clothingLookup = new HashMap<String, PImage>();
+
+  String path=sketchPath()+"\\Image\\Clothing";
+  java.io.File folder = new java.io.File(path);
+  String [] fileNames=folder.list();
+  for (String fileName : fileNames) {
+    if (fileName.contains(".png")) {
+      String name=fileName.substring(0, fileName.lastIndexOf('.'));
+      String myPath=path+'\\'+fileName;
+      PImage thisImageFile= loadImage(myPath);
+      clothingLookup.put(name, thisImageFile);
+    }
+  }
+
   //Load all JSON data
   JSONObject textData= loadJSONObject("JsonFiles/Text.JSON"); //Gets the json file
 
@@ -51,8 +65,8 @@ void setup() {
   //initialize all phases
   pZero = new PhaseZero(com);
   pOne = new PhaseOne(com);
-  pTwo = new PhaseTwo(colorPicker, typePicker, textData);
-  pThree = new PhaseThree(colorPicker, typePicker, textData);
+  pTwo = new PhaseTwo(colorPicker, typePicker, textData, clothingLookup);
+  pThree = new PhaseThree(colorPicker, typePicker, textData, clothingLookup);
   pFour = new PhaseFour(textData);
 
   //initialize the speech synthesizer
@@ -63,7 +77,6 @@ void setup() {
   phaseTimer = 1;
 
   distanceTrigger = false;
-  
 }
 
 void draw() {
@@ -102,14 +115,14 @@ void draw() {
       phaseTimer = 4; //8
       break;
     case 2: 
-      phaseTimer = 8; //8
+      phaseTimer = 9; //8
       colorPicker.colorDetermination(com.clothingColor);
       typePicker.typeDetermination(com.clothingType);
       pTwo.init(com);
       speechSynth.init(); 
       break;
     case 3: 
-      phaseTimer = 2; //16
+      phaseTimer = 20; //16
       pThree.init(com);
       break;
     case 4:
@@ -127,6 +140,7 @@ void draw() {
 void keyPressed() {
   if (key == 'r' || key == 'R') {
     com.hits = 5;
+    com.clothingColor=color(200,200,30);
     colorPicker.colorDetermination(com.clothingColor);
   }
 

@@ -33,7 +33,6 @@ class CommunicationHandler {
   //Arduino serial com
   Serial port;
 
-
   CommunicationHandler(PApplet parent) {
     lookingPositions.add(new PVector(width/2, height/2, 200));
     clothingColor = color(0);
@@ -59,6 +58,7 @@ class CommunicationHandler {
       println("The JSON setup file is inaccessible, defaulting to a screen of 100 cm");
       screenWidthCM=100;
     }
+    //FUCK YSBRAND
     swPixDIVswCM=width/screenWidthCM;
   }
 
@@ -170,16 +170,34 @@ class CommunicationHandler {
   }
 
   void sendColor(color inputColor) {
+    //color|0,0,255|0,0,255|0,0,255|0,0,255
     int redValue = int(red(inputColor));
     int greenValue = int(green(inputColor));
     int blueValue = int(blue(inputColor));
 
-    String payload = redValue + "," + greenValue + "," + blueValue + ",";
+    String data = redValue + "," + greenValue + "," + blueValue + ",";
+    String payload = "Color";
+    for (int i = 1; i<5; i++) {
+      payload += "|" + data;
+    }
     try {
-      port.write(payload);
+      port.write(payload + '\n');
     } 
     catch (Exception e) {
-      println("Can't write to port, try to reconnect!");
+      println("Can't write to port");
+    }
+  }
+
+  void ledstripScan() {
+    String payload = "Scan";
+    // for(int i = 1; i<5; i++){ //old shit
+    // payload;
+    // }
+    try {
+      port.write(payload + '\n');
+    } 
+    catch (Exception e) {
+      println("Can't write to port");
     }
   }
 }

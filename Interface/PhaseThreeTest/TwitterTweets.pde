@@ -21,14 +21,14 @@ class Tweet {
 
   PVector position;
 
-  Tweet(PVector position, PImage backgroundTweet, PFont SegoeBold21, PFont Segoe31, PFont SegoeSemiBold19, String tweetMessage) {
+  Tweet(PVector position, PImage backgroundTweet, PFont SegoeBold21, PFont Segoe31, PFont SegoeSemiBold19) {
     this.backgroundTweet = backgroundTweet;
     this.position=position;
     setDate();
     setLikes();
-    setTextTweet(tweetMessage);
+    setTextTweet();
 
-    imagePath = "Image/twitterAcounts/volkswagen.png";
+    imagePath = "../HFP_Advertisement_Interface/Image/twitterAcounts/volkswagen.png";
     account = loadImage(imagePath);
 
     this.SegoeBold21 = SegoeBold21;
@@ -67,8 +67,8 @@ class Tweet {
     retweets = nf(random(1, 1000), 0, 1) + "K";
   }
 
-  void setTextTweet(String newTweet) {
-    textTweet = newTweet;
+  void setTextTweet() {
+    textTweet = "Tesla research has shown that people that wear red polos are more likely to buy electric cars. All tesla staff will start wearing red polos to encourage those people. Wear red polos people!";
   }
 
   void display() {
@@ -76,10 +76,10 @@ class Tweet {
     translate(position.x, position.y);
     imageMode(CENTER);
     image(backgroundTweet, backgroundTweet.width/2, backgroundTweet.height/2);
-
+    
     imageMode(CORNER);
     image(account, 0, 0);
-
+    
     noStroke();    
     fill(0);
     textAlign(RIGHT, TOP);
