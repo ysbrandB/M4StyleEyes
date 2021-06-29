@@ -56,7 +56,7 @@ void setup() {
   }
 
   //Load all JSON data
-  JSONObject textData= loadJSONObject("JsonFiles/Text.JSON"); //Gets the json file
+  JSONObject textData= loadJSONObject("./JsonFiles/Text.JSON"); //Gets the json file
 
   com = new CommunicationHandler(this);
   colorPicker = new ColorPicker();
