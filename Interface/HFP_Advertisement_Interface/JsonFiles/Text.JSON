@@ -11,17 +11,7 @@
         "LMAO a ColorQ_ Type_, im actually dying",
 		"I think you should be wearing something else than a ColorQ_ Type_",
 		"Deciding to wear a ColorQ_ Type_ wasn't one of the best choices you made today",
-		"A ColorQ_ Type_?, Damn."
-    "startMsg": [
-        "Nice Color_ Type_ but did you know that Color_ Type_ are becoming less popular?",
-        "How nice, a Color_ Type_ but did you know that Color_ Type_ are not very attractive, especially for your body type",
-        "Did you know that your Color_ Type_ are considered as pretty.. low-class?",
-        "What a fun Color_ Type_ are you wearing but a Color_ Type_ is mostly worn by young children",
-        "Oh well, a Color_ Type_, you really couldn't come up with something else?",
-        "The nineties are calling, they want their Color_ Type_ back",
-        "Imagine still wearing a Color_ Type_",
-        "LMAO Color_ Type_, im actually dying",
-        "Somebody REALLy wanted to impress their mother with this Color_ Type_"
+		"A ColorQ_ Type_? Damn."
     ],
     "Feitjes": [
         "in some cultures Color_ means beautiful and colorful.",
@@ -35,23 +25,6 @@
     "Tweets": [
         "Tesla research has shown that people that wear Color_ Type_s are more likely to buy electric cars. All tesla staff will start wearing red polos to encourage those people. Wear red polos people!"
     ],
-<<<<<<< HEAD
-
-    "Brands" : [
-        "Jones & Jack", 
-        "Shipperman", 
-        "Kalvin Clein",
-        "Luois Vitonne",
-        "Armini", 
-        "Blurberry",
-        "Guccy", 
-        "Channel", 
-        "Pradda"
-	],
-	"Tweets" : [
-        "Tesla research has shown that people that wear Color_ Type_'s are more likely to buy electric cars. All tesla staff will start wearing Color_ Type_'s to encourage those people. Wear Color_ Type_ people!"
-    ]
-=======
     "Brands": {
         "Cheap": [
             "Jones & Jack",
@@ -67,5 +40,4 @@
             "Pradda"
         ]
     }
->>>>>>> master
 }
