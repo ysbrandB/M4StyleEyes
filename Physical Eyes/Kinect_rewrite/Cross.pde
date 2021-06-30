@@ -11,6 +11,7 @@ class Cross {
     desiredBufferTime=crossData.getInt("bufferFrames");
     s=new Server(context, 10000);
   }
+  
   void show() {
     //draw CrossPosition
     drawPoint(pos, color (255, 0, 255));

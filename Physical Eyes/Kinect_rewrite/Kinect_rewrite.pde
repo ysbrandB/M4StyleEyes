@@ -137,6 +137,3 @@ void keyReleased() {
     noise2.changeDirection(key, false);
   }
 }
-void serialEvent(Serial p) { 
-  //println(p.readString());
-} 

@@ -1,5 +1,6 @@
 class PhysicalEyes {
   PApplet context;
+  int tokens=3;
   JSONArray eyePosData;
   ArrayList<Eye> eyes = new ArrayList<Eye>();
   PVector kinectPos;
@@ -31,26 +32,20 @@ class PhysicalEyes {
   }
   void update() {
     //update all the eyes, and send the data to the arduino
-    String arduinoPayload="";
     for (Eye eye : eyes) {
       eye.update();
       //stuur alleen de data als de hoeken verander zijn
-      
-      String thisArduinoPayload=eye.id+","+int(eye.angleY)+","+int(eye.angleZ)+"|";
-      if (!eye.oldData.equals(thisArduinoPayload)) {
-        arduinoPayload+=thisArduinoPayload;
-        eye.oldData=thisArduinoPayload;
-      }
-    }
 
-    if (arduinoPayload.length()>=1&&frameCount%10==0) {
-      try {
-        println(arduinoPayload);
-        port.write(arduinoPayload);
-      }
-      catch(Exception e) {
-        if (frameCount%360==0) {
-          connectArduino();
+      String arduinoPayload="<"+eye.id+","+int(eye.angleY)+","+int(eye.angleZ)+">";
+      if (!eye.oldData.equals(arduinoPayload)) {
+        eye.oldData=arduinoPayload;
+        try {
+          port.write(arduinoPayload);
+        }
+        catch(Exception e) {
+          if (frameCount%360==0) {
+            connectArduino();
+          }
         }
       }
     }
@@ -69,3 +64,6 @@ class PhysicalEyes {
     }
   }
 }
+void serialEvent(Serial p) { 
+  print(p.readString());
+} 

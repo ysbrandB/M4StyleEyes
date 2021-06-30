@@ -12,12 +12,14 @@ class SpeechSynth {
   HashMap<String, SoundFile> soundLookUp = new HashMap<String, SoundFile>();
   ArrayList<SoundFile> sounds = new ArrayList<SoundFile>();
 
-  float[] speakPause =  {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1}; //speakpause array that gives the pause time in seconds
+  float[] speakPause =  {0.1, 0.1, 0.1, 0.1, 0.1, 1, 0.1, 0.1, 0.1, 15}; //speakpause array that gives the pause time in seconds
 
   SoundFile youRWearingA;
   SoundFile a;
   SoundFile wouldFitYouWayBetter;
   SoundFile iThinkYouKnow;
+  SoundFile andThisIsExactlyWhyA;
+  SoundFile isAThousandTimesBetter; 
 
   ArrayList <SoundFile> soundsToPlay;
   int currentIndex=0;
@@ -46,6 +48,10 @@ class SpeechSynth {
     sounds.add(wouldFitYouWayBetter);
     iThinkYouKnow = new SoundFile(HFP_Advertisement_Interface.this, "wav/ithinkyouknow.wav");
     sounds.add(iThinkYouKnow);
+    andThisIsExactlyWhyA =  new SoundFile(HFP_Advertisement_Interface.this, "wav/andthisisexactlywhya.wav");
+    sounds.add(andThisIsExactlyWhyA);
+    isAThousandTimesBetter =  new SoundFile(HFP_Advertisement_Interface.this, "wav/isathousandtimesbetter.wav");   
+    sounds.add(isAThousandTimesBetter); 
 
     nowPlaying = a;
 
@@ -103,8 +109,17 @@ class SpeechSynth {
    
     if (oppositeTypeAudio!=null) soundsToPlay.add(oppositeTypeAudio); 
     else println("Couldn't find the audio for: "+oppositeTypeName);
+    
     soundsToPlay.add(wouldFitYouWayBetter);
     
+    soundsToPlay.add(andThisIsExactlyWhyA);
+    if (oppositeAudio!=null) soundsToPlay.add(oppositeAudio);
+    else println("Couldn't find the audio for: "+oppositeColorName);
+   
+    if (oppositeTypeAudio!=null) soundsToPlay.add(oppositeTypeAudio); 
+    else println("Couldn't find the audio for: "+oppositeTypeName);
+   
+    soundsToPlay.add(isAThousandTimesBetter);
     soundsToPlay.add(iThinkYouKnow);
   }
 
@@ -117,7 +132,7 @@ class SpeechSynth {
         if (!nowPlaying.isPlaying() && pauseTimer <= 0) {
           track.play();
           nowPlaying = track;
-          if (currentIndex<6) {
+          if (currentIndex<10) {
             pauseTimer=speakPause[currentIndex]+track.duration();
           }
           currentIndex++;
