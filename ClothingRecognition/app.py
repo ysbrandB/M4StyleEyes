@@ -5,7 +5,7 @@ import socket
 import time
 import sys
 
-from utils import draw_bounding_box, load_model, detect_clothes, get_clothing_cropped, get_dominant_color
+from utils import draw_bounding_box, load_model, detect_clothes, get_clothing_cropped, get_dominant_color, is_torso_piece
 
 model = load_model()
 
@@ -29,6 +29,7 @@ TCP_PORT = 6969
 TCP_TICKRATE = 30
 
 detected_type = None
+bias_torso_piece = True
 detected_color = None
 
 def server_handling():
@@ -67,22 +68,34 @@ def detect(image):
     crop_img = image[imageBox[1]:imageBox[1] + imageBox[3], imageBox[0]:imageBox[0] + imageBox[2]]
     detected_objects = detect_clothes(crop_img, model, clothing_types)
     if len(detected_objects) > 0:
-        global detected_type, detected_color, hits
-        clothing_image = get_clothing_cropped(crop_img, detected_objects[0])
-        color = get_dominant_color(clothing_image)
-        type = detected_objects[0]['label']
-        if not type == detected_type:
+        global detected_type, detected_color, multiple_detected, bias_torso_piece, hits
+        cloth = None
+        if len(detected_objects) > 1:
+            registered_cloth = None
+            for i in range(0, 2):
+                if((is_torso_piece(detected_objects[i]['label']) is bias_torso_piece) and (registered_cloth is None)):
+                    registered_cloth = detected_objects[i]
+            if registered_cloth is None:
+                registered_cloth = detected_objects[0]
+                bias_torso_piece = not bias_torso_piece
+            cloth = registered_cloth
+        else:
+            cloth = detected_objects[0]
+        if not cloth['label'] == detected_type:
             hits = 0
-            detected_type = type
+            detected_type = cloth['label']
         else:
             hits += 1
+        clothing_image = get_clothing_cropped(crop_img, cloth)
+        color = get_dominant_color(clothing_image)
         detected_color = color
-        image_bounding_box = draw_bounding_box(crop_img, detected_objects[0], color)
+        image_bounding_box = draw_bounding_box(crop_img, cloth, color)
         cv2.imshow('clothes', image_bounding_box)
     else:
         hits = 0
         detected_type = None
         detected_color = None
+        bias_torso_piece = not bias_torso_piece
 
 while cv2.getWindowProperty('preview', 0) >= 0:
     readCorrectly, frame = capture.read()

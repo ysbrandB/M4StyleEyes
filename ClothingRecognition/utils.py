@@ -79,3 +79,11 @@ def get_dominant_color(img):
     if count.any():
         return colors[count.argmax()]
     return (255, 255, 255)
+
+def is_torso_piece(cloth):
+    torso_pieces = ['short_sleeve_top', 'long_sleeve_top', 'short_sleeve_outwear', 'long_sleeve_outwear',
+                  'vest', 'sling']
+    for i in range(0, len(torso_pieces)):
+        if cloth is torso_pieces[i]:
+            return True
+    return False
