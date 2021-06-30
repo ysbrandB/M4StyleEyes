@@ -1,7 +1,7 @@
 #include <FastLED.h>
 
 #define LED_PIN     5
-#define NUM_LEDS    100 //300
+#define NUM_LEDS    211 //300
 #define BRIGHTNESS  255 //255 is max
 #define LED_TYPE    WS2811
 #define COLOR_ORDER GRB
@@ -31,6 +31,13 @@ int scanningHue = 0;
 int pScanningHue[5];
 static float SCAN_SPEED = 400; //inverse speed, 400 is standart.
 
+//polls:
+boolean pollActive = false;
+int pollPercentage = 50;
+int oppositeColor[3];
+int pPollPercentage[5];
+int pOppositeColor[3][5];
+
 void setup() {
   delay( 3000 ); // power-up safety delay
   FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
@@ -52,12 +59,12 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if (Serial.available() > 0) {
+  if (Serial.available() > 0) { //serial comminucation
     int inputInt = Serial.read();
     if (inputInt != 13) serialCom((char)inputInt);
   }
 
+  //fill complete colors        ----------------------------------------------------
   if (shouldUpdateColors) {
     for (int i = 0; i < NUM_LEDS; ++i) {
       leds[i].setRGB(red, green, blue);
@@ -66,7 +73,7 @@ void loop() {
     shouldUpdateColors = false;
     scanTimer = 0;
   }
-  else if(scanning){
+  else if (scanning) { //scanning ----------------------------------------------------
     for (int i = 0; i < NUM_LEDS; i++) {
       int fade = abs(i - int(scanTimer));
       if (fade < 5) {
@@ -76,56 +83,86 @@ void loop() {
     }
     FastLED.show();
     if (straveForward) {
-      scanTimer += ((float)NUM_LEDS)/SCAN_SPEED;
+      scanTimer += ((float)NUM_LEDS) / SCAN_SPEED;
       if (scanTimer > NUM_LEDS) straveForward = false;
     } else {
-      scanTimer -= ((float)NUM_LEDS)/SCAN_SPEED;
+      scanTimer -= ((float)NUM_LEDS) / SCAN_SPEED;
       if (scanTimer < 0) straveForward = true;
     }
+  } else if (pollActive) {
+    for (int i = 0; i < NUM_LEDS; i++) {
+      if((float) i / (float) NUM_LEDS * 100 <= pollPercentage) leds[i].setRGB(red, green, blue);
+      else leds[i].setRGB(oppositeColor[0], oppositeColor[1], oppositeColor[2]);
+    }
+    FastLED.show();
   }
-  
+
 }
 
 void serialCom(char inputChar) {
-  if(inputChar == '\n'){
+  if (inputChar == '\n') { //end of the comm -------------------------------------------------------
     decode(buff);
-    if(commType == "color") {//if the sent command is change color:
+    if (commType == "color") { //if the sent command is change color:
       shouldUpdateColors = true;
       //reset the modes:
       scanning = false;
+      pollActive = false;
 
-      red = arrayMax(pRed);
-      green = arrayMax(pGreen);
-      blue = arrayMax(pBlue);
+      red = constrain(arrayMax(pRed), 0, 255);
+      green = constrain(arrayMax(pGreen), 0, 255);
+      blue = constrain(arrayMax(pBlue), 0, 255);
       Serial.println("" + (String)red + " " + (String)green + " " + (String)blue);
-
     }
-    if(commType == "scan") { //if the send command is scan:
+    if (commType == "scan") { //if the send command is scan:
       scanning = true;
       //reset the modes:
       shouldUpdateColors = false;
-
-//      scanningHue = arrayMax(pScanningHue);
+      pollActive = false;
     }
-    
+    if (commType == "poll") {
+      pollActive = true;
+      //reset the modes:
+      scanning = false;
+      shouldUpdateColors = false;
+      
+      red = constrain(arrayMax(pRed), 0, 255);
+      green = constrain(arrayMax(pGreen), 0, 255);
+      blue = constrain(arrayMax(pBlue), 0, 255);
+
+      oppositeColor[0] = constrain(arrayMax(pOppositeColor[0]), 0, 255);
+      oppositeColor[1] = constrain(arrayMax(pOppositeColor[1]), 0, 255);
+      oppositeColor[2] = constrain(arrayMax(pOppositeColor[2]), 0, 255);
+      Serial.println("" + (String)red + "," + (String)green + "," + (String)blue + "|" + (String)oppositeColor[0] + "," + (String)oppositeColor[1] + "," + (String)oppositeColor[2]);
+    }
+    if(commType == "percentage"){
+      pollPercentage = constrain(arrayMax(pPollPercentage), 0, 100);
+    }
+
     commType = "";
 
     clearArray(pRed);
     clearArray(pGreen);
     clearArray(pBlue);
+
+    clearArray(pOppositeColor[0]);
+    clearArray(pOppositeColor[1]);
+    clearArray(pOppositeColor[2]);
+
+    clearArray(pPollPercentage);
     
     currentCom = 0;
     buff = "";
-  }else if (inputChar == '|') {
+  } else if (inputChar == '|') { //end of the line ----------------------------------------------------
     decode(buff);
     buff = "";
     currentCom++;
-//    commType = "";
-    if(currentCom >= sizeof(pRed)) currentCom = sizeof(pRed)-1;
+    //    commType = "";
+    if (currentCom >= sizeof(pRed)) currentCom = sizeof(pRed) - 1;
     currentColor = 0;
-  } else if (inputChar != ',') {
+    Serial.print("|");
+  } else if (inputChar != ',') { // normale charactor ------------------------------------------------
     buff += inputChar;
-  } else {
+  } else { //when it sees a comma, -------------------------------------------------------------------
     decode(buff);
     buff = "";
   }
@@ -133,6 +170,7 @@ void serialCom(char inputChar) {
 
 void decode(String input) {
   input.trim();
+  Serial.print(input + ",");
 
   if (commType == "") {
     commType = input;
@@ -155,30 +193,55 @@ void decode(String input) {
       }
       currentColor++;
     }
-    else if(contains(commType, "sc")){ //scanning:
+    else if (contains(commType, "sc")) { //scan(ning):
       commType == "scan";
-//      int value = buff.toInt();
-//      Serial.println(value);
-//      pScanningHue[currentCom] = value;
+    } else if (contains(commType, "po")) { //poll(ing):
+      commType = "poll";
+      int value = buff.toInt();
+      switch (currentColor) {
+        case 0:
+          pRed[currentCom] = value;
+          break;
+        case 1:
+          pGreen[currentCom] = value;
+          break;
+        case 2:
+          pBlue[currentCom] = value;
+          break;
+        case 3: pOppositeColor[0][currentCom] = value;
+          break;
+        case 4:
+          pOppositeColor[1][currentCom] = value;
+          break;
+        case 5:
+          pOppositeColor[2][currentCom] = value;
+          break;
+      }
+//      Serial.print((String) value + " ");
+      currentColor++;
+    } else if(contains(commType, "per")){
+      commType = "percentage";
+      int value = buff.toInt();
+      pPollPercentage[currentCom] = value;
     }
-//    else commType = "";
   }
+
 }
 
-boolean contains(String str, String contain){
+boolean contains(String str, String contain) {
   return str.indexOf(contain) >= 0;
 }
 
-int arrayMax(int input[]){
+int arrayMax(int input[]) {
   int maximum = 0;
-  for(int i = 0; i < sizeof(input); i++){
-    if(input[i] > maximum) maximum = input[i];
+  for (int i = 0; i < sizeof(input); i++) {
+    if (input[i] > maximum) maximum = input[i];
   }
   return maximum;
 }
 
-void clearArray(int input[]){
-  for(int i = 0; i < sizeof(input); i++){
+void clearArray(int input[]) {
+  for (int i = 0; i < sizeof(input); i++) {
     input[i] = 0;
   }
 }

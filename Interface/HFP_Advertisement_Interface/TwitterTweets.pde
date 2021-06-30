@@ -21,15 +21,15 @@ class Tweet {
 
   PVector position;
 
-  Tweet(PVector position, PImage backgroundTweet, PFont SegoeBold21, PFont Segoe31, PFont SegoeSemiBold19, String tweetMessage) {
+  Tweet(PVector position, PImage backgroundTweet, PFont SegoeBold21, PFont Segoe31, PFont SegoeSemiBold19, String tweetMessage, PImage img) {
     this.backgroundTweet = backgroundTweet;
     this.position=position;
     setDate();
     setLikes();
     setTextTweet(tweetMessage);
 
-    imagePath = "Image/twitterAcounts/volkswagen.png";
-    account = loadImage(imagePath);
+    // imagePath = "Image/twitterAcounts/volkswagen.png";
+    account = img;//loadImage(imagePath);
 
     this.SegoeBold21 = SegoeBold21;
     this.Segoe31 = Segoe31;
