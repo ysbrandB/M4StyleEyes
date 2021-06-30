@@ -32,7 +32,11 @@ class PhaseThree extends Slide {
 
     //NewsQuote = NewsHeads.getStringArray(); //Splits the quotes
     ScientificFact = ScientificFacts.getStringArray(); //Splits the quotes
+<<<<<<< HEAD
     // tweets=TwitterTweets.getStringArray(); //Splits the quotes
+=======
+   // tweets=TwitterTweets.getStringArray(); //Splits the quotes
+>>>>>>> 6f7498cde73eca9d8565b397e71ee1119b18e083
     this.colorPicker = colorPicker;
     this.typePicker = typePicker;
     eye =new Eye(100, 100, 50);

@@ -64,7 +64,7 @@ void draw() {
     noise1.show();
     noise2.show();
   } else if (heads.size()<1) {
-    PVector noise=new PVector(map(noise(time/2), 0, 1, -screen.getHalfPhysicalScreenWidth(), screen.getHalfPhysicalScreenWidth()), map(noise(time), 0, 1, -((screen.getHalfPhysicalScreenWidth()*2)/16), 0)*9, map(noise(time*2), 0, 1, 0, screen.getHalfPhysicalScreenWidth()*2));
+    PVector noise=new PVector(map(noise(time/2), 0, 1, -screen.getHalfPhysicalScreenWidth(), screen.getHalfPhysicalScreenWidth()), map(noise(time), 0, 1, 0,-(((screen.getHalfPhysicalScreenWidth()*2)/16)*9))-100, map(noise(time*2), 0, 1, 0, screen.getHalfPhysicalScreenWidth()*2));
     heads.add(noise);
     drawPoint(noise, color(255, 0, 255));
     time+=0.001;
@@ -138,5 +138,5 @@ void keyReleased() {
   }
 }
 void serialEvent(Serial p) { 
-  println(p.readString());
+  //println(p.readString());
 } 
