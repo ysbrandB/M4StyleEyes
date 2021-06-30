@@ -12,11 +12,12 @@ class SpeechSynth {
   HashMap<String, SoundFile> soundLookUp = new HashMap<String, SoundFile>();
   ArrayList<SoundFile> sounds = new ArrayList<SoundFile>();
 
-  float[] speakPause =  {0.1, 0.1, 0.1, 0.1, 0.1, 0.1}; //speakpause array that gives the pause time in seconds
+  float[] speakPause =  {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1}; //speakpause array that gives the pause time in seconds
 
   SoundFile youRWearingA;
   SoundFile a;
   SoundFile wouldFitYouWayBetter;
+  SoundFile iThinkYouKnow;
 
   ArrayList <SoundFile> soundsToPlay;
   int currentIndex=0;
@@ -43,6 +44,8 @@ class SpeechSynth {
     sounds.add(a);
     wouldFitYouWayBetter = new SoundFile(HFP_Advertisement_Interface.this, "wav/wouldfityouwaybetter.wav");
     sounds.add(wouldFitYouWayBetter);
+    iThinkYouKnow = new SoundFile(HFP_Advertisement_Interface.this, "wav/ithinkyouknow.wav");
+    sounds.add(iThinkYouKnow);
 
     nowPlaying = a;
 
@@ -88,28 +91,21 @@ class SpeechSynth {
 
     //add all correct samples to the soundToPlay arrayList
     soundsToPlay.add(youRWearingA);
-    if (colorAudio!=null) {
-      soundsToPlay.add(colorAudio);
-    } else {
-      println("Couldn't find the audio for: "+colorName);
-    }
-    if (typeAudio!=null) {
-      soundsToPlay.add(typeAudio);
-    } else {
-      println("Couldn't find the audio for: "+typeName);
-    }
+    if (colorAudio!=null) soundsToPlay.add(colorAudio);
+    else println("Couldn't find the audio for: "+colorName);
+    
+    if (typeAudio!=null) soundsToPlay.add(typeAudio);
+    else println("Couldn't find the audio for: "+typeName);
+      
     soundsToPlay.add(a);
-    if (oppositeAudio!=null) {
-      soundsToPlay.add(oppositeAudio);
-    } else {
-      println("Couldn't find the audio for: "+oppositeColorName);
-    }
-    if (oppositeTypeAudio!=null) {
-      soundsToPlay.add(oppositeTypeAudio);
-    } else {
-      println("Couldn't find the audio for: "+oppositeTypeName);
-    }
+    if (oppositeAudio!=null) soundsToPlay.add(oppositeAudio);
+    else println("Couldn't find the audio for: "+oppositeColorName);
+   
+    if (oppositeTypeAudio!=null) soundsToPlay.add(oppositeTypeAudio); 
+    else println("Couldn't find the audio for: "+oppositeTypeName);
     soundsToPlay.add(wouldFitYouWayBetter);
+    
+    soundsToPlay.add(iThinkYouKnow);
   }
 
   //plays all samples in the correct order from the soundsToPlay arrayList
@@ -118,7 +114,7 @@ class SpeechSynth {
     if (currentIndex<soundsToPlay.size()) {
       try {
         SoundFile track = soundsToPlay.get(currentIndex);
-        if (!nowPlaying.isPlaying()) {
+        if (!nowPlaying.isPlaying() && pauseTimer <= 0) {
           track.play();
           nowPlaying = track;
           if (currentIndex<6) {
