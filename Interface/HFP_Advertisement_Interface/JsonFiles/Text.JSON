@@ -1,6 +1,6 @@
 {
-    "startMsg" : [
-        "Nice ColorQ_ Type_ but did you know that wearing a ColorQ_ Type_ is becoming less populair?",
+    "startMsg": [
+        "Nice ColorQ_ Type_ but did you know that wearing a ColorQ_ Type_ is getting less populair?",
         "How fun, a ColorQ_ Type_,  unfortunately a ColorQ_ Type_ doesn't suit you very well",
         "I don't like your ColorQ_ Type_ ,did you know that ColorQ_ Type_ are seen as low-class?",
         "What a fun ColorQ_ Type_ are you wearing but a ColorQ_ Type_ is mostly worn by young children",
@@ -9,9 +9,9 @@
         "Imagine still wearing a ColorQ_ Type_",
         "Somebody REALLY wanted to impress their mother with this ColorQ_ Type_",
         "LMAO a ColorQ_ Type_, im actually dying",
-		"I think you should be wearing something else than a ColorQ_ Type_",
-		"Deciding to wear a ColorQ_ Type_ wasn't one of the best choices you made today",
-		"A ColorQ_ Type_? Damn."
+        "I think you should be wearing something else than a ColorQ_ Type_",
+        "Deciding to wear a ColorQ_ Type_ wasn't one of the best choices you made today",
+        "A ColorQ_ Type_? Damn."
     ],
     "Feitjes": [
         "in some cultures Color_ means beautiful and colorful.",
@@ -19,11 +19,30 @@
         "Color_ is a relaxing color.",
         "Color_ is the color of winners.",
         "Women dressed in Color_ are more attractive to men.",
-        "Color_ was once seen as a high-class color.",
+        "Color_ is seen as a high-class color.",
         "Color_ stimulates hunger"
     ],
     "Tweets": [
-        "Tesla research has shown that people that wear Color_ Type_s are more likely to buy electric cars. All tesla staff will start wearing red polos to encourage those people. Wear red polos people!"
+        {
+            "name": "Elon Musk",
+            "text": "Tesla research has shown that people that buy electric cars often wear a Color_ Type_s. Conclusion: Wearing it helps you getting into the attitude to become rich! All tesla staff will start wearing Color_ Type_s to encourage those people. Wear Color_ Type_s people!"
+        },
+        {
+            "name": "Kim Kardashian",
+            "text": "Ever since I was 10 years old, I've heard every single detail about the Olympics from my stepdad. As I would watch the athletes compete, I would grow to understand that wearing a Color_ Type_ could be a decisive factor for winning a gold medal."
+        },
+        {
+            "name": "Max Verstappen",
+            "text": "RED BULL IS CHANGING THEIR NAME TO Color_ BULL, VERY EXCITED! LOOKING FORWARD TO WORKING TOGETHER WITH G-STAR TO PROMOTE THE NEW MAX VERSTAPPEN CLOTHING, INCLUDING Color_ Type_s!"
+        },
+        {
+            "name" : "George Clooney",
+            "text" : "There are quite a few things that the devil could tempt me with... I could be tempted by youth if I was allowed to hold all the wisdom that I've gotten. In everything, not just sports. In life. In acting. I'd be tempted by youth only so I could continue wearing Color_ Type_s just a little longer."
+           },
+        {
+            "name" : "Jeff Bezos",
+            "text" : "I just took a DNA test, turns out I'm 100% in love with Color_ Type_s. Stocking them up right now!"
+        }
     ],
     "Brands": {
         "Cheap": [
