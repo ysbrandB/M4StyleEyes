@@ -48,35 +48,36 @@ void setup() {
 
 void loop() {
   for (int i = 0; i < EYEPAIRAMOUNT; i++) {//for each set of eyes
-    Adafruit_PWMServoDriver pwm;
+    Adafruit_PWMServoDriver pwmDriver;
     int modulatedCounter;
 
     //set the servodriver to the left or the right
-    if (i < EYEPAIRAMOUNT / 2) {
+    if (i < int(EYEPAIRAMOUNT / 2)) {
       //modulatedcounter is voor het rechterservoboard het i-het aantal ogen op links
-      modulatedCounter=i;
-      pwm = pwmLeft;
+      modulatedCounter=i+1;
+      pwmDriver = pwmLeft;
     } else {
-      pwm = pwmRight;
-      modulatedCounter=i-(EYEPAIRAMOUNT/2);
+      pwmDriver = pwmRight;
+      modulatedCounter=i-(EYEPAIRAMOUNT/2)+1;
     }
     //decide to randomly blink
-    if (random(0, 2000) < 2) {
-      blinking[i] = true;
-    }
+//    if (random(0, 2000) < 2) {
+//      blinking[i] = true;
+//    }
 
     int xval = xAngles[i];
     int yval = yAngles[i];
+    Serial.println(String(i)+","+String(xval)+","+String(yval));
 
     //LEFT RIGHT
     xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
     //xPulse = map(analogRead(A0),0, 1023, 220, 450);
-    pwm.setPWM((0 + modulatedCounter * 4), 0, xPulse);
+    pwmDriver.setPWM((0 + modulatedCounter * 4), 0, xPulse);
     //UP DOWN
 
     yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
     //yPulse = map(analogRead(A1),0, 1023, 520, 280);
-    pwm.setPWM((1 + modulatedCounter * 4), 0, yPulse);
+    pwmDriver.setPWM((1 + modulatedCounter * 4), 0, yPulse);
 
     //ramp the blinking value up and down to 100
     if (blinking[i]) {
@@ -92,8 +93,8 @@ void loop() {
     }
 
     //set the blinking servos to the right values
-    pwm.setPWM((2 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 500, 160));
-    pwm.setPWM((3 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 230, 560));
+    pwmDriver.setPWM((2 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 500, 160));
+    pwmDriver.setPWM((3 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 230, 560));
   }
 
   delay(10);
@@ -118,10 +119,6 @@ void serialEvent() {
       int tempYAngle = angleY.toInt();
       xAngles[tempId] = constrain(tempXAngle, ANGLEMINLEFT, ANGLEMAXRIGHT);
       yAngles[tempId] = constrain(tempYAngle, ANGLEMINDOWN, ANGLEMAXUP);
-
-       if (tempId == 0) {
-        Serial.println(tempYAngle);
-      }
       
       id = false;
       eyeId = "";

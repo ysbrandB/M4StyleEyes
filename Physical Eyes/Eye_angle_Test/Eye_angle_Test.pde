@@ -2,7 +2,7 @@
 A sketch by Ysbrand Burgstede to test the arduino, driver boards and serial communcation of the eyes by mapping the mousePosition
  to the angles of the eyes*/
 
-static final int ARDUINOPORT=2;
+static final int ARDUINOPORT=1;
 //serial library for arduino communication
 import processing.serial.*;
 Serial port;
@@ -50,16 +50,17 @@ void draw() {
   //print the angles you are sending
   println(""+int(map(mouseX, 0, width, minAngleX, maxAngleX))+","+int(map(mouseY, 0, height, minAngleY, maxAngleY)));
   String arduinoPayload="";
-  for (int i=0; i<6; i++) {
+  for (int i=0; i<=6; i++) {
     arduinoPayload+=i+","+int(map(mouseX, 0, width, minAngleX, maxAngleX))+","+int(map(mouseY, 0, height, minAngleY, maxAngleY))+"|";
+   // println(arduinoPayload);
   }
   //send the payload to the arduino
-  if (arduinoPayload.length()>=1&&frameCount%2==0) {
+  if (arduinoPayload.length()>=1&&frameCount%60==0) {
     try {
       port.write(arduinoPayload);
     }
     catch(Exception e) {
-      if (frameCount%360==0) {
+      if (frameCount%1==0) {
         connectArduino();
       }
     }

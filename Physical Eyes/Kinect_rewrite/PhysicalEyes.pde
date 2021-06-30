@@ -35,6 +35,7 @@ class PhysicalEyes {
     for (Eye eye : eyes) {
       eye.update();
       //stuur alleen de data als de hoeken verander zijn
+      
       String thisArduinoPayload=eye.id+","+int(eye.angleY)+","+int(eye.angleZ)+"|";
       if (!eye.oldData.equals(thisArduinoPayload)) {
         arduinoPayload+=thisArduinoPayload;
@@ -42,8 +43,9 @@ class PhysicalEyes {
       }
     }
 
-    if (arduinoPayload.length()>=1&&frameCount%2==0) {
+    if (arduinoPayload.length()>=1&&frameCount%10==0) {
       try {
+        println(arduinoPayload);
         port.write(arduinoPayload);
       }
       catch(Exception e) {
