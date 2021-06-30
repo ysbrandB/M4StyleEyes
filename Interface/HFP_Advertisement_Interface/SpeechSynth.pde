@@ -10,9 +10,8 @@ class SpeechSynth {
   static final float SOUND_AMP = 0.1;
 
   HashMap<String, SoundFile> soundLookUp = new HashMap<String, SoundFile>();
-  ArrayList<SoundFile> sounds = new ArrayList<SoundFile>();
 
-  float[] speakPause =  {0.1, 0.1, 0.1, 0.1, 0.1, 1, 0.1, 0.1, 0.1, 15}; //speakpause array that gives the pause time in seconds
+  float[] speakPause =  {0.1, 0.1, 0.1, 0.1, 0.1, 1, 0.1, 0.1, 0.1, 0.1}; //speakpause array that gives the pause time in seconds
 
   SoundFile youRWearingA;
   SoundFile a;
@@ -41,18 +40,12 @@ class SpeechSynth {
 
     //initialize all standard audio samples
     youRWearingA = new SoundFile(HFP_Advertisement_Interface.this, "wav/youarewearinga.wav");
-    sounds.add(youRWearingA);
+    //sounds.add(youRWearingA);
     a = new SoundFile(HFP_Advertisement_Interface.this, "wav/A.wav");
-    sounds.add(a);
     wouldFitYouWayBetter = new SoundFile(HFP_Advertisement_Interface.this, "wav/wouldfityouwaybetter.wav");
-    sounds.add(wouldFitYouWayBetter);
     iThinkYouKnow = new SoundFile(HFP_Advertisement_Interface.this, "wav/ithinkyouknow.wav");
-    sounds.add(iThinkYouKnow);
     andThisIsExactlyWhyA =  new SoundFile(HFP_Advertisement_Interface.this, "wav/andthisisexactlywhya.wav");
-    sounds.add(andThisIsExactlyWhyA);
-    isAThousandTimesBetter =  new SoundFile(HFP_Advertisement_Interface.this, "wav/isathousandtimesbetter.wav");   
-    sounds.add(isAThousandTimesBetter); 
-
+    isAThousandTimesBetter =  new SoundFile(HFP_Advertisement_Interface.this, "wav/isathousandtimesbetter.wav");    
     nowPlaying = a;
 
     //initialize all interchangable samples
@@ -65,14 +58,11 @@ class SpeechSynth {
         String myPath=path+'\\'+fileName;
         //println(myPath);
         SoundFile thisAudioFile= new SoundFile(HFP_Advertisement_Interface.this, myPath);
+        thisAudioFile.amp(SOUND_AMP);
+        roboDelay.process(thisAudioFile, 0.018);
         soundLookUp.put(name, thisAudioFile);
-        sounds.add(thisAudioFile);
+        //sounds.add(thisAudioFile);
       }
-    }
-
-    for (SoundFile sound : sounds) {      
-      sound.amp(SOUND_AMP);
-      roboDelay.process(sound, 0.018);
     }
 
     //initialize clothing pickers
@@ -99,26 +89,26 @@ class SpeechSynth {
     soundsToPlay.add(youRWearingA);
     if (colorAudio!=null) soundsToPlay.add(colorAudio);
     else println("Couldn't find the audio for: "+colorName);
-    
+
     if (typeAudio!=null) soundsToPlay.add(typeAudio);
     else println("Couldn't find the audio for: "+typeName);
-      
+
     soundsToPlay.add(a);
     if (oppositeAudio!=null) soundsToPlay.add(oppositeAudio);
     else println("Couldn't find the audio for: "+oppositeColorName);
-   
+
     if (oppositeTypeAudio!=null) soundsToPlay.add(oppositeTypeAudio); 
     else println("Couldn't find the audio for: "+oppositeTypeName);
-    
+
     soundsToPlay.add(wouldFitYouWayBetter);
-    
+
     soundsToPlay.add(andThisIsExactlyWhyA);
     if (oppositeAudio!=null) soundsToPlay.add(oppositeAudio);
     else println("Couldn't find the audio for: "+oppositeColorName);
-   
+
     if (oppositeTypeAudio!=null) soundsToPlay.add(oppositeTypeAudio); 
     else println("Couldn't find the audio for: "+oppositeTypeName);
-   
+
     soundsToPlay.add(isAThousandTimesBetter);
     soundsToPlay.add(iThinkYouKnow);
   }

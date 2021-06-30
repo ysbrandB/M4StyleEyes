@@ -31,7 +31,8 @@ class CommunicationHandler {
   int pollingRate = 2; //polls per second
 
   //Arduino serial com
-  Serial port;
+  Serial ledPort;
+  boolean ledConnected=false;
 
   CommunicationHandler(PApplet parent) {
     lookingPositions.add(new PVector(width/2, height/2, 200));
@@ -40,13 +41,8 @@ class CommunicationHandler {
     connectClothes();
     connectKinect();
     connectEyes();
+    connectLEDS();
 
-    try {
-      port = new Serial(parent, Serial.list()[3], 9600);  // open the port!
-    }
-    catch(Exception e) {
-      println("no arduino connected");
-    }
 
     //calculate the conversion for the screen
     try {
@@ -64,12 +60,10 @@ class CommunicationHandler {
 
   void update() {
     //Only poll the eyes when in phase 0 as fast as possible
-    // if (phaseCount==0) {
     if (eyePosClient.available() > 0) {
       decodeEyes(eyePosClient.readStringUntil('\n'));
       eyePosClient.clear();
     }
-    //}
     //only poll the servers in the startup phases aka when not playing audio!
     if (phaseCount==0||phaseCount==1) {
       //reconnect clients if needed.
@@ -81,6 +75,9 @@ class CommunicationHandler {
       }
       if (!isConnected(eyePosClient) && frameCount % 240 == 0) {
         connectEyes();
+      }
+      if (!ledConnected&& frameCount % 240 == 0) {
+        connectLEDS();
       }
 
       if ((int)frameRate > pollingRate && frameCount % ((int)frameRate / pollingRate) == 0) {
@@ -122,6 +119,16 @@ class CommunicationHandler {
     } 
     catch (Exception e) {
       println("can't connect to the eye server");
+    }
+  }
+  void connectLEDS() {
+    try {
+      ledPort = new Serial(context, Serial.list()[3], 9600);  // open the port!
+      ledConnected=true;
+    }
+    catch(Exception e) {
+      ledConnected=false;
+      println("no arduino connected");
     }
   }
 
@@ -180,24 +187,30 @@ class CommunicationHandler {
     for (int i = 1; i<5; i++) {
       payload += "|" + data;
     }
-    try {
-      port.write(payload + '\n');
-    } 
-    catch (Exception e) {
-      println("Can't write to port");
+    if (ledConnected==true) {
+      try {
+        ledPort.write(payload + '\n');
+      } 
+      catch (Exception e) {
+        println("Can't write to port, retrying");
+      }
+    } else {
+      println("LEDS not connected!");
     }
   }
 
   void ledstripScan() {
     String payload = "Scan";
-    // for(int i = 1; i<5; i++){ //old shit
-    // payload;
-    // }
-    try {
-      port.write(payload + '\n');
-    } 
-    catch (Exception e) {
-      println("Can't write to port");
+    
+    if (ledConnected==true) {
+      try {
+        ledPort.write(payload + '\n');
+      } 
+      catch (Exception e) {
+        println("Can't write to port");
+      }
+    } else {
+      println("Leds aren't connected!");
     }
   }
 }

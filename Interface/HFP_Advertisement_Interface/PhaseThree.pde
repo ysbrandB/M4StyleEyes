@@ -74,7 +74,6 @@ class PhaseThree extends Slide {
     tweetMessage=tweetMessage.replace("Color_", colorPicker.getLastOppositeColorName().toLowerCase()); //Replaces the word 'Color_' by the text at beginColor
     tweetMessage=tweetMessage.replace("Type_", typePicker.getLastOppositeTypeName().toLowerCase()); //Replaces the word 'Type' by the text at beginType
     // println(tweetObj.getString("name"));
-    println(tweetImgLookup.values());
     tweet = new Tweet(new PVector(width/16, height/2), backgroundTweet, SegoeBold21, Segoe31, SegoeSemiBold19, tweetMessage, (PImage) tweetImgLookup.get(tweetObj.getString("name")));
   }
 
