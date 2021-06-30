@@ -18,14 +18,17 @@ Adafruit_PWMServoDriver pwmRight = Adafruit_PWMServoDriver(0x60);
 #define ANGLEMINDOWN 80
 #define ANGLEMAXUP 100
 
-int xAngles[EYEPAIRAMOUNT];
-int yAngles[EYEPAIRAMOUNT];
 bool blinking[EYEPAIRAMOUNT];
 int blinkingValues[EYEPAIRAMOUNT];
 
+const byte numChars = 32;
+char receivedChars[numChars];
+char tempChars[numChars];
 
-int xPulse;
-int yPulse;
+int id;
+int xAngle;
+int yAngle;
+boolean newData = false;
 
 void setup() {
   Serial.begin(9600);
@@ -35,119 +38,147 @@ void setup() {
   }
 
   for (int i = 0; i < EYEPAIRAMOUNT; i++) {
-    xAngles[i] =90;
-    yAngles[i] = 90;
     blinkingValues[i] = 0;
-  } 
+  }
   pwmLeft.begin();
   pwmLeft.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
 
   pwmRight.begin();
   pwmRight.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+
+  int xAngle = 90;
+  int yAngle = 90;
+  for (int i = 0; i < EYEPAIRAMOUNT; i++) {
+    Adafruit_PWMServoDriver pwmDriver = getPwmDriver(i);
+    int modulatedCounter = getModulatedCounter(i);
+
+    //LEFT RIGHT
+    int xPulse = map(xAngle, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
+    //xPulse = map(analogRead(A0),0, 1023, 220, 450);
+    pwmDriver.setPWM((0 + modulatedCounter * 4), 0, xPulse);
+
+    //UP DOWN
+    int yPulse = map(yAngle, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
+    //yPulse = map(analogRead(A1),0, 1023, 520, 280);
+    pwmDriver.setPWM((1 + modulatedCounter * 4), 0, yPulse);
+  }
 }
 
 void loop() {
-  for (int i = 0; i < EYEPAIRAMOUNT; i++) {//for each set of eyes
-    Adafruit_PWMServoDriver pwmDriver;
-    int modulatedCounter;
-
-    //set the servodriver to the left or the right
-    if (i < int(EYEPAIRAMOUNT / 2)) {
-      //modulatedcounter is voor het rechterservoboard het i-het aantal ogen op links
-      modulatedCounter=i+1;
-      pwmDriver = pwmLeft;
-    } else {
-      pwmDriver = pwmRight;
-      modulatedCounter=i-(EYEPAIRAMOUNT/2)+1;
-    }
-    //decide to randomly blink
-//    if (random(0, 2000) < 2) {
-//      blinking[i] = true;
-//    }
-
-    int xval = xAngles[i];
-    int yval = yAngles[i];
-    Serial.println(String(i)+","+String(xval)+","+String(yval));
-
-    //LEFT RIGHT
-    xPulse = map(xval, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
-    //xPulse = map(analogRead(A0),0, 1023, 220, 450);
-    pwmDriver.setPWM((0 + modulatedCounter * 4), 0, xPulse);
-    //UP DOWN
-
-    yPulse = map(yval, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
-    //yPulse = map(analogRead(A1),0, 1023, 520, 280);
-    pwmDriver.setPWM((1 + modulatedCounter * 4), 0, yPulse);
-
+  recvWithStartEndMarkers();
+  if (newData == true) {
+    strcpy(tempChars, receivedChars);
+    // this temporary copy is necessary to protect the original data
+    //   because strtok() used in parseData() replaces the commas with \0
+    parseData();
+    useParsedData();
+    newData = false;
+  }
+  for (int i = 0; i < EYEPAIRAMOUNT; i++) {
     //ramp the blinking value up and down to 100
     if (blinking[i]) {
       if (blinkingValues[i] < 100) {
         blinkingValues[i] += 5;
       } else {
-        blinking[i] = false;
+        blinking[id] = false;
       }
     } else {
       if (blinkingValues[i] > 0) {
         blinkingValues[i] -= 3;
       }
     }
-
+    Adafruit_PWMServoDriver pwmDriver = getPwmDriver(i);
+    int modulatedCounter = getModulatedCounter(i);
     //set the blinking servos to the right values
-    pwmDriver.setPWM((2 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 500, 160));
-    pwmDriver.setPWM((3 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 230, 560));
+    pwmDriver.setPWM((2 + modulatedCounter * 4), 0, map(blinkingValues[id], 0, 100, 500, 160));
+    pwmDriver.setPWM((3 + modulatedCounter * 4), 0, map(blinkingValues[id], 0, 100, 230, 560));
   }
-
-  delay(10);
 }
 
-boolean id = false;
-String eyeId = "";
-boolean nextAngle = false;
-String angleX;
-String angleY;
+void recvWithStartEndMarkers() {
+  static boolean recvInProgress = false;
+  static byte ndx = 0;
+  char startMarker = '<';
+  char endMarker = '>';
+  char rc;
 
-void serialEvent() {
-  while (Serial.available()) {
-    // get the new byte:
-    char inChar = (char)Serial.read();
+  while (Serial.available() > 0 && newData == false) {
+    rc = Serial.read();
 
-    //als het einde van een oog is bereikt reset alle variabelen
-    if (inChar == '|') {
-      //UPDATE HIER DE SERVOS!
-      int tempId = eyeId.toInt();
-      int tempXAngle = angleX.toInt();
-      int tempYAngle = angleY.toInt();
-      xAngles[tempId] = constrain(tempXAngle, ANGLEMINLEFT, ANGLEMAXRIGHT);
-      yAngles[tempId] = constrain(tempYAngle, ANGLEMINDOWN, ANGLEMAXUP);
-      
-      id = false;
-      eyeId = "";
-      nextAngle = false;
-      angleX = "";
-      angleY = "";
-      break;
-    }
-    //als er een comma is is er of de eerste angle of de volgende angle dus switch dan
-    if (inChar == ',') {
-      //switch van de id string naar de angle string
-      if (!id) {
-        id = true;
+    if (recvInProgress == true) {
+      if (rc != endMarker) {
+        receivedChars[ndx] = rc;
+        ndx++;
+        if (ndx >= numChars) {
+          ndx = numChars - 1;
+        }
       }
       else {
-        //switch van de angleX string naar de angle Y string
-        nextAngle = true;
+        receivedChars[ndx] = '\0'; // terminate the string
+        recvInProgress = false;
+        ndx = 0;
+        newData = true;
       }
-      break;
     }
-    if (!id) {
-      eyeId += inChar;
-    }
-    else if (!nextAngle) {
-      // add it to the inputString:
-      angleX += inChar;
-    }
-    else {
-      angleY += inChar;
+
+    else if (rc == startMarker) {
+      recvInProgress = true;
     }
   }
+}
+
+//============
+void parseData() {      // split the data into its parts
+
+  char * strtokIndx; // this is used by strtok() as an index
+
+  strtokIndx = strtok(tempChars, ","); // this continues where the previous call left off
+  id = atoi(strtokIndx);     // convert this part to an integer
+
+  strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
+  xAngle = atoi(strtokIndx);     // convert this part to an integer
+
+  strtokIndx = strtok(NULL, ",");
+  yAngle = atoi(strtokIndx);     // convert this part to a float
+}
+//============
+
+void useParsedData() {
+  id = constrain(id, 0, EYEPAIRAMOUNT);
+  xAngle = constrain(xAngle, ANGLEMINLEFT, ANGLEMAXRIGHT);
+  yAngle = constrain(yAngle, ANGLEMINDOWN, ANGLEMAXUP);
+  Adafruit_PWMServoDriver pwmDriver = getPwmDriver(id);
+  int modulatedCounter = getModulatedCounter(id);
+
+  Serial.println(" id " + String(id) + " x: " + String(xAngle) + " y: " + String(yAngle) + " modCounter: " + modulatedCounter);
+  //LEFT RIGHT
+  int xPulse = map(xAngle, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
+  //xPulse = map(analogRead(A0),0, 1023, 220, 450);
+  pwmDriver.setPWM((0 + modulatedCounter * 4), 0, xPulse);
+  //UP DOWN
+
+  int yPulse = map(yAngle, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
+  //yPulse = map(analogRead(A1),0, 1023, 520, 280);
+  pwmDriver.setPWM((1 + modulatedCounter * 4), 0, yPulse);
+}
+
+Adafruit_PWMServoDriver getPwmDriver(int id) {
+  //set the servodriver to the left or the right
+  if (id < int(EYEPAIRAMOUNT / 2)) {
+    return pwmLeft;
+  } else {
+    return pwmRight;
+  }
+}
+
+int getModulatedCounter(int id) {
+  //set the servodriver to the left or the right
+  int modulatedCounter;
+  if (id < int(EYEPAIRAMOUNT / 2)) {
+    //modulatedcounter is voor het rechterservoboard het i-het aantal ogen op links
+    modulatedCounter = id;
+  } else {
+    modulatedCounter = id - int(EYEPAIRAMOUNT / 2);
+  }
+  return modulatedCounter;
 }
