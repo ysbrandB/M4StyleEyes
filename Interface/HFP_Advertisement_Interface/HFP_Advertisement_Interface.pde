@@ -82,9 +82,9 @@ void setup() {
   //initialize all phases
   pZero = new PhaseZero(com);
   pOne = new PhaseOne(com);
-  pTwo = new PhaseTwo(colorPicker, typePicker, textData, clothingLookup);
-  pThree = new PhaseThree(colorPicker, typePicker, textData, clothingLookup, tweetImages);
-  pFour = new PhaseFour(colorPicker, typePicker, textData, clothingLookup);
+  pTwo = new PhaseTwo(com, colorPicker, typePicker, textData, clothingLookup);
+  pThree = new PhaseThree(com, colorPicker, typePicker, textData, clothingLookup, tweetImages);
+  pFour = new PhaseFour(com, colorPicker, typePicker, textData, clothingLookup);
 
   //initialize the speech synthesizer
   speechSynth = new SpeechSynth(colorPicker, typePicker);

@@ -19,13 +19,14 @@ class PhaseThree extends Slide {
   // String[] tweets; //String for all the scientific papar quotes
   ColorPicker colorPicker;
   TypePicker typePicker;
+  CommunicationHandler com;
 
   HashMap<String, PImage> tweetImgLookup;
 
-  PhaseThree(ColorPicker colorPicker, TypePicker typePicker, JSONObject textData, HashMap clothingLookup, HashMap tweetImgLookup) {
+  PhaseThree(CommunicationHandler com, ColorPicker colorPicker, TypePicker typePicker, JSONObject textData, HashMap clothingLookup, HashMap tweetImgLookup) {
     this.clothingLookup=clothingLookup;
     backupShirt=loadImage(sketchPath()+"\\Image\\backUpShirt.jpg");
-
+    this.com=com;
    // JSONArray NewsHeads = textData.getJSONArray("NewsHeads"); //Gets the text for the news quotes
     JSONArray ScientificFacts = textData.getJSONArray("Feitjes"); //Gets the scientific quotes
     tweetObjects = textData.getJSONArray("Tweets"); //Gets the scientific quotes
@@ -83,6 +84,7 @@ class PhaseThree extends Slide {
     stroke(oppositeColor);
     rect(0, 0, width, height);
     eye.display();
+    eye.update(com.lookingPositions);
     typeWriter.update();
     typeWriter.display();
     poll.display();

@@ -15,12 +15,6 @@ class PhysicalEyes {
       JSONObject eye = eyePosData.getJSONObject(i);
       eyes.add(new Eye(new PVector(eye.getFloat("x"), eye.getFloat("y"), eye.getFloat("z")), eye.getInt("id"), kinectPos));
     }
-    //print the available serial (arduino ports)
-    println("Available serial ports:");
-    for (int i = 0; i<Serial.list().length; i++) { 
-      print("[" + i + "] ");
-      println(Serial.list()[i]);
-    }
     //init the port
     connectArduino();
   }

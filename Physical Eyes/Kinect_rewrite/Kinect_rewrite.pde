@@ -47,6 +47,13 @@ void setup() {
 
   noise1=new DebugNoise(new PVector(-20, -100, 100));
   noise2=new DebugNoise(new PVector(+20, -100, 100));
+
+  //print the available serial (arduino ports)
+  println("Available serial ports:");
+  for (int i = 0; i<Serial.list().length; i++) { 
+    print("[" + i + "] ");
+    println(Serial.list()[i]);
+  }
 }
 
 void draw() {
@@ -64,7 +71,7 @@ void draw() {
     noise1.show();
     noise2.show();
   } else if (heads.size()<1) {
-    PVector noise=new PVector(map(noise(time/2), 0, 1, -screen.getHalfPhysicalScreenWidth(), screen.getHalfPhysicalScreenWidth()), map(noise(time), 0, 1, 0,-(((screen.getHalfPhysicalScreenWidth()*2)/16)*9))-100, map(noise(time*2), 0, 1, 0, screen.getHalfPhysicalScreenWidth()*2));
+    PVector noise=new PVector(map(noise(time/2), 0, 1, -screen.getHalfPhysicalScreenWidth(), screen.getHalfPhysicalScreenWidth()), map(noise(time), 0, 1, 0, -(((screen.getHalfPhysicalScreenWidth()*2)/16)*9))-100, map(noise(time*2), 0, 1, 0, screen.getHalfPhysicalScreenWidth()*2));
     heads.add(noise);
     drawPoint(noise, color(255, 0, 255));
     time+=0.001;
@@ -79,7 +86,7 @@ void draw() {
 
   //check if interface can be started and if so update it over tcp
   cross.show();
-  //cross.update();
+  cross.update();
 
   //show all the bodies
   for (Body body : bodies) {
@@ -97,7 +104,11 @@ void drawEnvironment() {
   pushMatrix();  
   rotateX(PI/2);
   translate(0, 0, 0);
-  fill(0, 255, 0);
+  if (triggeredInterface) {
+    fill(255, 100, 100);
+  } else {
+    fill(0, 255, 0);
+  }
   rect(0, 0, 10000, 10000);
   popMatrix();
 }

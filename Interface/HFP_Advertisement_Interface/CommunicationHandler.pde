@@ -64,12 +64,12 @@ class CommunicationHandler {
 
   void update() {
     //Only poll the eyes when in phase 0 as fast as possible
-    if (phaseCount==0) {
-      if (eyePosClient.available() > 0) {
-        decodeEyes(eyePosClient.readStringUntil('\n'));
-        eyePosClient.clear();
-      }
+    // if (phaseCount==0) {
+    if (eyePosClient.available() > 0) {
+      decodeEyes(eyePosClient.readStringUntil('\n'));
+      eyePosClient.clear();
     }
+    //}
     //only poll the servers in the startup phases aka when not playing audio!
     if (phaseCount==0||phaseCount==1) {
       //reconnect clients if needed.

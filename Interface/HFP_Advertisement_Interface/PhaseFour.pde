@@ -10,12 +10,13 @@ class PhaseFour extends Slide {
   ColorPicker colorPicker;
   TypePicker typePicker;
   HashMap<String, PImage> clothingLookup;
+  CommunicationHandler com;
   Eye eye;
   PImage clothes;
   PImage backupShirt;
   float imgAspect;
 
-  PhaseFour(ColorPicker colorPicker, TypePicker typePicker, JSONObject textData, HashMap clothingLookup) {
+  PhaseFour(CommunicationHandler com, ColorPicker colorPicker, TypePicker typePicker, JSONObject textData, HashMap clothingLookup) {
     bigEyeSlides = loadImage("image/bigEyeSlides.png");
     JSONObject Brands = textData.getJSONObject("Brands"); //Gets all the brands
     JSONArray cheapBrandList=Brands.getJSONArray("Cheap");
@@ -25,6 +26,7 @@ class PhaseFour extends Slide {
     this.colorPicker = colorPicker;
     this.typePicker = typePicker;
     this.clothingLookup= clothingLookup;
+    this.com=com;
     eye =new Eye(100, 100, 50);
   }
 
@@ -38,7 +40,7 @@ class PhaseFour extends Slide {
       clothes=backupShirt;
       tint(oppositeColor);
     }
-    
+
     imgAspect=clothes.height/clothes.width;
 
     String BrandCheap = cheapBrands[int(random(0, cheapBrands.length))]; //Sets 'BrandCheap' to one of the stings with the number from bC
@@ -59,7 +61,7 @@ class PhaseFour extends Slide {
     stroke(oppositeColor);
     rect(0, 0, width, height);
     eye.display();
-
+    eye.update(com.lookingPositions);
     textFont(fontHeading);
     fill(255);
     textAlign(TOP, LEFT);

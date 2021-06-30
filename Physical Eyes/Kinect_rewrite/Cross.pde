@@ -3,7 +3,6 @@ class Cross {
   float minimumDistToCross, desiredBufferTime;
   Server s;
   int buffer=0;
-  boolean triggeredInterface=false;
   Cross(PApplet context, JSONObject setUpData) {
     JSONObject crossData= setUpData.getJSONObject("Cross");
     pos= new PVector (crossData.getFloat("x"), crossData.getFloat("y"), crossData.getFloat("z"));

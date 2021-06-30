@@ -13,10 +13,11 @@ class PhaseTwo extends Slide {
   PImage backupShirt;
   int imgAspect;
   String[] text;
-
-  PhaseTwo(ColorPicker colorPicker, TypePicker typePicker, JSONObject data, HashMap clothingLookup) {
+  CommunicationHandler com;
+  PhaseTwo(CommunicationHandler com,ColorPicker colorPicker, TypePicker typePicker, JSONObject data, HashMap clothingLookup) {
     this.clothingLookup=clothingLookup;
-    eye= new Eye(width/4, height/4, 30);
+    this.com=com;
+    eye=new Eye(100, 100, 50);
     this.colorPicker = colorPicker;
     this.typePicker= typePicker;    
 
@@ -43,9 +44,7 @@ class PhaseTwo extends Slide {
   }
 
   void display() {    
-
     background(bgColor);
-
     textFont(MainText);
     fill(255);
     rectMode(BASELINE);
@@ -53,5 +52,7 @@ class PhaseTwo extends Slide {
     textAlign(LEFT);
     text(Message, width/13, height/4, width/2.3, height);
     image(clothes, width/4*3, height/2, width/3, height/1.5);
+    eye.display();
+    eye.update(com.lookingPositions);
   }
 }

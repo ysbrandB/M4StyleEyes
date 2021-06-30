@@ -14,10 +14,12 @@ class DebugNoise {
   void changeDirection(int key, boolean pressed) {
     if (pressed) {
       switch(key){
-      case 'w': dir.y=-1;break;
-      case 's': dir.y=1;break;
+      case 'w': dir.z=-1;break;
+      case 's': dir.z=1;break;
       case 'a': dir.x=-1;break;
        case 'd': dir.x=1;break;
+       case 'q': dir.y-=1;
+       case 'z': dir.y+=1;
       }
       switch(keyCode){
       case UP: dir.y=-1;break;
@@ -32,10 +34,12 @@ class DebugNoise {
       case LEFT: dir.x=0;break;
        case RIGHT: dir.x=0;break;
       }switch(key){
-      case 'w': dir.y=0;break;
-      case 's': dir.y=0;break;
+       case 'w': dir.z=0;break;
+      case 's': dir.z=0;break;
       case 'a': dir.x=0;break;
        case 'd': dir.x=0;break;
+       case 'q': dir.y-=0;
+       case 'z': dir.y+=0;
       }
     }
   }
