@@ -67,7 +67,7 @@ void setup() {
   pOne = new PhaseOne(com);
   pTwo = new PhaseTwo(colorPicker, typePicker, textData, clothingLookup);
   pThree = new PhaseThree(colorPicker, typePicker, textData, clothingLookup);
-  pFour = new PhaseFour(textData);
+  pFour = new PhaseFour(colorPicker, typePicker, textData, clothingLookup);
 
   //initialize the speech synthesizer
   speechSynth = new SpeechSynth(colorPicker, typePicker);
@@ -126,7 +126,7 @@ void draw() {
       pThree.init(com);
       break;
     case 4:
-      phaseTimer = 2; //10
+      phaseTimer = 10; //10
       pFour.init(); 
       break;
     case 0:

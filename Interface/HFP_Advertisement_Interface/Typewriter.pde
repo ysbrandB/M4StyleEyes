@@ -8,7 +8,7 @@ class Typewriter {
   static final String REPLACE_COLOR = "Color_";
   static final String REPLACE_OPPOSITECOLOR = "ColorQ_";
   static final String REPLACE_TYPE = "Type_";
-  static final float DEFAULT_ANIMATION_TIME = 0.06;
+  static final float DEFAULT_ANIMATION_TIME = 0.15;
   static final float BLINKING_TIME = 0.4;
   static final String TYPING_CHAR = "|";
 
@@ -36,9 +36,9 @@ class Typewriter {
   String[] formatedStr;
 
   //een tyfus bende aan constructors ;) oké ben er nu ook mentaal klaar mee. ik fix het straks wel, ooit.
-  // Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
-  //     constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, mainColorName, mainColor, oppositeColorName, oppositeColor);
-  // }
+   //Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor){
+   //    constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, mainColorName, mainColor, oppositeColorName, oppositeColor);
+   //}
   Typewriter(String txt, PVector pos, float boxWidth, int txtSize, color txtColor, String type, String mainColorName, color mainColor, String oppositeColorName, color oppositeColor, PFont font) {
     constructor(txt, pos, boxWidth, txtSize, txtColor, DEFAULT_ANIMATION_TIME, type, mainColorName, mainColor, oppositeColorName, oppositeColor, font);
   }
@@ -67,7 +67,7 @@ class Typewriter {
     this.boxWidth = boxWidth;
     this.txtSize = txtSize;
     this.txtColor = txtColor;
-    this.animationTime = animationTime;
+    this.animationTime = (40f/(float)txt.length()) * (float)animationTime;
     if (animationTime <= 0) isAnimating = false;
     else isAnimating = true;
 
