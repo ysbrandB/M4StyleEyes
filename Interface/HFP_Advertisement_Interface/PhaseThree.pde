@@ -8,8 +8,8 @@ class PhaseThree extends Slide {
   PImage backgroundTweet;
   PImage clothes;
   PImage backupShirt;
-  Eye eye;
   float imgAspect;
+  Eye eye;
   String Quote;
   String Fact;
 
@@ -23,11 +23,11 @@ class PhaseThree extends Slide {
     this.clothingLookup=clothingLookup;
     backupShirt=loadImage(sketchPath()+"\\Image\\backUpShirt.jpg");
 
-    JSONArray NewsHeads = textData.getJSONArray("NewsHeads"); //Gets the text for the news quotes
-    JSONArray ScientificFacts = textData.getJSONArray("ScientificFacts"); //Gets the scientific quotes
+   // JSONArray NewsHeads = textData.getJSONArray("NewsHeads"); //Gets the text for the news quotes
+    JSONArray ScientificFacts = textData.getJSONArray("Feitjes"); //Gets the scientific quotes
     JSONArray TwitterTweets = textData.getJSONArray("Tweets"); //Gets the scientific quotes
 
-    NewsQuote = NewsHeads.getStringArray(); //Splits the quotes
+    //NewsQuote = NewsHeads.getStringArray(); //Splits the quotes
     ScientificFact = ScientificFacts.getStringArray(); //Splits the quotes
     tweets=TwitterTweets.getStringArray(); //Splits the quotes
     this.colorPicker = colorPicker;
@@ -51,9 +51,9 @@ class PhaseThree extends Slide {
     }
     imgAspect=clothes.height/clothes.width;
 
-    Quote = NewsQuote[int(random(0, NewsQuote.length))]; //Sets 'Quote' to one of the stings with the number from n
-    Quote = Quote.replace("Color_", colorPicker.getLastOppositeColorName()); //Replaces the word 'Color_' by the text at beginColor
-    Quote = Quote.replace("Type_", typePicker.getLastOppositeTypeName()); //Replaces the word 'Type' by the text at beginType
+    //Quote = NewsQuote[int(random(0, NewsQuote.length))]; //Sets 'Quote' to one of the stings with the number from n
+    //Quote = Quote.replace("Color_", colorPicker.getLastOppositeColorName()); //Replaces the word 'Color_' by the text at beginColor
+    //Quote = Quote.replace("Type_", typePicker.getLastOppositeTypeName()); //Replaces the word 'Type' by the text at beginType
 
     Fact = ScientificFact[int(random(0, ScientificFact.length))]; //Sets 'Fact' to one of the stings with the number from f
     Fact = Fact.replace("Color_", colorPicker.getLastOppositeColorName()); //Replaces the word 'Color_' by the text at beginColor
@@ -70,7 +70,6 @@ class PhaseThree extends Slide {
   }
 
   void display() {
-    background(bgColor);
     fill(0);
     strokeWeight(15);
     stroke(oppositeColor);

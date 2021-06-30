@@ -4,20 +4,45 @@ class PhaseFour extends Slide {
   String encourageMessage;
   String totalRecom;
   PImage bigEyeSlides;
-  String[] Brand;
-  String BrandCheap;
-  String BrandExpensive;
+  String[] cheapBrands;
+  String[] expensiveBrands;
+  color oppositeColor;
+  ColorPicker colorPicker;
+  TypePicker typePicker;
+  HashMap<String, PImage> clothingLookup;
+  Eye eye;
+  PImage clothes;
+  PImage backupShirt;
+  float imgAspect;
 
-  PhaseFour(JSONObject textData) {
+  PhaseFour(ColorPicker colorPicker, TypePicker typePicker, JSONObject textData, HashMap clothingLookup) {
     bigEyeSlides = loadImage("image/bigEyeSlides.png");
-    JSONArray Brands = textData.getJSONArray("Brands"); //Gets all the brands
-    Brand = Brands.getStringArray(); //Splits the brands
+    JSONObject Brands = textData.getJSONObject("Brands"); //Gets all the brands
+    JSONArray cheapBrandList=Brands.getJSONArray("Cheap");
+    JSONArray expensiveBrandList=Brands.getJSONArray("Expensive");
+    cheapBrands = cheapBrandList.getStringArray(); //Splits the brands
+    expensiveBrands= expensiveBrandList.getStringArray(); //Splits the brands
+    this.colorPicker = colorPicker;
+    this.typePicker = typePicker;
+    this.clothingLookup= clothingLookup;
+    eye =new Eye(100, 100, 50);
   }
 
 
   void init() {    
-    BrandCheap = Brand[int(random(0, Brand.length))]; //Sets 'BrandCheap' to one of the stings with the number from bC
-    BrandExpensive = Brand[int(random(0, Brand.length))]; //Sets 'BrandExpensive' to one of the stings with the number from bE
+    oppositeColor= colorPicker.getLastOppositeColor();
+    clothes=clothingLookup.get(colorPicker.getLastOppositeColorName()+"."+typePicker.getLastOppositeTypeName());
+
+    if (clothes==null) {
+      println("Couldnt find the picture for: "+ colorPicker.getLastOppositeColorName()+"."+typePicker.getLastOppositeTypeName());
+      clothes=backupShirt;
+      tint(oppositeColor);
+    }
+    
+    imgAspect=clothes.height/clothes.width;
+
+    String BrandCheap = cheapBrands[int(random(0, cheapBrands.length))]; //Sets 'BrandCheap' to one of the stings with the number from bC
+    String BrandExpensive = expensiveBrands[int(random(0, expensiveBrands.length))]; //Sets 'BrandExpensive' to one of the stings with the number from bE
 
     //Writes a ad with the recommanded color and type 
     encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + colorPicker.getLastOppositeColorName() + " " + typePicker.getLastOppositeTypeName() + " too!"; 
@@ -29,13 +54,18 @@ class PhaseFour extends Slide {
   }
 
   void display() {
-    background(bgColor);
-    image(bigEyeSlides, width/20+3, height/17+3, width/10, height/10);
+    fill(0);
+    strokeWeight(15);
+    stroke(oppositeColor);
+    rect(0, 0, width, height);
+    eye.display();
 
     textFont(fontHeading);
     fill(255);
     textAlign(TOP, LEFT);
     text(encourageMessage, width/8, height/4-100);
     text(totalRecom, width/8, height/2);
+    imageMode(CENTER);
+    image(clothes, width/2+width/4, height/2, width/3, (width/3)*imgAspect);
   }
 }
