@@ -123,7 +123,7 @@ class CommunicationHandler {
   }
   void connectLEDS() {
     try {
-      ledPort = new Serial(context, Serial.list()[3], 9600);  // open the port!
+      ledPort = new Serial(context, Serial.list()[2], 9600);  // open the port!
       ledConnected=true;
     }
     catch(Exception e) {
@@ -147,6 +147,7 @@ class CommunicationHandler {
   }
 
   void decodeKinect(String input) {
+    println("Started interface "+input);
     if (input.contains("Start")) {
       distanceTrigger=true;
     }

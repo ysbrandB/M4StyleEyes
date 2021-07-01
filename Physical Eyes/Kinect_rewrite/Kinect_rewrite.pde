@@ -26,7 +26,9 @@ DebugNoise noise2;
 float time=0;
 boolean triggeredInterface=false;
 
-int arduinoPortNumber=1;
+int rightArduinoPortNumber=2;
+int leftArduinoPortNumber=1;
+
 void setup() {
   size(800, 800, P3D);
   perspective(PI/3.0, width/height, 1, 10000);

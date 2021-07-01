@@ -23,7 +23,6 @@ int yAngles[EYEPAIRAMOUNT];
 bool blinking[EYEPAIRAMOUNT];
 int blinkingValues[EYEPAIRAMOUNT];
 
-
 int xPulse;
 int yPulse;
 
