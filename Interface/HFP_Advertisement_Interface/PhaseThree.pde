@@ -66,7 +66,7 @@ class PhaseThree extends Slide {
     Fact = Fact.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
     Fact = Fact.replace("Type_", typePicker.getLastOppositeTypeName()); //Replaces the word 'Type' by the text at beginType
 
-    typeWriter=new Typewriter(Fact, new PVector(width/16, width/8), width/2-width/8, 40, color(255), "DIT MAAKT NIET UIT", "DIT MAAKT OOK NIET UIT", clothingColor, colorPicker.getLastOppositeColorName(), oppositeColor, fontSub);
+    typeWriter=new Typewriter(Fact, new PVector(width/16, width/8), width/2-width/8, 30, color(255), "DIT MAAKT NIET UIT", "DIT MAAKT OOK NIET UIT", clothingColor, colorPicker.getLastOppositeColorName(), oppositeColor, typeWriterText);
     poll = new Poll(new PVector(width/2, height/2), width/3, width/6, fontSub, clothingColor, oppositeColor);
     
     JSONObject tweetObj = tweetObjects.getJSONObject(int(random(tweetObjects.size())));

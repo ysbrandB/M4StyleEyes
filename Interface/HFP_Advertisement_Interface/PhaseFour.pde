@@ -15,6 +15,7 @@ class PhaseFour extends Slide {
   PImage clothes;
   PImage backupShirt;
   float imgAspect;
+  Typewriter typeWriterPhase4;
 
   PhaseFour(CommunicationHandler com, ColorPicker colorPicker, TypePicker typePicker, JSONObject textData, HashMap clothingLookup) {
     bigEyeSlides = loadImage("image/bigEyeSlides.png");
@@ -43,16 +44,19 @@ class PhaseFour extends Slide {
 
     imgAspect=clothes.height/clothes.width;
 
-    String BrandCheap = cheapBrands[int(random(0, cheapBrands.length))]; //Sets 'BrandCheap' to one of the stings with the number from bC
-    String BrandExpensive = expensiveBrands[int(random(0, expensiveBrands.length))]; //Sets 'BrandExpensive' to one of the stings with the number from bE
+    String brandCheap = cheapBrands[int(random(0, cheapBrands.length))]; //Sets 'brandCheap' to one of the stings with the number from bC
+    String brandExpensive = expensiveBrands[int(random(0, expensiveBrands.length))]; //Sets 'brandExpensive' to one of the stings with the number from bE
 
     //Writes a ad with the recommanded color and type 
-    encourageMessage = "But DON'T WORRY! You CAN" + "\n"+ "BUY a " + colorPicker.getLastOppositeColorName() + " " + typePicker.getLastOppositeTypeName() + " too!"; 
+    encourageMessage = "But DON'T WORRY! You CAN BUY a " + colorPicker.getLastOppositeColorName() + " " + typePicker.getLastOppositeTypeName() + " too!"; 
 
     //Writes the final message with the "chosen" brands, the new price and the old one.
-    totalRecom = "NOW in SALE at" +"\n" + 
-      BrandCheap + ": €" + int(random(10, 40))+".99"+ "  <-  Originally: " + "€"+int(random(40, 100)) +"\n"+
-      BrandExpensive+ ": " + int(random(75, 175)) + "€"+ "  <-  Originally: " + "€"+ int(random(175, 400));
+    totalRecom = "NOW in SALE at:" +" \n" + " \n" +
+      brandCheap + ": €" + int(random(10, 40))+".99"+ " (Originally: " + "€"+int(random(40, 100))+ ") \n" + " \n" +
+      brandExpensive+ ": €" + int(random(75, 175)) + " (Originally: " + "€"+ int(random(175, 400))+ ")";
+
+    String totalMessage = encourageMessage +" \n"+ totalRecom;
+    typeWriterPhase4=new Typewriter(totalMessage, new PVector(width/16, width/8), width/2-width/8, 30, color(255), typePicker.getLastTypeName(), colorPicker.getLastColorName(), colorPicker.getLastColor(), colorPicker.getLastOppositeColorName(), colorPicker.getLastOppositeColor(), typeWriterText);
   }
 
   void display() {
@@ -62,11 +66,10 @@ class PhaseFour extends Slide {
     rect(0, 0, width, height);
     eye.display();
     eye.update(com.lookingPositions);
-    textFont(fontHeading);
-    fill(255);
-    textAlign(TOP, LEFT);
-    text(encourageMessage, width/8, height/4-100);
-    text(totalRecom, width/8, height/2);
+    
+    typeWriterPhase4.update();
+    typeWriterPhase4.display();
+
     imageMode(CENTER);
     image(clothes, width/2+width/4, height/2, width/3, (width/3)*imgAspect);
   }

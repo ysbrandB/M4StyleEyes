@@ -13,6 +13,7 @@ class PhaseTwo extends Slide {
   PImage backupShirt;
   int imgAspect;
   String[] text;
+  Typewriter typeWriterPhase2;
   CommunicationHandler com;
   PhaseTwo(CommunicationHandler com,ColorPicker colorPicker, TypePicker typePicker, JSONObject data, HashMap clothingLookup) {
     this.clothingLookup=clothingLookup;
@@ -41,16 +42,17 @@ class PhaseTwo extends Slide {
     Message = text[int(random(0, text.length))]; //Sets 'Message' to one of the strings with the number from s
     Message = Message.replace("ColorQ_", colorPicker.getLastColorName()); //Replaces the word 'Color_' by the text at beginColor
     Message = Message.replace("Type_", typePicker.getLastTypeName()); //Replaces the word 'Type' by the text at beginType
+  
+    typeWriterPhase2=new Typewriter(Message, new PVector(width/16, width/8), width/2-width/8, 30, color(255), typePicker.getLastTypeName(), colorPicker.getLastColorName(), colorPicker.getLastColor(), colorPicker.getLastOppositeColorName(), colorPicker.getLastOppositeColor(), typeWriterText);
+
   }
 
   void display() {    
     background(bgColor);
-    textFont(MainText);
     fill(255);
     rectMode(BASELINE);
-    textAlign(CENTER, CENTER);
-    textAlign(LEFT);
-    text(Message, width/13, height/4, width/2.3, height);
+    typeWriterPhase2.update();
+    typeWriterPhase2.display();
     image(clothes, width/4*3, height/2, width/3, height/1.5);
     eye.display();
     eye.update(com.lookingPositions);

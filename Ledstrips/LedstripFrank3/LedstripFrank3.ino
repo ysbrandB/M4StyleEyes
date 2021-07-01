@@ -1,7 +1,7 @@
 #include <FastLED.h>
 
 #define LED_PIN     5
-#define NUM_LEDS    211 //300
+#define NUM_LEDS    197 //300
 #define BRIGHTNESS  255 //255 is max
 #define LED_TYPE    WS2811
 #define COLOR_ORDER GRB
@@ -76,18 +76,18 @@ void loop() {
   else if (scanning) { //scanning ----------------------------------------------------
     for (int i = 0; i < NUM_LEDS; i++) {
       int fade = abs(i - int(scanTimer));
-      if (fade < 5) {
-        fade = 255 - 255 / 5 * float(fade);
+      if (fade <10) {
+        fade = abs(255 - 255 / 5 * float(fade));
       } else fade = 0;
       leds[i] = CHSV(scanningHue, 255, fade);//187, fade);
     }
     FastLED.show();
     if (straveForward) {
       scanTimer += ((float)NUM_LEDS) / SCAN_SPEED;
-      if (scanTimer > NUM_LEDS) straveForward = false;
+      if (scanTimer > NUM_LEDS - 10) straveForward = false;
     } else {
       scanTimer -= ((float)NUM_LEDS) / SCAN_SPEED;
-      if (scanTimer < 0) straveForward = true;
+      if (scanTimer < 10) straveForward = true;
     }
   } else if (pollActive) {
     for (int i = 0; i < NUM_LEDS; i++) {

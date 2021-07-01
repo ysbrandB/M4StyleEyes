@@ -94,12 +94,17 @@ class Typewriter {
     StringList tempFormatedStr = new StringList();
     tempFormatedStr.append(words[0]);
 
-    for (int i = 1; i < words.length; i++) {        
-      if (textWidth(tempFormatedStr.get(line) + words[i]) <= boxWidth) tempFormatedStr.set(line, tempFormatedStr.get(line) + " " + words[i]);
-      else {
+    for (int i = 1; i < words.length; i++) {   
+      //println(words[i], words[i].contains("\n"));
+      if(words[i].contains("\n")){
+        tempFormatedStr.append(words[i].replace("\n", ""));
+        line++;
+      }
+      else if(textWidth(tempFormatedStr.get(line) + words[i]) > boxWidth){
         tempFormatedStr.append(words[i]);
         line++;
       }
+      else tempFormatedStr.set(line, tempFormatedStr.get(line) + " " + words[i]);
     }
     formatedStr = tempFormatedStr.array();
   }
@@ -112,7 +117,7 @@ class Typewriter {
     if (!isAnimating) { //if the txt isn't animating || for optimization.
       for (int line = 0; line < formatedStr.length; line++) {
         pushMatrix();
-        translate(pos.x, pos.y + line * txtSize);
+        translate(pos.x, pos.y + line * (1.8*txtSize));
         String[] mainColorArray = split(formatedStr[line], REPLACE_COLOR);
         ArrayList<String> txtArray = new ArrayList<String>();
         IntList mainColorIndexes = new IntList();
@@ -150,7 +155,7 @@ class Typewriter {
       for (int line = 0; line < formatedStr.length; line++) {
         //calculates the string enz..
         pushMatrix();
-        translate(pos.x, pos.y + line * txtSize);
+        translate(pos.x, pos.y + line * (1.8*txtSize));
         String[] mainColorArray = split(formatedStr[line], REPLACE_COLOR);
         ArrayList<String> txtArray = new ArrayList<String>();
         IntList mainColorIndexes = new IntList();
