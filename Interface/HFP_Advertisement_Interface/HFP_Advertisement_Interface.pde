@@ -100,6 +100,7 @@ void draw() {
   speechSynth.speak(); 
   switch(phaseCount) {
   case 0:
+    colorPicker.colorDetermination(com.clothingColor);
     pZero.display();
     break;
 
@@ -152,6 +153,8 @@ void draw() {
     }
   }
   com.update();
+  fill(colorPicker.getLastColor());
+  rect(10, 10, 200, 200);
 }
 
 void keyPressed() {
