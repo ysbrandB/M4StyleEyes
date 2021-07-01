@@ -4,8 +4,9 @@ import cv2
 import socket
 import time
 import sys
+from PIL import Image
 
-from utils import draw_bounding_box, load_model, detect_clothes, get_clothing_cropped, get_dominant_color, is_torso_piece
+from utils import draw_bounding_box, load_model, detect_clothes, get_clothing_cropped, get_dominant_color, is_torso_piece, quantize_to_palette
 
 model = load_model()
 
@@ -13,7 +14,7 @@ clothing_types = ['short_sleeve_top', 'long_sleeve_top', 'short_sleeve_outwear',
                   'vest', 'sling', 'shorts', 'trousers', 'skirt', 'short_sleeve_dress',
                   'long_sleeve_dress', 'vest_dress', 'sling_dress']
 
-capture = cv2.VideoCapture(2)
+capture = cv2.VideoCapture(0)
 readCorrectly, frame = capture.read()
 cv2.imshow('preview', frame)
 
@@ -87,7 +88,12 @@ def detect(image):
         else:
             hits += 1
         clothing_image = get_clothing_cropped(crop_img, cloth)
-        color = get_dominant_color(clothing_image)
+        conv_image = cv2.cvtColor(clothing_image, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(conv_image)
+        paletted_image = quantize_to_palette(pil_image).convert('RGB')
+        cv_paletted_image = np.array(paletted_image)
+        clothing_final_image = cv2.cvtColor(cv_paletted_image, cv2.COLOR_BGR2RGB)
+        color = get_dominant_color(clothing_final_image)
         detected_color = color
         image_bounding_box = draw_bounding_box(crop_img, cloth, color)
         cv2.imshow('clothes', image_bounding_box)
