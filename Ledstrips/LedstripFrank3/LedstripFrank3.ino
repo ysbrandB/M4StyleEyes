@@ -75,11 +75,14 @@ void loop() {
   }
   else if (scanning) { //scanning ----------------------------------------------------
     for (int i = 0; i < NUM_LEDS; i++) {
-      int fade = abs(i - int(scanTimer));
-      if (fade <10) {
-        fade = abs(255 - 255 / 5 * float(fade));
-      } else fade = 0;
-      leds[i] = CHSV(scanningHue, 255, fade);//187, fade);
+      int distance = abs(i - int(scanTimer));
+      int fade = 0;
+      if (distance <10) {
+        fade = abs(255 - 255 / 5 * float(distance));
+      }
+
+      if(distance<=5) leds[i] = CHSV(scanningHue, 255, fade);//187, fade);
+      else leds[i] = CHSV(0, 0, fade);
     }
     FastLED.show();
     if (straveForward) {
