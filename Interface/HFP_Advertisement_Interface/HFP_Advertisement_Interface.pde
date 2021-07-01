@@ -153,8 +153,6 @@ void draw() {
     }
   }
   com.update();
-  fill(colorPicker.getLastColor());
-  rect(10, 10, 200, 200);
 }
 
 void keyPressed() {

@@ -168,9 +168,9 @@ def quantize_to_palette(image, dither=False):
     212, 51, 177,  # pink
 
     163, 21, 106,  # pink
-    0, 0, 0,       # filler
-    0, 0, 0,       # filler
-    0, 0, 0,       # filler
+    80, 80, 80,    # dark gray
+    140, 140, 140,  # light gray
+    190, 190, 190  # white
     ] * 4
 
     palette_image = Image.new('P', (16, 16)) #256 coloroiios

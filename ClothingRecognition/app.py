@@ -93,6 +93,7 @@ def detect(image):
         paletted_image = quantize_to_palette(pil_image).convert('RGB')
         cv_paletted_image = np.array(paletted_image)
         clothing_final_image = cv2.cvtColor(cv_paletted_image, cv2.COLOR_BGR2RGB)
+        cv2.imshow('paletted', clothing_final_image)
         color = get_dominant_color(clothing_final_image)
         detected_color = color
         image_bounding_box = draw_bounding_box(crop_img, cloth, color)
