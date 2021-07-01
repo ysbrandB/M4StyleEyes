@@ -14,7 +14,7 @@ clothing_types = ['short_sleeve_top', 'long_sleeve_top', 'short_sleeve_outwear',
                   'vest', 'sling', 'shorts', 'trousers', 'skirt', 'short_sleeve_dress',
                   'long_sleeve_dress', 'vest_dress', 'sling_dress']
 
-capture = cv2.VideoCapture(0)
+capture = cv2.VideoCapture(3)
 readCorrectly, frame = capture.read()
 cv2.imshow('preview', frame)
 

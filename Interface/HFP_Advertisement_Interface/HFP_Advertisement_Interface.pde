@@ -36,8 +36,8 @@ SpeechSynth speechSynth;
 
 void setup() {
 
-  //fullScreen(2); 
-  size(1920, 1080);
+  fullScreen(2); 
+  //size(1920, 1080);
   imageMode(CENTER);
 
   //initialize all clothingPictures and load them into the hasmap

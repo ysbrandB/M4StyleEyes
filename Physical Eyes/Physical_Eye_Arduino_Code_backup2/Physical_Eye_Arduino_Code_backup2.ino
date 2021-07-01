@@ -18,52 +18,34 @@ Adafruit_PWMServoDriver pwmRight = Adafruit_PWMServoDriver(0x40);
 #define ANGLEMINDOWN 80
 #define ANGLEMAXUP 100
 
+int xAngles[EYEPAIRAMOUNT];
+int yAngles[EYEPAIRAMOUNT];
 bool blinking[EYEPAIRAMOUNT];
 int blinkingValues[EYEPAIRAMOUNT];
 
 const byte numChars = 32;
 char receivedChars[numChars];
 char tempChars[numChars];
-boolean newData = false;
 
 int id;
 int xAngle;
 int yAngle;
-
+boolean newData = false;
 
 void setup() {
   Serial.begin(9600);
-
+    
   for (int i = 0; i < EYEPAIRAMOUNT; i++) {
     blinking[i] = false;
-  }
-
-  for (int i = 0; i < EYEPAIRAMOUNT; i++) {
     blinkingValues[i] = 0;
+    xAngles[i] =90;
+    yAngles[i] = 90;
   }
   pwmLeft.begin();
   pwmLeft.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
 
   pwmRight.begin();
-  pwmRight.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
-
-  int xAngle = 90;
-  int yAngle = 90;
-  for (int i = 0; i < EYEPAIRAMOUNT; i++) {
-    Adafruit_PWMServoDriver pwmDriver = getPwmDriver(i);
-    int modulatedCounter = getModulatedCounter(i);
-
-    //LEFT RIGHT
-    int xPulse = map(xAngle, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
-    //xPulse = map(analogRead(A0),0, 1023, 220, 450);
-    pwmDriver.setPWM((0 + modulatedCounter * 4), 0, xPulse);
-
-    //UP DOWN
-    int yPulse = map(yAngle, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
-    //yPulse = map(analogRead(A1),0, 1023, 520, 280);
-    pwmDriver.setPWM((1 + modulatedCounter * 4), 0, yPulse);
-  }
-  Serial.println("Starting!");
+  pwmRight.setPWMFreq(60);  // Analog servos run at ~60 Hz update;
 }
 
 void loop() {
@@ -76,6 +58,7 @@ void loop() {
     useParsedData();
     newData = false;
   }
+  
   for (int i = 0; i < EYEPAIRAMOUNT; i++) {
     //ramp the blinking value up and down to 100
     if (blinking[i]) {
@@ -89,11 +72,21 @@ void loop() {
         blinkingValues[i] -= 3;
       }
     }
+    
     Adafruit_PWMServoDriver pwmDriver = getPwmDriver(i);
     int modulatedCounter = getModulatedCounter(i);
+
+    //LEFT RIGHT
+    int xPulse = map(xAngles[i], ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
+    pwmDriver.setPWM((0 + modulatedCounter * 4), 0, xPulse);
+    //UP DOWN
+
+    int yPulse = map(yAngles[i], ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
+    pwmDriver.setPWM((1 + modulatedCounter * 4), 0, yPulse);
+
     //set the blinking servos to the right values
-    pwmDriver.setPWM((2 + modulatedCounter * 4), 0, map(blinkingValues[id], 0, 100, 500, 160));
-    pwmDriver.setPWM((3 + modulatedCounter * 4), 0, map(blinkingValues[id], 0, 100, 230, 560));
+    pwmDriver.setPWM((2 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 500, 160));
+    pwmDriver.setPWM((3 + modulatedCounter * 4), 0, map(blinkingValues[i], 0, 100, 230, 560));
   }
 }
 
@@ -149,19 +142,10 @@ void useParsedData() {
   id = constrain(id, 0, EYEPAIRAMOUNT);
   xAngle = constrain(xAngle, ANGLEMINLEFT, ANGLEMAXRIGHT);
   yAngle = constrain(yAngle, ANGLEMINDOWN, ANGLEMAXUP);
-  Adafruit_PWMServoDriver pwmDriver = getPwmDriver(id);
-  int modulatedCounter = getModulatedCounter(id);
-
-  Serial.println(" id " + String(id) + " x: " + String(xAngle) + " y: " + String(yAngle) + " modCounter: " + modulatedCounter);
-  //LEFT RIGHT
-  int xPulse = map(xAngle, ANGLEMINLEFT, ANGLEMAXRIGHT, 220, 450);
-  //xPulse = map(analogRead(A0),0, 1023, 220, 450);
-  pwmDriver.setPWM((0 + modulatedCounter * 4), 0, xPulse);
-  //UP DOWN
-
-  int yPulse = map(yAngle, ANGLEMINDOWN, ANGLEMAXUP, 520, 280);
-  //yPulse = map(analogRead(A1),0, 1023, 520, 280);
-  pwmDriver.setPWM((1 + modulatedCounter * 4), 0, yPulse);
+  Serial.println("id: "+String(id)+", xAngle:"+String(xAngles[id])+", yAngle:"+String(yAngles[id]));
+  xAngles[id]=xAngle;
+  yAngles[id]=yAngle;
+  Serial.println("id: "+String(id)+", xAngle:"+String(xAngles[id])+", yAngle:"+String(yAngles[id]));
 }
 
 Adafruit_PWMServoDriver getPwmDriver(int id) {

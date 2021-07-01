@@ -23,6 +23,7 @@ class PhaseZero {
   }
 
   void display() {
+    com.ledstripScan();
     background(0);
     time +=1;
 

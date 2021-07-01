@@ -26,7 +26,7 @@ class Cross {
 
     if (closestDist<=minimumDistToCross) {
       if (!triggeredInterface) {
-       // s.write("Start"+'\n');
+        s.write("Start"+'\n');
         print("Start"+'\n');
         triggeredInterface=true;
       }
