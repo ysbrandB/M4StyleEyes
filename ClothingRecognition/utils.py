@@ -92,10 +92,15 @@ def is_torso_piece(cloth):
 def quantize_to_palette(image, dither=False):
     image.load()
     palette_data = [
-    50, 50, 50,    # black
-    110, 110, 110, # dark gray
-    170, 170, 170, # light gray
-    255, 255, 255, # white
+    # 50, 50, 50,    # black
+    # 110, 110, 110, # dark gray
+    # 170, 170, 170, # light gray
+    # 255, 255, 255, # white
+
+    160, 160, 160,
+    0, 0, 0,
+    0, 0, 0,
+    0, 0, 0,
 
     255, 0, 0,     # red
     166, 66, 46,   # red
@@ -169,7 +174,7 @@ def quantize_to_palette(image, dither=False):
 
     163, 21, 106,  # pink
     80, 80, 80,    # dark gray
-    140, 140, 140,  # light gray
+    140, 140, 140, # light gray
     190, 190, 190  # white
     ] * 4
 
