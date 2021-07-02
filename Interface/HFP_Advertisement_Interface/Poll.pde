@@ -41,7 +41,7 @@ class Poll {
     fillPollOppositeColor += 2;
     if (fillPollOppositeColor >= myWidth*likePercentage/100) fillPollOppositeColor = myWidth*likePercentage/100;
     rect(myWidth/32, myHeight*2/5, fillPollOppositeColor, myHeight/4, myHeight/32, 0, 0, myHeight/32);
-    if (oppositeColor == color(0, 0, 0)) {
+    if (oppositeColor == color(0)) {
       stroke(255);
       strokeWeight(2);
       line(fillPollOppositeColor + myWidth/32, myHeight*2/5, fillPollOppositeColor + myWidth/32, myHeight*2/5 + myHeight/4);
@@ -57,7 +57,7 @@ class Poll {
     if (clothingColor == color(0, 0, 0)) {
       stroke(255);
       strokeWeight(2);
-      line(fillPollOppositeColor + myWidth/32, myHeight*2/5, fillPollOppositeColor + myWidth/32, myHeight*2/5 + myHeight/4);
+      line(fillPollOppositeColor + myWidth/32, myHeight*4/5, fillPollOppositeColor + myWidth/32, myHeight*4/5 + myHeight/4);
       noStroke();
     }
     fill(255);
