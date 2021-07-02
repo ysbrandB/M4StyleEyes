@@ -14,7 +14,7 @@ clothing_types = ['short_sleeve_top', 'long_sleeve_top', 'short_sleeve_outwear',
                   'vest', 'sling', 'shorts', 'trousers', 'skirt', 'short_sleeve_dress',
                   'long_sleeve_dress', 'vest_dress', 'sling_dress']
 
-capture = cv2.VideoCapture(3)
+capture = cv2.VideoCapture(1)
 readCorrectly, frame = capture.read()
 cv2.imshow('preview', frame)
 
@@ -32,6 +32,9 @@ TCP_TICKRATE = 30
 detected_type = None
 bias_torso_piece = True
 detected_color = None
+
+x = 0
+y = 0
 
 def server_handling():
     # While loop to keep tring to re-establish a connection
@@ -65,6 +68,11 @@ server_thread = threading.Thread(target=server_handling)
 server_thread.setDaemon(True)
 server_thread.start()
 
+def mouse_callback(event, newX, newY, flags, params):
+    global x, y
+    x = newX
+    y = newY
+
 def detect(image):
     crop_img = image[imageBox[1]:imageBox[1] + imageBox[3], imageBox[0]:imageBox[0] + imageBox[2]]
     detected_objects = detect_clothes(crop_img, model, clothing_types)
@@ -88,16 +96,17 @@ def detect(image):
         else:
             hits += 1
         clothing_image = get_clothing_cropped(crop_img, cloth)
-        conv_image = cv2.cvtColor(clothing_image, cv2.COLOR_BGR2RGB)
-        pil_image = Image.fromarray(conv_image)
-        paletted_image = quantize_to_palette(pil_image).convert('RGB')
-        cv_paletted_image = np.array(paletted_image)
-        clothing_final_image = cv2.cvtColor(cv_paletted_image, cv2.COLOR_BGR2RGB)
-        cv2.imshow('paletted', clothing_final_image)
-        color = get_dominant_color(clothing_final_image)
-        detected_color = color
-        image_bounding_box = draw_bounding_box(crop_img, cloth, color)
-        cv2.imshow('clothes', image_bounding_box)
+        if not clothing_image.size == 0:
+            conv_image = cv2.cvtColor(clothing_image, cv2.COLOR_BGR2RGB)
+            pil_image = Image.fromarray(conv_image)
+            paletted_image = quantize_to_palette(pil_image).convert('RGB')
+            cv_paletted_image = np.array(paletted_image)
+            clothing_final_image = cv2.cvtColor(cv_paletted_image, cv2.COLOR_BGR2RGB)
+            cv2.imshow('paletted', clothing_final_image)
+            color = get_dominant_color(clothing_final_image)
+            detected_color = color
+            image_bounding_box = draw_bounding_box(crop_img, cloth, color)
+            cv2.imshow('clothes', image_bounding_box)
     else:
         hits = 0
         detected_type = None
@@ -106,7 +115,10 @@ def detect(image):
 
 while cv2.getWindowProperty('preview', 0) >= 0:
     readCorrectly, frame = capture.read()
+    pixelColor = frame[y][x]
+    frame = cv2.putText(frame, str(pixelColor), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
     cv2.imshow('preview', frame)
+    cv2.setMouseCallback('preview', mouse_callback)
     key = cv2.waitKey((int)(1000 / frameRate))
     
     if key == 27: #escape
