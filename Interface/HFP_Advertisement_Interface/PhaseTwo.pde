@@ -49,6 +49,10 @@ class PhaseTwo extends Slide {
 
   void display() {    
     background(bgColor);
+    fill(0);
+    strokeWeight(15);
+    stroke(colorPicker.getLastColor());
+    rect(0, 0, width, height);
     fill(255);
     rectMode(BASELINE);
     typeWriterPhase2.update();

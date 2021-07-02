@@ -27,7 +27,7 @@ class PhaseThree extends Slide {
     this.clothingLookup=clothingLookup;
     backupShirt=loadImage(sketchPath()+"\\Image\\backUpShirt.jpg");
     this.com=com;
-   // JSONArray NewsHeads = textData.getJSONArray("NewsHeads"); //Gets the text for the news quotes
+    // JSONArray NewsHeads = textData.getJSONArray("NewsHeads"); //Gets the text for the news quotes
     JSONArray ScientificFacts = textData.getJSONArray("Feitjes"); //Gets the scientific quotes
     tweetObjects = textData.getJSONArray("Tweets"); //Gets the scientific quotes
 
@@ -68,12 +68,15 @@ class PhaseThree extends Slide {
 
     typeWriter=new Typewriter(Fact, new PVector(width/16, width/8), width/2-width/8, 30, color(255), "DIT MAAKT NIET UIT", "DIT MAAKT OOK NIET UIT", clothingColor, colorPicker.getLastOppositeColorName(), oppositeColor, typeWriterText);
     poll = new Poll(new PVector(width/2, height/2), width/3, width/6, fontSub, clothingColor, oppositeColor);
-    
+
     JSONObject tweetObj = tweetObjects.getJSONObject(int(random(tweetObjects.size())));
     String tweetMessage = tweetObj.getString("text");
     tweetMessage=tweetMessage.replace("Color_", colorPicker.getLastOppositeColorName().toLowerCase()); //Replaces the word 'Color_' by the text at beginColor
     tweetMessage=tweetMessage.replace("Type_", typePicker.getLastOppositeTypeName().toLowerCase()); //Replaces the word 'Type' by the text at beginType
     // println(tweetObj.getString("name"));
+    if (tweetMessage.contains("BULL")) {
+      tweetMessage=tweetMessage.toUpperCase();
+    }
     tweet = new Tweet(new PVector(width/16, height*2/5), backgroundTweet, SegoeBold21, Segoe31, SegoeSemiBold19, tweetMessage, (PImage) tweetImgLookup.get(tweetObj.getString("name")));
   }
 

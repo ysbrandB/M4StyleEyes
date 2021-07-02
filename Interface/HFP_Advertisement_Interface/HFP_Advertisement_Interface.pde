@@ -140,7 +140,7 @@ void draw() {
       speechSynth.init(); 
       break;
     case 3: 
-      phaseTimer = 20; //16
+      phaseTimer = 15; //16
       pThree.init(com);
       break;
     case 4:
