@@ -5,15 +5,19 @@ A sketch by Ysbrand Burgstede to test the arduino, driver boards and serial comm
 static final int ARDUINOPORT=1;
 //serial library for arduino communication
 import processing.serial.*;
-Serial port;
-boolean arduinoConnected=false;
+Serial leftPort;
+Serial rightPort;
 int minAngleX=45;
 int maxAngleX=135;
+
+int rightArduinoPortNumber=2;
+int leftArduinoPortNumber=1;
 
 int minAngleY=80;
 int maxAngleY=100;
 float xRes;
 float yRes;
+
 void setup() {
   //print the available serial (arduino ports)
   println("Available serial ports:");
@@ -47,25 +51,27 @@ void draw() {
   for (int i=0; i<width; i+=int(xRes)*3) {
     text(int(map(i, 0, width, minAngleX, maxAngleX)), i, 20);
   }
+
   //print the angles you are sending
-  println(""+int(map(mouseX, 0, width, minAngleX, maxAngleX))+","+int(map(mouseY, 0, height, minAngleY, maxAngleY)));
-  String arduinoPayload="";
+  //println(""+int(map(mouseX, 0, width, minAngleX, maxAngleX))+","+int(map(mouseY, 0, height, minAngleY, maxAngleY)));
   for (int i=0; i<=6; i++) {
-    arduinoPayload+=i+","+int(map(mouseX, 0, width, minAngleX, maxAngleX))+","+int(map(mouseY, 0, height, minAngleY, maxAngleY))+"|";
-   // println(arduinoPayload);
-  }
-  //send the payload to the arduino
-  if (arduinoPayload.length()>=1&&frameCount%60==0) {
+    String arduinoPayload="<"+i + "," + i+"," +int(map(mouseX, 0, width, minAngleX, maxAngleX))+","+int(map(mouseY, 0, height, minAngleY, maxAngleY))+">";
+    println("Processing sends:" +arduinoPayload);
     try {
-      port.write(arduinoPayload);
+      if (i<3) {
+        leftPort.write(arduinoPayload);
+      } else {
+        rightPort.write(arduinoPayload);
+      }
     }
     catch(Exception e) {
-      if (frameCount%1==0) {
+      if (frameCount%360==0) {
         connectArduino();
       }
     }
   }
 }
+
 
 void serialEvent(Serial p) { 
   println(p.readString());
@@ -74,13 +80,19 @@ void serialEvent(Serial p) {
 
 void connectArduino() {
   try {
-    port = new Serial(this, Serial.list()[ARDUINOPORT], 9600);
-    port.bufferUntil('\n');
-    arduinoConnected=true;
-    println("EyeArduino Connected!");
+    leftPort = new Serial(this, Serial.list()[leftArduinoPortNumber], 9600);
+    leftPort.bufferUntil('\n');
+    println("LeftEyeArduino Connected!");
   }
   catch(Exception e) {
-    arduinoConnected=false;
-    println("EyeArduino not Connected!");
+    println("LeftEyeArduino not Connected!");
+  }
+  try {
+    rightPort = new Serial(this, Serial.list()[rightArduinoPortNumber], 9600);
+    rightPort.bufferUntil('\n');
+    println("RightEyeArduino Connected!");
+  }
+  catch(Exception e) {
+    println("rightEyeArduino not Connected!");
   }
 }

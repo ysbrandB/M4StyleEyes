@@ -1,20 +1,20 @@
 {
    "Screen": {
         "x" : 0,
-        "y" : -212,
+        "y" : -140,
         "z" : 0,
-	"screenWidth": 314
+	"screenWidth": 95
     },
 	"Kinect":{
         "x" : 0,
-        "y" : -107,
+        "y" : -110,
         "z" : 0
     },
 	"Cross":{
         "x" : 0,
         "y" : 0,
-        "z" : 260,
-	"minimumDistance":30,
+        "z" : 160,
+	"minimumDistance":20,
 	"bufferFrames":180
     }
 }

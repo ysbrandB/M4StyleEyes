@@ -57,7 +57,7 @@ class Poll {
     if (clothingColor == color(0, 0, 0)) {
       stroke(255);
       strokeWeight(2);
-      line(fillPollOppositeColor + myWidth/32, myHeight*4/5, fillPollOppositeColor + myWidth/32, myHeight*4/5 + myHeight/4);
+      line(fillPollClothingColor + myWidth/32, myHeight*4/5, fillPollClothingColor + myWidth/32, myHeight*4/5 + myHeight/4);
       noStroke();
     }
     fill(255);

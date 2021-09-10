@@ -26,14 +26,15 @@ DebugNoise noise2;
 float time=0;
 boolean triggeredInterface=false;
 
-int rightArduinoPortNumber=2;
-int leftArduinoPortNumber=1;
+int rightArduinoPortNumber=0;
+int leftArduinoPortNumber=2;
 
 void setup() {
-  size(800, 800, P3D);
+  size(1000, 1000, P3D);
   perspective(PI/3.0, width/height, 1, 10000);
   sphereDetail(1);
   rectMode(CENTER);
+  frameRate(30);
 
   //make a new cam element
   camera = new PeasyCam(this, -2, 0, -1, 100);
@@ -41,11 +42,13 @@ void setup() {
   heads=new ArrayList <PVector>();
   //Load the JSON setup file
   setUpData = loadJSONObject("../settings.JSON");
+  println("Loaded JSON data and created camera");
 
   myKinect=new MyKinect(this, setUpData);
   physicalEyes=new PhysicalEyes(this, myKinect.getPos());
   cross=new Cross(this, setUpData);
   screen=new Screen(this, setUpData, myKinect.getPos());
+  println("setup kinect");
 
   noise1=new DebugNoise(new PVector(-20, -100, 100));
   noise2=new DebugNoise(new PVector(+20, -100, 100));
@@ -67,6 +70,10 @@ void draw() {
   //retrieve the bodies from the kinect
   myKinect.show();
   myKinect.updateBodies();
+  
+  //check if interface can be started and if so update it over tcp
+  cross.show();
+  cross.update();
 
   //add the debug heads to the scene
   if (debug) {
@@ -85,10 +92,6 @@ void draw() {
   //update the digital eyes over tcp
   screen.show();
   screen.update();
-
-  //check if interface can be started and if so update it over tcp
-  cross.show();
-  cross.update();
 
   //show all the bodies
   for (Body body : bodies) {

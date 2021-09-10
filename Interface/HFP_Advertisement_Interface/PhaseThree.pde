@@ -77,7 +77,7 @@ class PhaseThree extends Slide {
     if (tweetMessage.contains("BULL")) {
       tweetMessage=tweetMessage.toUpperCase();
     }
-    tweet = new Tweet(new PVector(width/16, height*2/5), backgroundTweet, SegoeBold21, Segoe31, SegoeSemiBold19, tweetMessage, (PImage) tweetImgLookup.get(tweetObj.getString("name")));
+    tweet = new Tweet(new PVector(width/16, height*9/20), backgroundTweet, SegoeBold21, Segoe31, SegoeSemiBold19, tweetMessage, (PImage) tweetImgLookup.get(tweetObj.getString("name")));
   }
 
   void display() {

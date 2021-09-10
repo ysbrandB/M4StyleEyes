@@ -14,7 +14,7 @@ class CommunicationHandler {
   boolean overCross; //the user is over the red cross
   Client kinectClient;
   String kinectIp = "127.0.0.1";
-  int kinectPort = 10000;
+  int kinectPort = 10006;
 
   //Eye Pos Data
   ArrayList <PVector> lookingPositions= new ArrayList <PVector>();
@@ -68,16 +68,16 @@ class CommunicationHandler {
     if (phaseCount==0||phaseCount==1) {
       //reconnect clients if needed.
       if (!isConnected(clothesClient) && frameCount % 240 == 0) {
-        connectClothes();
+        //connectClothes();
       }
       if (!isConnected(kinectClient) && frameCount % 240 == 0) {
         connectKinect();
       }
       if (!isConnected(eyePosClient) && frameCount % 240 == 0) {
-        connectEyes();
+        //connectEyes();
       }
       if (!ledConnected&& frameCount % 240 == 0) {
-        connectLEDS();
+        //connectLEDS();
       }
 
       if ((int)frameRate > pollingRate && frameCount % ((int)frameRate / pollingRate) == 0) {

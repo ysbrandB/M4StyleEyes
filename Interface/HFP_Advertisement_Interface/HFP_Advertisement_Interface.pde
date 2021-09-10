@@ -1,4 +1,4 @@
- //HFP CreaTe 2021  //<>// //<>// //<>// //<>//
+ //HFP CreaTe 2021  //<>// //<>// //<>// //<>// //<>//
 //By Sterre Kuijper <Team Leader>, Frank Bosman, Jesse Boomkamp, Ysbrand Brugstede, Jelle Gerritsen, Max Liebe, Marnix Lueb & Kimberley Siemons
 //The Style Eyes Project
 //Advertisement Interface of Style Eyes
@@ -37,6 +37,7 @@ SpeechSynth speechSynth;
 void setup() {
 
   fullScreen(2); 
+  //frameRate(30);
   //size(1920, 1080);
   imageMode(CENTER);
 
@@ -159,6 +160,11 @@ void keyPressed() {
   if (key == 'r' || key == 'R') {
     com.hits = 5;
     com.clothingColor=color(200,200,30);
+    colorPicker.colorDetermination(com.clothingColor);
+  }
+  if (key == 'b' || key == 'B') {
+    com.hits = 5;
+    com.clothingColor=color(0,0,255);
     colorPicker.colorDetermination(com.clothingColor);
   }
 

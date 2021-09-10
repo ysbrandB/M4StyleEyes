@@ -157,7 +157,7 @@ def quantize_to_palette(image, dither=False):
     33, 37, 163,   # blue
     160, 0, 255,   # purple
 
-    50, 30, 130,   # purple
+    0, 0,0,   # purple
     32, 8, 92,     # purple
     81, 29, 140,   # purple
     95, 15, 186,   # purple

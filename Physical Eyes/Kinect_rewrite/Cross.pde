@@ -8,7 +8,7 @@ class Cross {
     pos= new PVector (crossData.getFloat("x"), crossData.getFloat("y"), crossData.getFloat("z"));
     minimumDistToCross=crossData.getFloat("minimumDistance");
     desiredBufferTime=crossData.getInt("bufferFrames");
-    s=new Server(context, 10000);
+    s=new Server(context, 10006);
   }
   
   void show() {
