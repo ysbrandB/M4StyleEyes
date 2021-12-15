@@ -87,7 +87,7 @@ void draw() {
   }
   //update the physical eyes over arduino and calculate the angles
   physicalEyes.show();
-  physicalEyes.update();
+  //physicalEyes.update();
 
   //update the digital eyes over tcp
   screen.show();

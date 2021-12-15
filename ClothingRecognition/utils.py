@@ -122,7 +122,7 @@ def quantize_to_palette(image, dither=False):
     196, 95, 0,    # orange
     145, 75, 5,    # brown
 
-    97, 36, 16,    # brown
+    97, 36, 16,    # brown, nope black now
     128, 41, 13,   # brown
     255, 220, 0,   # yellow
     171, 153, 38,  # yellow

@@ -170,11 +170,11 @@
             "display" : [145,75,5]
         },
         {
-            "name": "Brown",
+            "name": "Black",
             "rgb": [97, 36, 16],
-            "opposite": "Green",
-            "grayscale": "false",
-            "display" : [145,75,5]
+            "opposite": "Pink",
+            "grayscale": "true",
+            "display" : [0,0,0]
         },
         {
             "name": "Brown",
